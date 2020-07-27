@@ -38,7 +38,8 @@ public class JwtTokenUtil implements Serializable {
 
     public Long getUserIdFromToken(String token) {
         Claims claims = getAllClaimsFromToken(token);
-        return (Long) claims.get("userId");
+
+        return ((Number) claims.get("userId")).longValue();
     }
 
     public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
@@ -53,7 +54,7 @@ public class JwtTokenUtil implements Serializable {
                 .getBody();
     }
 
-    private Boolean isTokenExpired(String token) {
+    public Boolean isTokenExpired(String token) {
         final Date expiration = getExpirationDateFromToken(token);
         return expiration.before(new Date());
     }
