@@ -1,4 +1,4 @@
-package com.egorhristoforov.eventikrestapi.configuration.JWT;
+package com.egorhristoforov.eventikrestapi.configuration.jwt;
 
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;

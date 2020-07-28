@@ -1,6 +1,6 @@
-package com.egorhristoforov.eventikrestapi.services.Impl;
+package com.egorhristoforov.eventikrestapi.services.impl;
 
-import com.egorhristoforov.eventikrestapi.configuration.JWT.JwtTokenUtil;
+import com.egorhristoforov.eventikrestapi.configuration.jwt.JwtTokenUtil;
 import com.egorhristoforov.eventikrestapi.dtos.requests.*;
 import com.egorhristoforov.eventikrestapi.dtos.responses.UserCredentialsResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.UserProfileResponse;
@@ -19,7 +19,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;

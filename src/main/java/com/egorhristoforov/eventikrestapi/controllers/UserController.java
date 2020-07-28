@@ -33,9 +33,8 @@ public class UserController {
     @PostMapping(value = "")
     @ResponseStatus(HttpStatus.CREATED)
     public Long createUser(@Valid @RequestBody UserCreateRequest user) throws BadRequestException {
-        Long userId = userService.createUser(user);
 
-        return userId;
+        return userService.createUser(user);
     }
 
     @PostMapping(value = "/{id}/confirm")

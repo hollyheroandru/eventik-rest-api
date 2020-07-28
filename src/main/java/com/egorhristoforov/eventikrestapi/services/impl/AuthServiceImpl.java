@@ -1,6 +1,6 @@
-package com.egorhristoforov.eventikrestapi.services.Impl;
+package com.egorhristoforov.eventikrestapi.services.impl;
 
-import com.egorhristoforov.eventikrestapi.configuration.JWT.JwtTokenUtil;
+import com.egorhristoforov.eventikrestapi.configuration.jwt.JwtTokenUtil;
 import com.egorhristoforov.eventikrestapi.dtos.requests.AuthLoginRequest;
 import com.egorhristoforov.eventikrestapi.dtos.requests.AuthRefreshRequest;
 import com.egorhristoforov.eventikrestapi.dtos.responses.UserCredentialsResponse;
@@ -13,8 +13,6 @@ import com.egorhristoforov.eventikrestapi.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class AuthServiceImpl implements AuthService {

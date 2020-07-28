@@ -1,7 +1,7 @@
-package com.egorhristoforov.eventikrestapi.configuration.Security;
+package com.egorhristoforov.eventikrestapi.configuration.security;
 
-import com.egorhristoforov.eventikrestapi.configuration.JWT.JwtAuthenticationEntryPoint;
-import com.egorhristoforov.eventikrestapi.configuration.JWT.JwtAuthenticationFilter;
+import com.egorhristoforov.eventikrestapi.configuration.jwt.JwtAuthenticationEntryPoint;
+import com.egorhristoforov.eventikrestapi.configuration.jwt.JwtAuthenticationFilter;
 import com.egorhristoforov.eventikrestapi.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -56,6 +56,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                     .antMatchers(HttpMethod.POST,"/api/v1/users/**").permitAll()
                     .antMatchers(HttpMethod.POST, "/api/v1/auth/**").permitAll()
+                    .antMatchers(HttpMethod.GET, "/api/v1/countries/**").permitAll()
                     .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class)

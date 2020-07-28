@@ -1,4 +1,4 @@
-package com.egorhristoforov.eventikrestapi.configuration.JWT;
+package com.egorhristoforov.eventikrestapi.configuration.jwt;
 
 import com.egorhristoforov.eventikrestapi.models.User;
 import io.jsonwebtoken.Claims;

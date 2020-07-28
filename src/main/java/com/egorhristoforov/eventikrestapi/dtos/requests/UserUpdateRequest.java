@@ -1,6 +1,5 @@
 package com.egorhristoforov.eventikrestapi.dtos.requests;
 
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class UserUpdateRequest {
