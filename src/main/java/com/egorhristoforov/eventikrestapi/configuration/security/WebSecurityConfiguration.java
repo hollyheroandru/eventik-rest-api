@@ -57,6 +57,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.POST,"/api/v1/users/**").permitAll()
                     .antMatchers(HttpMethod.POST, "/api/v1/auth/**").permitAll()
                     .antMatchers(HttpMethod.GET, "/api/v1/countries/**").permitAll()
+                    .antMatchers(HttpMethod.GET, "/api/v1/events/**/status").authenticated()
+                    .antMatchers(HttpMethod.GET, "/api/v1/events/**").permitAll()
                     .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class)

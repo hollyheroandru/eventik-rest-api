@@ -2,14 +2,20 @@ package com.egorhristoforov.eventikrestapi.services.impl;
 
 import com.egorhristoforov.eventikrestapi.configuration.jwt.JwtTokenUtil;
 import com.egorhristoforov.eventikrestapi.dtos.requests.*;
+import com.egorhristoforov.eventikrestapi.dtos.responses.EventStatusResponse;
+import com.egorhristoforov.eventikrestapi.dtos.responses.EventsListResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.UserCredentialsResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.UserProfileResponse;
 import com.egorhristoforov.eventikrestapi.exceptions.BadRequestException;
 import com.egorhristoforov.eventikrestapi.exceptions.ForbiddenException;
 import com.egorhristoforov.eventikrestapi.exceptions.ResourceNotFoundException;
 import com.egorhristoforov.eventikrestapi.exceptions.UnauthorizedException;
+import com.egorhristoforov.eventikrestapi.models.Booking;
+import com.egorhristoforov.eventikrestapi.models.Event;
 import com.egorhristoforov.eventikrestapi.models.User;
 import com.egorhristoforov.eventikrestapi.models.UserRole;
+import com.egorhristoforov.eventikrestapi.repositories.BookingRepository;
+import com.egorhristoforov.eventikrestapi.repositories.EventRepository;
 import com.egorhristoforov.eventikrestapi.repositories.UserRepository;
 import com.egorhristoforov.eventikrestapi.repositories.UserRoleRepository;
 import com.egorhristoforov.eventikrestapi.services.UserService;
@@ -25,7 +31,9 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -37,6 +45,10 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
     @Autowired
     UserRoleRepository roleRepository;
+    @Autowired
+    EventRepository eventRepository;
+    @Autowired
+    BookingRepository bookingRepository;
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -71,7 +83,7 @@ public class UserServiceImpl implements UserService {
     private boolean hasRole(User user, String roleName) {
         Optional<UserRole> role = roleRepository.findByName(roleName);
 
-        return role.isPresent() && user.getAuthorities().contains(role.get());
+        return role.isPresent() && user.getRoles().contains(role.get());
     }
 
     @Override
@@ -259,5 +271,81 @@ public class UserServiceImpl implements UserService {
         existedUser.setPassword(bCryptPasswordEncoder.encode(request.getPassword()));
 
         userRepository.save(existedUser);
+    }
+
+    @Transactional
+    public List<EventsListResponse> getBookedEventsForUser(Long userId)
+            throws ResourceNotFoundException, UnauthorizedException, ForbiddenException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            throw new UnauthorizedException("Unauthorized request");
+        }
+
+        User currentUser = userRepository.findByEmail(authentication.getName())
+                .orElseThrow(() -> new UnauthorizedException("Unauthorized request"));
+
+        if (!currentUser.getId().equals(userId) && !hasRole(currentUser, "ADMIN")) {
+            throw new ForbiddenException("Access denied");
+        }
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        return user.getBookings().stream()
+                .map(Booking::getEvent)
+                .filter(event -> event.getDate().after(new Date(System.currentTimeMillis() - 3600 * 1000)))
+                .sorted(Comparator.comparing(Event::getId).reversed())
+                .map(event -> new EventsListResponse(event.getId(), event.getLongitude(), event.getLatitude(),
+                        event.getApartment(), event.getTitle(), event.getDate(), event.getModifiedDate()))
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<EventsListResponse> getCreatedEventsForUser(Long userId)
+            throws ResourceNotFoundException, UnauthorizedException, ForbiddenException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            throw new UnauthorizedException("Unauthorized request");
+        }
+
+        User currentUser = userRepository.findByEmail(authentication.getName())
+                .orElseThrow(() -> new UnauthorizedException("Unauthorized request"));
+
+        if (!currentUser.getId().equals(userId) && !hasRole(currentUser, "ADMIN")) {
+            throw new ForbiddenException("Access denied");
+        }
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        return user.getCreatedEvents().stream()
+                .filter(event -> event.getDate().after(new Date(System.currentTimeMillis() - 3600 * 1000)))
+                .sorted(Comparator.comparing(Event::getId).reversed())
+                .map(event -> new EventsListResponse(event.getId(), event.getLongitude(), event.getLatitude(),
+                        event.getApartment(), event.getTitle(), event.getDate(), event.getModifiedDate()))
+                .collect(Collectors.toList());
+    }
+
+    public EventStatusResponse getStatus(Long userId, Long eventId)
+            throws UnauthorizedException, ResourceNotFoundException, ForbiddenException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            throw new UnauthorizedException("Unauthorized request");
+        }
+
+        User currentUser = userRepository.findByEmail(authentication.getName())
+                .orElseThrow(() -> new UnauthorizedException("Unauthorized request"));
+
+        if (!currentUser.getId().equals(userId) && !hasRole(currentUser, "ADMIN")) {
+            throw new ForbiddenException("Access denied");
+        }
+
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new ResourceNotFoundException("Event not found"));
+
+        boolean booked = bookingRepository.existsByEventAndVisitor(userId, eventId);
+        boolean created = !booked && eventRepository.existsByEventAndOwner(eventId, userId);
+
+        return new EventStatusResponse(booked, created);
     }
 }

@@ -1,6 +1,8 @@
 package com.egorhristoforov.eventikrestapi.controllers;
 
 import com.egorhristoforov.eventikrestapi.dtos.requests.*;
+import com.egorhristoforov.eventikrestapi.dtos.responses.EventStatusResponse;
+import com.egorhristoforov.eventikrestapi.dtos.responses.EventsListResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.UserCredentialsResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.UserProfileResponse;
 import com.egorhristoforov.eventikrestapi.exceptions.BadRequestException;
@@ -14,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
+import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/users")
@@ -74,5 +78,24 @@ public class UserController {
     public void passwordVerify(@Valid @RequestBody PasswordVerifyRequest body)
             throws ResourceNotFoundException, BadRequestException {
         userService.verifyPassword(body);
+    }
+
+    @GetMapping(value = "/{id}/booked-events")
+    public ResponseEntity<List<EventsListResponse>> getBookedEvents(@PathVariable(value = "id") @Positive Long userId)
+            throws ResourceNotFoundException, UnauthorizedException, ForbiddenException {
+        return ResponseEntity.ok(userService.getBookedEventsForUser(userId));
+    }
+
+    @GetMapping(value = "/{id}/created-events")
+    public ResponseEntity<List<EventsListResponse>> getCreatedEvents(@PathVariable(value = "id") @Positive Long userId)
+            throws ResourceNotFoundException, UnauthorizedException, ForbiddenException {
+        return ResponseEntity.ok(userService.getCreatedEventsForUser(userId));
+    }
+
+    @GetMapping(value = "/{user-id}/events/{event-id}/status")
+    public ResponseEntity<EventStatusResponse> getStatus(@PathVariable(value = "user-id") @Positive Long userId,
+                                                         @PathVariable(value = "event-id") @Positive Long eventId)
+            throws UnauthorizedException, ResourceNotFoundException, ForbiddenException {
+        return ResponseEntity.ok(userService.getStatus(userId, eventId));
     }
 }

@@ -1,6 +1,8 @@
 package com.egorhristoforov.eventikrestapi.services;
 
 import com.egorhristoforov.eventikrestapi.dtos.requests.*;
+import com.egorhristoforov.eventikrestapi.dtos.responses.EventStatusResponse;
+import com.egorhristoforov.eventikrestapi.dtos.responses.EventsListResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.UserCredentialsResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.UserProfileResponse;
 import com.egorhristoforov.eventikrestapi.exceptions.BadRequestException;
@@ -8,6 +10,8 @@ import com.egorhristoforov.eventikrestapi.exceptions.ForbiddenException;
 import com.egorhristoforov.eventikrestapi.exceptions.ResourceNotFoundException;
 import com.egorhristoforov.eventikrestapi.exceptions.UnauthorizedException;
 import org.springframework.security.core.userdetails.UserDetailsService;
+
+import java.util.List;
 
 public interface UserService extends UserDetailsService {
     UserProfileResponse findUserById(Long id)
@@ -30,4 +34,13 @@ public interface UserService extends UserDetailsService {
 
     void verifyPassword(PasswordVerifyRequest request)
             throws ResourceNotFoundException, BadRequestException;
+
+    List<EventsListResponse> getBookedEventsForUser(Long userId)
+            throws ResourceNotFoundException, UnauthorizedException, ForbiddenException;
+
+    List<EventsListResponse> getCreatedEventsForUser(Long userId)
+            throws ResourceNotFoundException, UnauthorizedException, ForbiddenException;
+
+    EventStatusResponse getStatus(Long userId, Long eventId)
+            throws UnauthorizedException, ResourceNotFoundException, ForbiddenException;
 }

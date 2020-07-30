@@ -1,6 +1,7 @@
 package com.egorhristoforov.eventikrestapi.models;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "cities")
@@ -26,6 +27,9 @@ public class City {
 
     @Column(name = "added_by_user")
     private boolean isAddedByUser = false;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "city")
+    private Set<Event> events;
 
     public City(Long id, String enName, String ruName, Double longitude, Double latitude, Country country, boolean isAddedByUser) {
         this.id = id;
@@ -94,5 +98,13 @@ public class City {
 
     public void setAddedByUser(boolean addedByUser) {
         isAddedByUser = addedByUser;
+    }
+
+    public Set<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(Set<Event> events) {
+        this.events = events;
     }
 }

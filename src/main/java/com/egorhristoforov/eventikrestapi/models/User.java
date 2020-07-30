@@ -49,6 +49,12 @@ public class User implements UserDetails {
     @Column(name = "is_activated")
     private Boolean isActivated = false;
 
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "owner")
+    private Set<Event> createdEvents;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "visitor")
+    private Set<Booking> bookings;
+
     public User() {
         super();
     }
@@ -179,5 +185,21 @@ public class User implements UserDetails {
 
     public void setActivated(Boolean activated) {
         isActivated = activated;
+    }
+
+    public Set<Event> getCreatedEvents() {
+        return createdEvents;
+    }
+
+    public void setCreatedEvents(Set<Event> createdEvents) {
+        this.createdEvents = createdEvents;
+    }
+
+    public Set<Booking> getBookings() {
+        return bookings;
+    }
+
+    public void setBookings(Set<Booking> bookings) {
+        this.bookings = bookings;
     }
 }
