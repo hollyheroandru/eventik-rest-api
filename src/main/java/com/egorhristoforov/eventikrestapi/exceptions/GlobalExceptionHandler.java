@@ -1,5 +1,6 @@
 package com.egorhristoforov.eventikrestapi.exceptions;
 
+import com.egorhristoforov.eventikrestapi.exceptions.models.ErrorDetails;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

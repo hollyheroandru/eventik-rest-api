@@ -1,4 +1,4 @@
-package com.egorhristoforov.eventikrestapi.dtos.requests;
+package com.egorhristoforov.eventikrestapi.dtos.requests.Auth;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;

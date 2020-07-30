@@ -1,7 +1,7 @@
 package com.egorhristoforov.eventikrestapi.controllers;
 
-import com.egorhristoforov.eventikrestapi.dtos.responses.CitiesListResponse;
-import com.egorhristoforov.eventikrestapi.dtos.responses.CountriesListResponse;
+import com.egorhristoforov.eventikrestapi.dtos.responses.location.CitiesListResponse;
+import com.egorhristoforov.eventikrestapi.dtos.responses.location.CountriesListResponse;
 import com.egorhristoforov.eventikrestapi.exceptions.ResourceNotFoundException;
 import com.egorhristoforov.eventikrestapi.services.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;

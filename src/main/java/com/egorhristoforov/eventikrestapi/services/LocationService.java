@@ -1,7 +1,7 @@
 package com.egorhristoforov.eventikrestapi.services;
 
-import com.egorhristoforov.eventikrestapi.dtos.responses.CitiesListResponse;
-import com.egorhristoforov.eventikrestapi.dtos.responses.CountriesListResponse;
+import com.egorhristoforov.eventikrestapi.dtos.responses.location.CitiesListResponse;
+import com.egorhristoforov.eventikrestapi.dtos.responses.location.CountriesListResponse;
 import com.egorhristoforov.eventikrestapi.exceptions.ResourceNotFoundException;
 
 import java.util.List;

@@ -1,8 +1,8 @@
 package com.egorhristoforov.eventikrestapi.services;
 
-import com.egorhristoforov.eventikrestapi.dtos.requests.EventCreateRequest;
-import com.egorhristoforov.eventikrestapi.dtos.requests.EventUpdateRequest;
-import com.egorhristoforov.eventikrestapi.dtos.responses.*;
+import com.egorhristoforov.eventikrestapi.dtos.requests.event.EventCreateRequest;
+import com.egorhristoforov.eventikrestapi.dtos.requests.event.EventUpdateRequest;
+import com.egorhristoforov.eventikrestapi.dtos.responses.event.*;
 import com.egorhristoforov.eventikrestapi.exceptions.BadRequestException;
 import com.egorhristoforov.eventikrestapi.exceptions.ForbiddenException;
 import com.egorhristoforov.eventikrestapi.exceptions.ResourceNotFoundException;

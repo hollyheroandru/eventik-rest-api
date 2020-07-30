@@ -1,4 +1,4 @@
-package com.egorhristoforov.eventikrestapi.dtos.responses;
+package com.egorhristoforov.eventikrestapi.dtos.responses.location;
 
 public class CitiesListResponse {
     private Long id;

@@ -1,13 +1,13 @@
-package com.egorhristoforov.eventikrestapi.dtos.responses;
+package com.egorhristoforov.eventikrestapi.dtos.responses.user;
 
-public class EventStatusResponse {
+public class UserEventStatusResponse {
     private boolean booked;
     private boolean created;
 
-    public EventStatusResponse() {
+    public UserEventStatusResponse() {
     }
 
-    public EventStatusResponse(boolean booked, boolean created) {
+    public UserEventStatusResponse(boolean booked, boolean created) {
         this.booked = booked;
         this.created = created;
     }

@@ -1,10 +1,10 @@
 package com.egorhristoforov.eventikrestapi.services;
 
-import com.egorhristoforov.eventikrestapi.dtos.requests.*;
-import com.egorhristoforov.eventikrestapi.dtos.responses.EventStatusResponse;
-import com.egorhristoforov.eventikrestapi.dtos.responses.EventsListResponse;
-import com.egorhristoforov.eventikrestapi.dtos.responses.UserCredentialsResponse;
-import com.egorhristoforov.eventikrestapi.dtos.responses.UserProfileResponse;
+import com.egorhristoforov.eventikrestapi.dtos.requests.user.*;
+import com.egorhristoforov.eventikrestapi.dtos.responses.user.UserEventStatusResponse;
+import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventsListResponse;
+import com.egorhristoforov.eventikrestapi.dtos.responses.user.UserCredentialsResponse;
+import com.egorhristoforov.eventikrestapi.dtos.responses.user.UserProfileResponse;
 import com.egorhristoforov.eventikrestapi.exceptions.BadRequestException;
 import com.egorhristoforov.eventikrestapi.exceptions.ForbiddenException;
 import com.egorhristoforov.eventikrestapi.exceptions.ResourceNotFoundException;
@@ -41,6 +41,6 @@ public interface UserService extends UserDetailsService {
     List<EventsListResponse> getCreatedEventsForUser(Long userId)
             throws ResourceNotFoundException, UnauthorizedException, ForbiddenException;
 
-    EventStatusResponse getStatus(Long userId, Long eventId)
+    UserEventStatusResponse getStatus(Long userId, Long eventId)
             throws UnauthorizedException, ResourceNotFoundException, ForbiddenException;
 }

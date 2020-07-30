@@ -1,4 +1,4 @@
-package com.egorhristoforov.eventikrestapi.exceptions;
+package com.egorhristoforov.eventikrestapi.exceptions.models;
 
 import java.util.Date;
 

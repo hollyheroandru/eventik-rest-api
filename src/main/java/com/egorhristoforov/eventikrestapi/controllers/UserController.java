@@ -1,10 +1,10 @@
 package com.egorhristoforov.eventikrestapi.controllers;
 
-import com.egorhristoforov.eventikrestapi.dtos.requests.*;
-import com.egorhristoforov.eventikrestapi.dtos.responses.EventStatusResponse;
-import com.egorhristoforov.eventikrestapi.dtos.responses.EventsListResponse;
-import com.egorhristoforov.eventikrestapi.dtos.responses.UserCredentialsResponse;
-import com.egorhristoforov.eventikrestapi.dtos.responses.UserProfileResponse;
+import com.egorhristoforov.eventikrestapi.dtos.requests.user.*;
+import com.egorhristoforov.eventikrestapi.dtos.responses.user.UserEventStatusResponse;
+import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventsListResponse;
+import com.egorhristoforov.eventikrestapi.dtos.responses.user.UserCredentialsResponse;
+import com.egorhristoforov.eventikrestapi.dtos.responses.user.UserProfileResponse;
 import com.egorhristoforov.eventikrestapi.exceptions.BadRequestException;
 import com.egorhristoforov.eventikrestapi.exceptions.ForbiddenException;
 import com.egorhristoforov.eventikrestapi.exceptions.ResourceNotFoundException;
@@ -93,8 +93,8 @@ public class UserController {
     }
 
     @GetMapping(value = "/{user-id}/events/{event-id}/status")
-    public ResponseEntity<EventStatusResponse> getStatus(@PathVariable(value = "user-id") @Positive Long userId,
-                                                         @PathVariable(value = "event-id") @Positive Long eventId)
+    public ResponseEntity<UserEventStatusResponse> getStatus(@PathVariable(value = "user-id") @Positive Long userId,
+                                                             @PathVariable(value = "event-id") @Positive Long eventId)
             throws UnauthorizedException, ResourceNotFoundException, ForbiddenException {
         return ResponseEntity.ok(userService.getStatus(userId, eventId));
     }

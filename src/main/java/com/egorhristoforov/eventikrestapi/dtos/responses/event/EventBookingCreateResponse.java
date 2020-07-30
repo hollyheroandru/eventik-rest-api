@@ -1,8 +1,8 @@
-package com.egorhristoforov.eventikrestapi.dtos.responses;
+package com.egorhristoforov.eventikrestapi.dtos.responses.event;
 
 import java.util.Date;
 
-public class EventBookingDeleteResponse {
+public class EventBookingCreateResponse {
     private Long id;
     private Double longitude;
     private Double latitude;
@@ -14,10 +14,10 @@ public class EventBookingDeleteResponse {
     private boolean registrationRequired;
     private Date lastModifiedDate;
 
-    public EventBookingDeleteResponse() {
+    public EventBookingCreateResponse() {
     }
 
-    public EventBookingDeleteResponse(Long id, Double longitude, Double latitude, String apartment,
+    public EventBookingCreateResponse(Long id, Double longitude, Double latitude, String apartment,
                                       String title, String description, Date date, int countOfVisitors,
                                       boolean registrationRequired, Date lastModifiedDate) {
         this.id = id;

@@ -1,4 +1,4 @@
-package com.egorhristoforov.eventikrestapi.dtos.requests;
+package com.egorhristoforov.eventikrestapi.dtos.requests.event;
 
 import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotBlank;

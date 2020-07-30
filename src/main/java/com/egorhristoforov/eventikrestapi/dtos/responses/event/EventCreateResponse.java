@@ -1,8 +1,8 @@
-package com.egorhristoforov.eventikrestapi.dtos.responses;
+package com.egorhristoforov.eventikrestapi.dtos.responses.event;
 
 import java.util.Date;
 
-public class EventRetrieveResponse {
+public class EventCreateResponse {
     private Long id;
     private Double longitude;
     private Double latitude;
@@ -14,12 +14,10 @@ public class EventRetrieveResponse {
     private boolean registrationRequired;
     private Date lastModifiedDate;
 
-    public EventRetrieveResponse() {
+    public EventCreateResponse() {
     }
 
-    public EventRetrieveResponse(Long id, Double longitude, Double latitude, String apartment,
-                                 String title, String description, Date date, int countOfVisitors,
-                                 boolean registrationRequired, Date lastModifiedDate) {
+    public EventCreateResponse(Long id, Double longitude, Double latitude, String apartment, String title, String description, Date date, int countOfVisitors, boolean registrationRequired, Date lastModifiedDate) {
         this.id = id;
         this.longitude = longitude;
         this.latitude = latitude;
@@ -29,6 +27,14 @@ public class EventRetrieveResponse {
         this.date = date;
         this.countOfVisitors = countOfVisitors;
         this.registrationRequired = registrationRequired;
+        this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public Date getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
+    public void setLastModifiedDate(Date lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
     }
 
@@ -102,13 +108,5 @@ public class EventRetrieveResponse {
 
     public void setRegistrationRequired(boolean registrationRequired) {
         this.registrationRequired = registrationRequired;
-    }
-
-    public Date getLastModifiedDate() {
-        return lastModifiedDate;
-    }
-
-    public void setLastModifiedDate(Date lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
     }
 }

@@ -1,9 +1,9 @@
 package com.egorhristoforov.eventikrestapi.services.impl;
 
 import com.egorhristoforov.eventikrestapi.configuration.jwt.JwtTokenUtil;
-import com.egorhristoforov.eventikrestapi.dtos.requests.AuthLoginRequest;
-import com.egorhristoforov.eventikrestapi.dtos.requests.AuthRefreshRequest;
-import com.egorhristoforov.eventikrestapi.dtos.responses.UserCredentialsResponse;
+import com.egorhristoforov.eventikrestapi.dtos.requests.Auth.AuthLoginRequest;
+import com.egorhristoforov.eventikrestapi.dtos.requests.Auth.AuthRefreshRequest;
+import com.egorhristoforov.eventikrestapi.dtos.responses.user.UserCredentialsResponse;
 import com.egorhristoforov.eventikrestapi.exceptions.BadRequestException;
 import com.egorhristoforov.eventikrestapi.exceptions.ResourceNotFoundException;
 import com.egorhristoforov.eventikrestapi.exceptions.UnauthorizedException;
@@ -26,7 +26,7 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     private JwtTokenUtil jwtUtil;
 
-    public UserCredentialsResponse loginUser(AuthLoginRequest request) throws ResourceNotFoundException, BadRequestException {
+    public UserCredentialsResponse loginUser(AuthLoginRequest request) throws ResourceNotFoundException, UnauthorizedException {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
@@ -35,7 +35,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         if (!bCryptPasswordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new BadRequestException("Wrong password");
+            throw new UnauthorizedException("Wrong credentials");
         }
 
         String accessToken = jwtUtil.generateAccessToken(user);

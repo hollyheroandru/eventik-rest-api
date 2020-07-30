@@ -1,4 +1,4 @@
-package com.egorhristoforov.eventikrestapi.dtos.responses;
+package com.egorhristoforov.eventikrestapi.dtos.responses.user;
 
 public class UserCredentialsResponse {
     private String access;

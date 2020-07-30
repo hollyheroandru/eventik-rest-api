@@ -1,34 +1,27 @@
-package com.egorhristoforov.eventikrestapi.dtos.responses;
+package com.egorhristoforov.eventikrestapi.dtos.responses.event;
 
 import java.util.Date;
 
-public class EventBookingCreateResponse {
+public class EventsListResponse {
     private Long id;
     private Double longitude;
     private Double latitude;
     private String apartment;
     private String title;
-    private String description;
     private Date date;
-    private int countOfVisitors;
-    private boolean registrationRequired;
     private Date lastModifiedDate;
 
-    public EventBookingCreateResponse() {
+    public EventsListResponse() {
     }
 
-    public EventBookingCreateResponse(Long id, Double longitude, Double latitude, String apartment,
-                                      String title, String description, Date date, int countOfVisitors,
-                                      boolean registrationRequired, Date lastModifiedDate) {
+    public EventsListResponse(Long id, Double longitude, Double latitude, String apartment,
+                              String title, Date date, Date lastModifiedDate) {
         this.id = id;
         this.longitude = longitude;
         this.latitude = latitude;
         this.apartment = apartment;
         this.title = title;
-        this.description = description;
         this.date = date;
-        this.countOfVisitors = countOfVisitors;
-        this.registrationRequired = registrationRequired;
         this.lastModifiedDate = lastModifiedDate;
     }
 
@@ -72,36 +65,12 @@ public class EventBookingCreateResponse {
         this.title = title;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public Date getDate() {
         return date;
     }
 
     public void setDate(Date date) {
         this.date = date;
-    }
-
-    public int getCountOfVisitors() {
-        return countOfVisitors;
-    }
-
-    public void setCountOfVisitors(int countOfVisitors) {
-        this.countOfVisitors = countOfVisitors;
-    }
-
-    public boolean isRegistrationRequired() {
-        return registrationRequired;
-    }
-
-    public void setRegistrationRequired(boolean registrationRequired) {
-        this.registrationRequired = registrationRequired;
     }
 
     public Date getLastModifiedDate() {

@@ -1,10 +1,13 @@
-package com.egorhristoforov.eventikrestapi.dtos.responses;
+package com.egorhristoforov.eventikrestapi.dtos.responses.event;
 
-public class UserProfileResponse {
+public class EventVisitorsListResponse {
     private String name;
     private String surname;
 
-    public UserProfileResponse(String name, String surname) {
+    public EventVisitorsListResponse() {
+    }
+
+    public EventVisitorsListResponse(String name, String surname) {
         this.name = name;
         this.surname = surname;
     }

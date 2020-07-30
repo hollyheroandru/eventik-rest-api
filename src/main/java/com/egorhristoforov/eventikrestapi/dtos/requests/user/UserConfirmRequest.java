@@ -1,4 +1,4 @@
-package com.egorhristoforov.eventikrestapi.dtos.requests;
+package com.egorhristoforov.eventikrestapi.dtos.requests.user;
 
 import org.springframework.validation.annotation.Validated;
 

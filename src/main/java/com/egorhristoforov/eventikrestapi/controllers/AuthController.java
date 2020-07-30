@@ -1,8 +1,8 @@
 package com.egorhristoforov.eventikrestapi.controllers;
 
-import com.egorhristoforov.eventikrestapi.dtos.requests.AuthLoginRequest;
-import com.egorhristoforov.eventikrestapi.dtos.requests.AuthRefreshRequest;
-import com.egorhristoforov.eventikrestapi.dtos.responses.UserCredentialsResponse;
+import com.egorhristoforov.eventikrestapi.dtos.requests.Auth.AuthLoginRequest;
+import com.egorhristoforov.eventikrestapi.dtos.requests.Auth.AuthRefreshRequest;
+import com.egorhristoforov.eventikrestapi.dtos.responses.user.UserCredentialsResponse;
 import com.egorhristoforov.eventikrestapi.exceptions.BadRequestException;
 import com.egorhristoforov.eventikrestapi.exceptions.ResourceNotFoundException;
 import com.egorhristoforov.eventikrestapi.exceptions.UnauthorizedException;
@@ -25,7 +25,7 @@ public class AuthController {
 
     @PostMapping(value = "/login")
     public ResponseEntity<UserCredentialsResponse> login(@Valid @RequestBody AuthLoginRequest body)
-            throws ResourceNotFoundException, BadRequestException {
+            throws ResourceNotFoundException, UnauthorizedException {
         UserCredentialsResponse response = authService.loginUser(body);
 
         return ResponseEntity.ok(response);

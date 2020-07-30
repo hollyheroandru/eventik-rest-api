@@ -1,4 +1,4 @@
-package com.egorhristoforov.eventikrestapi.dtos.requests;
+package com.egorhristoforov.eventikrestapi.dtos.requests.user;
 
 import javax.validation.constraints.Size;
 

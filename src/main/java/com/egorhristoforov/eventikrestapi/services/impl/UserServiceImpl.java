@@ -1,11 +1,11 @@
 package com.egorhristoforov.eventikrestapi.services.impl;
 
 import com.egorhristoforov.eventikrestapi.configuration.jwt.JwtTokenUtil;
-import com.egorhristoforov.eventikrestapi.dtos.requests.*;
-import com.egorhristoforov.eventikrestapi.dtos.responses.EventStatusResponse;
-import com.egorhristoforov.eventikrestapi.dtos.responses.EventsListResponse;
-import com.egorhristoforov.eventikrestapi.dtos.responses.UserCredentialsResponse;
-import com.egorhristoforov.eventikrestapi.dtos.responses.UserProfileResponse;
+import com.egorhristoforov.eventikrestapi.dtos.requests.user.*;
+import com.egorhristoforov.eventikrestapi.dtos.responses.user.UserEventStatusResponse;
+import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventsListResponse;
+import com.egorhristoforov.eventikrestapi.dtos.responses.user.UserCredentialsResponse;
+import com.egorhristoforov.eventikrestapi.dtos.responses.user.UserProfileResponse;
 import com.egorhristoforov.eventikrestapi.exceptions.BadRequestException;
 import com.egorhristoforov.eventikrestapi.exceptions.ForbiddenException;
 import com.egorhristoforov.eventikrestapi.exceptions.ResourceNotFoundException;
@@ -326,7 +326,7 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
     }
 
-    public EventStatusResponse getStatus(Long userId, Long eventId)
+    public UserEventStatusResponse getStatus(Long userId, Long eventId)
             throws UnauthorizedException, ResourceNotFoundException, ForbiddenException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) {
@@ -346,6 +346,6 @@ public class UserServiceImpl implements UserService {
         boolean booked = bookingRepository.existsByEventAndVisitor(userId, eventId);
         boolean created = !booked && eventRepository.existsByEventAndOwner(eventId, userId);
 
-        return new EventStatusResponse(booked, created);
+        return new UserEventStatusResponse(booked, created);
     }
 }

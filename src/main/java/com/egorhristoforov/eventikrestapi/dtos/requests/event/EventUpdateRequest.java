@@ -1,43 +1,36 @@
-package com.egorhristoforov.eventikrestapi.dtos.responses;
+package com.egorhristoforov.eventikrestapi.dtos.requests.event;
 
+import org.springframework.lang.Nullable;
+
+import javax.validation.constraints.FutureOrPresent;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.util.Date;
 
-public class EventUpdateResponse {
-    private Long id;
+public class EventUpdateRequest {
     private Double longitude;
     private Double latitude;
     private String apartment;
     private String title;
     private String description;
-    private Date date;
-    private int countOfVisitors;
-    private boolean registrationRequired;
-    private Date lastModifiedDate;
 
-    public EventUpdateResponse() {
+    @FutureOrPresent
+    private Date date;
+
+    private Boolean registrationRequired;
+
+    public EventUpdateRequest() {
     }
 
-    public EventUpdateResponse(Long id, Double longitude, Double latitude, String apartment,
-                               String title, String description, Date date, int countOfVisitors,
-                               boolean registrationRequired, Date lastModifiedDate) {
-        this.id = id;
+    public EventUpdateRequest(Double longitude, Double latitude, String apartment, String title,
+                              String description, Date date, boolean registrationRequired) {
         this.longitude = longitude;
         this.latitude = latitude;
         this.apartment = apartment;
         this.title = title;
         this.description = description;
         this.date = date;
-        this.countOfVisitors = countOfVisitors;
         this.registrationRequired = registrationRequired;
-        this.lastModifiedDate = lastModifiedDate;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Double getLongitude() {
@@ -88,27 +81,11 @@ public class EventUpdateResponse {
         this.date = date;
     }
 
-    public int getCountOfVisitors() {
-        return countOfVisitors;
-    }
-
-    public void setCountOfVisitors(int countOfVisitors) {
-        this.countOfVisitors = countOfVisitors;
-    }
-
-    public boolean isRegistrationRequired() {
+    public Boolean isRegistrationRequired() {
         return registrationRequired;
     }
 
     public void setRegistrationRequired(boolean registrationRequired) {
         this.registrationRequired = registrationRequired;
-    }
-
-    public Date getLastModifiedDate() {
-        return lastModifiedDate;
-    }
-
-    public void setLastModifiedDate(Date lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
     }
 }

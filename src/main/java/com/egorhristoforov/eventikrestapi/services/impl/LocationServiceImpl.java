@@ -1,7 +1,7 @@
 package com.egorhristoforov.eventikrestapi.services.impl;
 
-import com.egorhristoforov.eventikrestapi.dtos.responses.CitiesListResponse;
-import com.egorhristoforov.eventikrestapi.dtos.responses.CountriesListResponse;
+import com.egorhristoforov.eventikrestapi.dtos.responses.location.CitiesListResponse;
+import com.egorhristoforov.eventikrestapi.dtos.responses.location.CountriesListResponse;
 import com.egorhristoforov.eventikrestapi.exceptions.ResourceNotFoundException;
 import com.egorhristoforov.eventikrestapi.models.City;
 import com.egorhristoforov.eventikrestapi.models.Country;
