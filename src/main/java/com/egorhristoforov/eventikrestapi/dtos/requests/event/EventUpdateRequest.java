@@ -1,10 +1,6 @@
 package com.egorhristoforov.eventikrestapi.dtos.requests.event;
 
-import org.springframework.lang.Nullable;
-
 import javax.validation.constraints.FutureOrPresent;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import java.util.Date;
 
 public class EventUpdateRequest {

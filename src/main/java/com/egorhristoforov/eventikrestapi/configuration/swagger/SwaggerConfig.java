@@ -13,6 +13,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 @Configuration
 @EnableSwagger2
@@ -26,7 +27,7 @@ public class SwaggerConfig {
                 .apis(RequestHandlerSelectors.basePackage("com.egorhristoforov.eventikrestapi.controllers.app"))
                 .build()
                 .apiInfo(getApiInfo())
-                .securitySchemes(Arrays.asList(new ApiKey("Access token", "Authorization", "header")));
+                .securitySchemes(Collections.singletonList(new ApiKey("Access token", "Authorization", "header")));
     }
 
     private ApiInfo getApiInfo() {

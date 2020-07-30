@@ -1,10 +1,9 @@
 package com.egorhristoforov.eventikrestapi.services.impl;
 
 import com.egorhristoforov.eventikrestapi.configuration.jwt.JwtTokenUtil;
-import com.egorhristoforov.eventikrestapi.dtos.requests.Auth.AuthLoginRequest;
-import com.egorhristoforov.eventikrestapi.dtos.requests.Auth.AuthRefreshRequest;
+import com.egorhristoforov.eventikrestapi.dtos.requests.auth.AuthLoginRequest;
+import com.egorhristoforov.eventikrestapi.dtos.requests.auth.AuthRefreshRequest;
 import com.egorhristoforov.eventikrestapi.dtos.responses.user.UserCredentialsResponse;
-import com.egorhristoforov.eventikrestapi.exceptions.BadRequestException;
 import com.egorhristoforov.eventikrestapi.exceptions.ResourceNotFoundException;
 import com.egorhristoforov.eventikrestapi.exceptions.UnauthorizedException;
 import com.egorhristoforov.eventikrestapi.models.User;
