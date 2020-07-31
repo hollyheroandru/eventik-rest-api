@@ -131,7 +131,6 @@ public class UserServiceImpl implements UserService {
                 "Код подтверждения регистрации: " + emailActivationCode);
 
         createdUser.setEmailConfirmationCode(emailActivationCode);
-        createdUser.setRegistrationDate(new Date());
 
         userRepository.save(createdUser);
         return createdUser.getId();
@@ -296,7 +295,7 @@ public class UserServiceImpl implements UserService {
                 .filter(event -> event.getDate().after(new Date(System.currentTimeMillis() - 3600 * 1000)))
                 .sorted(Comparator.comparing(Event::getId).reversed())
                 .map(event -> new EventsListResponse(event.getId(), event.getLongitude(), event.getLatitude(),
-                        event.getApartment(), event.getTitle(), event.getDate(), event.getModifiedDate()))
+                        event.getApartment(), event.getTitle(), event.getDate(), event.getLastModifiedDate()))
                 .collect(Collectors.toList());
     }
 
@@ -322,7 +321,7 @@ public class UserServiceImpl implements UserService {
                 .filter(event -> event.getDate().after(new Date(System.currentTimeMillis() - 3600 * 1000)))
                 .sorted(Comparator.comparing(Event::getId).reversed())
                 .map(event -> new EventsListResponse(event.getId(), event.getLongitude(), event.getLatitude(),
-                        event.getApartment(), event.getTitle(), event.getDate(), event.getModifiedDate()))
+                        event.getApartment(), event.getTitle(), event.getDate(), event.getLastModifiedDate()))
                 .collect(Collectors.toList());
     }
 

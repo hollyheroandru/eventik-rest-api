@@ -1,5 +1,7 @@
 package com.egorhristoforov.eventikrestapi.dtos.responses.event;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class EventsListResponse {
@@ -8,7 +10,11 @@ public class EventsListResponse {
     private Double latitude;
     private String apartment;
     private String title;
+
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
     private Date date;
+
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
     private Date lastModifiedDate;
 
     public EventsListResponse() {

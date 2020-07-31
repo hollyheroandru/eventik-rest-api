@@ -1,5 +1,7 @@
 package com.egorhristoforov.eventikrestapi.dtos.responses.event;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class EventBookingDeleteResponse {
@@ -9,9 +11,14 @@ public class EventBookingDeleteResponse {
     private String apartment;
     private String title;
     private String description;
+
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
     private Date date;
+
     private int countOfVisitors;
     private boolean registrationRequired;
+
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
     private Date lastModifiedDate;
 
     public EventBookingDeleteResponse() {

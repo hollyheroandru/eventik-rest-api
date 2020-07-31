@@ -1,32 +1,27 @@
 package com.egorhristoforov.eventikrestapi.models;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 @Table(name = "bookings")
-public class Booking {
+public class Booking extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Event event;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User visitor;
 
-    @Column(name = "created_at")
-    private Date bookingDate;
-
     public Booking() {
     }
 
-    public Booking(Long id, Event event, User visitor, Date bookingDate) {
+    public Booking(Long id, Event event, User visitor) {
         this.id = id;
         this.event = event;
         this.visitor = visitor;
-        this.bookingDate = bookingDate;
     }
 
     public Long getId() {
@@ -51,13 +46,5 @@ public class Booking {
 
     public void setVisitor(User visitor) {
         this.visitor = visitor;
-    }
-
-    public Date getBookingDate() {
-        return bookingDate;
-    }
-
-    public void setBookingDate(Date bookingDate) {
-        this.bookingDate = bookingDate;
     }
 }
