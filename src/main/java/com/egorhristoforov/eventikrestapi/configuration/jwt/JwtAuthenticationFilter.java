@@ -45,9 +45,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             } catch (Exception e) {
                 logger.warn("Get username from token error");
             }
-        } else {
-            logger.warn("couldn't find bearer string, will ignore the header");
         }
+
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
             try {
@@ -55,7 +54,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 if (jwtTokenUtil.validateToken(authToken, userDetails)) {
                     UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
-                    logger.info("authenticated user " + username + ", setting security context");
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             } catch (UsernameNotFoundException e) {
