@@ -66,7 +66,7 @@ public class EventServiceImpl implements EventService {
         createdEvent.setDescription(request.getDescription());
         createdEvent.setDate(request.getDate());
         createdEvent.setCreatedDate(new Date());
-        createdEvent.setModifiedDate(new Date());
+        //createdEvent.setModifiedDate(new Date());
         createdEvent.setLongitude(request.getLongitude());
         createdEvent.setLatitude(request.getLatitude());
         createdEvent.setRegistrationRequired(request.isRegistrationRequired());
@@ -84,7 +84,7 @@ public class EventServiceImpl implements EventService {
         response.setDate(createdEvent.getDate());
         response.setCountOfVisitors(0);
         response.setRegistrationRequired(createdEvent.isRegistrationRequired());
-        response.setLastModifiedDate(createdEvent.getModifiedDate());
+        response.setLastModifiedDate(createdEvent.getLastModifiedDate());
 
         return response;
     }
@@ -99,7 +99,7 @@ public class EventServiceImpl implements EventService {
                 .filter(event -> event.getDate().after(new Date(System.currentTimeMillis() - 3600 * 1000)))
                 .sorted(Comparator.comparing(Event::getId).reversed())
                 .map(event -> new EventsListResponse(event.getId(), event.getLongitude(), event.getLatitude(),
-                        event.getApartment(), event.getTitle(), event.getDate(), event.getModifiedDate()))
+                        event.getApartment(), event.getTitle(), event.getDate(), event.getLastModifiedDate()))
                 .collect(Collectors.toList());
     }
 
@@ -116,7 +116,7 @@ public class EventServiceImpl implements EventService {
         response.setDescription(event.getDescription());
         response.setDate(event.getDate());
         response.setRegistrationRequired(event.isRegistrationRequired());
-        response.setLastModifiedDate(event.getModifiedDate());
+        response.setLastModifiedDate(event.getLastModifiedDate());
         response.setCountOfVisitors(eventRepository.countOfVisitors(eventId));
 
         return response;
@@ -167,7 +167,7 @@ public class EventServiceImpl implements EventService {
         event.setDate(request.getDate() == null ? event.getDate() : request.getDate());
         event.setRegistrationRequired(request.isRegistrationRequired() == null ? event.isRegistrationRequired() : request.isRegistrationRequired());
 
-        event.setModifiedDate(new Date());
+        //event.setModifiedDate(new Date());
 
         eventRepository.save(event);
 
@@ -181,7 +181,7 @@ public class EventServiceImpl implements EventService {
         response.setDate(event.getDate());
         response.setCountOfVisitors(eventRepository.countOfVisitors(eventId));
         response.setRegistrationRequired(event.isRegistrationRequired());
-        response.setLastModifiedDate(event.getModifiedDate());
+        response.setLastModifiedDate(event.getLastModifiedDate());
 
         return response;
     }
@@ -217,7 +217,7 @@ public class EventServiceImpl implements EventService {
         response.setDate(event.getDate());
         response.setCountOfVisitors(eventRepository.countOfVisitors(eventId));
         response.setRegistrationRequired(event.isRegistrationRequired());
-        response.setLastModifiedDate(event.getModifiedDate());
+        response.setLastModifiedDate(event.getLastModifiedDate());
 
         if (bookingRepository.existsByEventAndVisitor(currentUser.getId(), eventId)) {
             return response;
@@ -226,7 +226,6 @@ public class EventServiceImpl implements EventService {
         Booking booking = new Booking();
         booking.setEvent(event);
         booking.setVisitor(currentUser);
-        booking.setBookingDate(new Date());
 
         bookingRepository.save(booking);
 
@@ -264,7 +263,7 @@ public class EventServiceImpl implements EventService {
         response.setDate(event.getDate());
         response.setCountOfVisitors(eventRepository.countOfVisitors(eventId));
         response.setRegistrationRequired(event.isRegistrationRequired());
-        response.setLastModifiedDate(event.getModifiedDate());
+        response.setLastModifiedDate(event.getLastModifiedDate());
 
         if (!booking.isPresent()) {
             return response;
@@ -299,7 +298,7 @@ public class EventServiceImpl implements EventService {
         }
 
         return event.getBookings().stream()
-                .sorted(Comparator.comparing(Booking::getBookingDate))
+                .sorted(Comparator.comparing(Booking::getCreatedDate))
                 .map(Booking::getVisitor)
                 .map(visitor -> new EventVisitorsListResponse(visitor.getName(), visitor.getSurname()))
                 .collect(Collectors.toList());

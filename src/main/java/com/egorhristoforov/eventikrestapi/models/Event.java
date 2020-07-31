@@ -1,12 +1,15 @@
 package com.egorhristoforov.eventikrestapi.models;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
 
 @Entity
 @Table(name = "events")
-public class Event {
+public class Event extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -36,23 +39,18 @@ public class Event {
     private Date date;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "event")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Booking> bookings;
 
     @Column(name = "registration_required")
     private boolean isRegistrationRequired;
-
-    @Column(name = "created_at")
-    private Date createdDate;
-
-    @Column(name = "modified_at")
-    private Date modifiedDate;
 
     public Event() {
     }
 
     public Event(Long id, User owner, Double longitude, Double latitude, City city, String apartment,
                  String title, String description, Date date, Set<Booking> bookings,
-                 boolean isRegistrationRequired, Date createdDate, Date modifiedDate) {
+                 boolean isRegistrationRequired) {
         this.id = id;
         this.owner = owner;
         this.longitude = longitude;
@@ -64,8 +62,6 @@ public class Event {
         this.date = date;
         this.bookings = bookings;
         this.isRegistrationRequired = isRegistrationRequired;
-        this.createdDate = createdDate;
-        this.modifiedDate = modifiedDate;
     }
 
     public Long getId() {
@@ -154,21 +150,5 @@ public class Event {
 
     public void setRegistrationRequired(boolean registrationRequired) {
         isRegistrationRequired = registrationRequired;
-    }
-
-    public Date getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public Date getModifiedDate() {
-        return modifiedDate;
-    }
-
-    public void setModifiedDate(Date modifiedDate) {
-        this.modifiedDate = modifiedDate;
     }
 }

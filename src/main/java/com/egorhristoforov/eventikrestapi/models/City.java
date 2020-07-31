@@ -5,7 +5,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "cities")
-public class City {
+public class City extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -31,7 +31,8 @@ public class City {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "city")
     private Set<Event> events;
 
-    public City(Long id, String enName, String ruName, Double longitude, Double latitude, Country country, boolean isAddedByUser) {
+    public City(Long id, String enName, String ruName, Double longitude, Double latitude,
+                Country country, boolean isAddedByUser) {
         this.id = id;
         this.enName = enName;
         this.ruName = ruName;

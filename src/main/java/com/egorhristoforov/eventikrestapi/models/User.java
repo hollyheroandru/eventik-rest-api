@@ -1,12 +1,13 @@
 package com.egorhristoforov.eventikrestapi.models;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -14,7 +15,7 @@ import java.util.stream.Collectors;
 @Table(name = "users", uniqueConstraints = {
         @UniqueConstraint(columnNames = "email")
 })
-public class User implements UserDetails {
+public class User extends Auditable implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -43,16 +44,15 @@ public class User implements UserDetails {
     @Column(name = "password_confirmation_code")
     private String passwordConfirmationCode;
 
-    @Column(name = "registration_date")
-    private Date registrationDate;
-
     @Column(name = "is_activated")
     private Boolean isActivated = false;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "owner")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Event> createdEvents;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "visitor")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Booking> bookings;
 
     public User() {
@@ -60,7 +60,7 @@ public class User implements UserDetails {
     }
 
     public User(String email, String password, String name, String surname, String emailConfirmationCode,
-                String passwordConfirmationCode, Date registrationDate,
+                String passwordConfirmationCode,
                 Boolean isActivated) {
         super();
 
@@ -70,7 +70,6 @@ public class User implements UserDetails {
         this.surname = surname;
         this.emailConfirmationCode = emailConfirmationCode;
         this.passwordConfirmationCode = passwordConfirmationCode;
-        this.registrationDate = registrationDate;
         this.isActivated = isActivated;
     }
 
@@ -169,14 +168,6 @@ public class User implements UserDetails {
 
     public void setPasswordConfirmationCode(String passwordConfirmationCode) {
         this.passwordConfirmationCode = passwordConfirmationCode;
-    }
-
-    public Date getRegistrationDate() {
-        return registrationDate;
-    }
-
-    public void setRegistrationDate(Date registrationDate) {
-        this.registrationDate = registrationDate;
     }
 
     public Boolean getActivated() {

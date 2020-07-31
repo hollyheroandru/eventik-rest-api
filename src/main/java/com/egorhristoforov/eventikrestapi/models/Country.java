@@ -5,7 +5,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "countries")
-public class Country {
+public class Country extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
