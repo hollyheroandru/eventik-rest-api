@@ -27,6 +27,9 @@ public class UserCreateRequest {
         this.surname = surname;
     }
 
+    public UserCreateRequest() {
+    }
+
     public String getEmail() {
         return email;
     }
