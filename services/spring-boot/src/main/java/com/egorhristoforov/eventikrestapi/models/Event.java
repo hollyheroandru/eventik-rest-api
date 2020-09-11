@@ -39,7 +39,6 @@ public class Event extends Auditable {
     private Date date;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "event")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Booking> bookings;
 
     @Column(name = "registration_required")
