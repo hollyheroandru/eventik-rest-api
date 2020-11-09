@@ -23,7 +23,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     private static final String ADMIN_ENDPOINT = "/api/v1/admin/**";
-    private static final String LOGIN_ENDPOINT = "/api/v1/auth/login";
 
     @Autowired
     UserService userService;
@@ -64,7 +63,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.GET, "/api/v1/countries/**").permitAll()
                     .antMatchers(HttpMethod.GET, "/api/v1/events/**/status").authenticated()
                     .antMatchers(HttpMethod.GET, "/api/v1/events/**").permitAll()
-                    .antMatchers(HttpMethod.POST, ADMIN_ENDPOINT).hasRole("ADMIN")
+                    .antMatchers(HttpMethod.POST, "/api/v1/admin/login").permitAll()
+                    .antMatchers(ADMIN_ENDPOINT).hasRole("ADMIN")
                     .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class)

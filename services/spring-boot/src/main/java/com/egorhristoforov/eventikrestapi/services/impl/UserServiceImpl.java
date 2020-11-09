@@ -127,9 +127,9 @@ public class UserServiceImpl implements UserService {
         createdUser.setSurname(user.getSurname());
 
         String emailActivationCode = generateRandomDigitsCode(5);
-        sendEmail(user.getEmail(), "Регистрация в приложении Ивентик",
-                "Код подтверждения регистрации: " + emailActivationCode);
-
+//        sendEmail(user.getEmail(), "Регистрация в приложении Ивентик",
+//                "Код подтверждения регистрации: " + emailActivationCode);
+//
         createdUser.setEmailConfirmationCode(emailActivationCode);
 
         userRepository.save(createdUser);
