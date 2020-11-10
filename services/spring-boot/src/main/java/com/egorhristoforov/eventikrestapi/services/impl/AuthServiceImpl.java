@@ -71,7 +71,7 @@ public class AuthServiceImpl implements AuthService {
             throw new UnauthorizedException("Wrong credentials");
         }
 
-        if(!hasRole(user, "ADMIN")) {
+        if(!hasRole(user, "ADMIN") || !hasRole(user, "MODERATOR")) {
             throw new ForbiddenException("Not enough rights");
         }
 
