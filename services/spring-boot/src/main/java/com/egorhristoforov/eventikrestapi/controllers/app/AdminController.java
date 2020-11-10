@@ -1,13 +1,16 @@
 package com.egorhristoforov.eventikrestapi.controllers.app;
 
+import com.egorhristoforov.eventikrestapi.dtos.requests.auth.AuthLoginRequest;
 import com.egorhristoforov.eventikrestapi.dtos.requests.user.UserUpdateRequest;
 import com.egorhristoforov.eventikrestapi.dtos.responses.admin.UsersListResponse;
+import com.egorhristoforov.eventikrestapi.dtos.responses.user.UserCredentialsResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.user.UserProfileResponse;
 import com.egorhristoforov.eventikrestapi.exceptions.BadRequestException;
 import com.egorhristoforov.eventikrestapi.exceptions.ForbiddenException;
 import com.egorhristoforov.eventikrestapi.exceptions.ResourceNotFoundException;
 import com.egorhristoforov.eventikrestapi.exceptions.UnauthorizedException;
 import com.egorhristoforov.eventikrestapi.services.AdminService;
+import com.egorhristoforov.eventikrestapi.services.AuthService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
@@ -28,6 +31,18 @@ public class AdminController {
 
     @Autowired
     AdminService adminService;
+
+    @Autowired
+    AuthService authService;
+
+    @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Login admin")
+    public ResponseEntity<UserCredentialsResponse> login(@Valid @RequestBody AuthLoginRequest body)
+            throws ResourceNotFoundException, UnauthorizedException, ForbiddenException {
+        UserCredentialsResponse response = authService.loginAdmin(body);
+
+        return ResponseEntity.ok(response);
+    }
 
     @GetMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Get list of users", authorizations = { @Authorization(value = "Access token") })
