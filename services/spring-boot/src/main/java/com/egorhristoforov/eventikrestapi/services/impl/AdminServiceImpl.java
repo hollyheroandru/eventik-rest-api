@@ -56,8 +56,8 @@ public class AdminServiceImpl implements AdminService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        if(request.getNewPassword() != null) {
-            user.setPassword(bCryptPasswordEncoder.encode(request.getNewPassword()));
+        if(request.getPassword() != null) {
+            user.setPassword(bCryptPasswordEncoder.encode(request.getPassword()));
         }
         user.setName(request.getName() == null ? user.getName() : request.getName());
         user.setSurname(request.getSurname() == null ? user.getSurname() : request.getSurname());
