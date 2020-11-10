@@ -1,14 +1,15 @@
 package com.egorhristoforov.eventikrestapi.services.impl;
 
-import com.egorhristoforov.eventikrestapi.dtos.requests.user.UserUpdateRequest;
+import com.egorhristoforov.eventikrestapi.dtos.requests.admin.AdminUserUpdateRequest;
 import com.egorhristoforov.eventikrestapi.dtos.responses.admin.UsersListResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.user.UserProfileResponse;
 import com.egorhristoforov.eventikrestapi.exceptions.ResourceNotFoundException;
 import com.egorhristoforov.eventikrestapi.models.User;
+import com.egorhristoforov.eventikrestapi.repositories.CityRepository;
+import com.egorhristoforov.eventikrestapi.repositories.EventRepository;
 import com.egorhristoforov.eventikrestapi.repositories.UserRepository;
 import com.egorhristoforov.eventikrestapi.services.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,13 @@ public class AdminServiceImpl implements AdminService {
 
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Autowired
+    EventRepository eventRepository;
+
+    @Autowired
+    CityRepository cityRepository;
+
 
     @Transactional
     public List<UsersListResponse> getUsersList() throws ResourceNotFoundException {
@@ -43,7 +51,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public UserProfileResponse updateUserProfileById(Long id, UserUpdateRequest request)
+    public UserProfileResponse updateUserProfileById(Long id, AdminUserUpdateRequest request)
             throws ResourceNotFoundException {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
@@ -53,10 +61,9 @@ public class AdminServiceImpl implements AdminService {
         }
         user.setName(request.getName() == null ? user.getName() : request.getName());
         user.setSurname(request.getSurname() == null ? user.getSurname() : request.getSurname());
+        user.setEmail(request.getEmail() == null ? user.getEmail() : request.getEmail());
 
         userRepository.save(user);
         return new UserProfileResponse(user.getName(), user.getSurname());
     }
-
-
 }
