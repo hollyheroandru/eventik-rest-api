@@ -1,7 +1,7 @@
 package com.egorhristoforov.eventikrestapi.controllers.app;
 
+import com.egorhristoforov.eventikrestapi.dtos.requests.admin.AdminUserUpdateRequest;
 import com.egorhristoforov.eventikrestapi.dtos.requests.auth.AuthLoginRequest;
-import com.egorhristoforov.eventikrestapi.dtos.requests.user.UserUpdateRequest;
 import com.egorhristoforov.eventikrestapi.dtos.responses.admin.UsersListResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.user.UserCredentialsResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.user.UserProfileResponse;
@@ -59,7 +59,7 @@ public class AdminController {
     @PutMapping(value = "/users/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Update users profiles", authorizations = { @Authorization(value = "Access token") })
     public ResponseEntity<UserProfileResponse> updateUserById(@PathVariable(value = "id") Long userId,
-                                                              @Valid @RequestBody UserUpdateRequest body)
+                                                              @Valid @RequestBody AdminUserUpdateRequest body)
             throws ResourceNotFoundException, UnauthorizedException, ForbiddenException, BadRequestException {
         UserProfileResponse response = adminService.updateUserProfileById(userId, body);
 
