@@ -7,7 +7,7 @@ public class UserUpdateRequest {
     private String name;
 
     @Size(min = 2, max = 50, message = "Name length must be greater than or equal 6 and less than or equal to 50")
-    private String Surname;
+    private String surname;
 
     @Size(min = 6, max = 50, message = "Password length must be greater than or equal 6 and less than or equal to 50")
     private String oldPassword;
@@ -17,7 +17,7 @@ public class UserUpdateRequest {
 
     public UserUpdateRequest(String name, String surname, String oldPassword, String newPassword) {
         this.name = name;
-        Surname = surname;
+        this.surname = surname;
         this.oldPassword = oldPassword;
         this.newPassword = newPassword;
     }
@@ -34,11 +34,11 @@ public class UserUpdateRequest {
     }
 
     public String getSurname() {
-        return Surname;
+        return surname;
     }
 
     public void setSurname(String surname) {
-        Surname = surname;
+        this.surname = surname;
     }
 
     public String getOldPassword() {
