@@ -8,7 +8,7 @@ public class AdminUserUpdateRequest {
     private String name;
 
     @Size(min = 2, max = 50, message = "Name length must be greater than or equal 6 and less than or equal to 50")
-    private String Surname;
+    private String surname;
 
     @Size(min = 6, max = 50, message = "Password length must be greater than or equal 6 and less than or equal to 50")
     private String oldPassword;
@@ -23,7 +23,7 @@ public class AdminUserUpdateRequest {
     public AdminUserUpdateRequest(String name, String surname, String oldPassword,
                                   String newPassword, String email) {
         this.name = name;
-        Surname = surname;
+        this.surname = surname;
         this.oldPassword = oldPassword;
         this.newPassword = newPassword;
         this.email = email;
@@ -41,11 +41,11 @@ public class AdminUserUpdateRequest {
     }
 
     public String getSurname() {
-        return Surname;
+        return surname;
     }
 
     public void setSurname(String surname) {
-        Surname = surname;
+        this.surname = surname;
     }
 
     public String getOldPassword() {
