@@ -1,20 +1,34 @@
 package com.egorhristoforov.eventikrestapi.services.impl;
 
+import com.egorhristoforov.eventikrestapi.dtos.requests.admin.AdminEventCreateRequest;
+import com.egorhristoforov.eventikrestapi.dtos.requests.admin.AdminEventUpdateRequest;
 import com.egorhristoforov.eventikrestapi.dtos.requests.admin.AdminUserUpdateRequest;
+import com.egorhristoforov.eventikrestapi.dtos.requests.event.EventCreateRequest;
+import com.egorhristoforov.eventikrestapi.dtos.requests.event.EventUpdateRequest;
 import com.egorhristoforov.eventikrestapi.dtos.responses.admin.UsersListResponse;
+import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventCreateResponse;
+import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventUpdateResponse;
+import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventsListResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.user.UserProfileResponse;
+import com.egorhristoforov.eventikrestapi.exceptions.ForbiddenException;
 import com.egorhristoforov.eventikrestapi.exceptions.ResourceNotFoundException;
+import com.egorhristoforov.eventikrestapi.exceptions.UnauthorizedException;
+import com.egorhristoforov.eventikrestapi.models.City;
+import com.egorhristoforov.eventikrestapi.models.Event;
 import com.egorhristoforov.eventikrestapi.models.User;
 import com.egorhristoforov.eventikrestapi.repositories.CityRepository;
 import com.egorhristoforov.eventikrestapi.repositories.EventRepository;
 import com.egorhristoforov.eventikrestapi.repositories.UserRepository;
 import com.egorhristoforov.eventikrestapi.services.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -56,8 +70,8 @@ public class AdminServiceImpl implements AdminService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        if(request.getNewPassword() != null) {
-            user.setPassword(bCryptPasswordEncoder.encode(request.getNewPassword()));
+        if(request.getPassword() != null) {
+            user.setPassword(bCryptPasswordEncoder.encode(request.getPassword()));
         }
         user.setName(request.getName() == null ? user.getName() : request.getName());
         user.setSurname(request.getSurname() == null ? user.getSurname() : request.getSurname());
@@ -65,5 +79,88 @@ public class AdminServiceImpl implements AdminService {
 
         userRepository.save(user);
         return new UserProfileResponse(user.getName(), user.getSurname());
+    }
+
+    @Override
+    public EventCreateResponse createEvent(AdminEventCreateRequest request)
+            throws ResourceNotFoundException {
+
+        User owner = userRepository.findById(request.getOwnerId())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        City eventCity = cityRepository.findById(request.getCityId())
+                .orElseThrow(() -> new ResourceNotFoundException("Provided city not found"));
+
+        Event createdEvent = new Event();
+        createdEvent.setCity(eventCity);
+        createdEvent.setApartment(request.getApartment());
+        createdEvent.setTitle(request.getTitle());
+        createdEvent.setDescription(request.getDescription());
+        createdEvent.setDate(request.getDate());
+        createdEvent.setCreatedDate(new Date());
+        //createdEvent.setModifiedDate(new Date());
+        createdEvent.setLongitude(request.getLongitude());
+        createdEvent.setLatitude(request.getLatitude());
+        createdEvent.setRegistrationRequired(request.isRegistrationRequired());
+        createdEvent.setOwner(owner);
+
+        eventRepository.save(createdEvent);
+
+        EventCreateResponse response = new EventCreateResponse();
+        response.setId(createdEvent.getId());
+        response.setLatitude(createdEvent.getLatitude());
+        response.setLongitude(createdEvent.getLongitude());
+        response.setApartment(createdEvent.getApartment());
+        response.setTitle(createdEvent.getTitle());
+        response.setDescription(createdEvent.getDescription());
+        response.setDate(createdEvent.getDate());
+        response.setCountOfVisitors(0);
+        response.setRegistrationRequired(createdEvent.isRegistrationRequired());
+        response.setLastModifiedDate(createdEvent.getLastModifiedDate());
+
+        return response;
+    }
+
+    @Override
+    public void deleteEventById(Long eventId) throws ResourceNotFoundException {
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new ResourceNotFoundException("Event not found"));
+        eventRepository.delete(event);
+    }
+
+    @Override
+    public EventUpdateResponse updateEvent(Long eventId, AdminEventUpdateRequest request)
+            throws ResourceNotFoundException {
+
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new ResourceNotFoundException("Event not found"));
+
+        event.setLongitude(request.getLongitude() == null ? event.getLongitude() : request.getLongitude());
+        event.setLatitude(request.getLatitude() == null ? event.getLatitude() : request.getLatitude());
+        event.setApartment(request.getApartment() == null ? event.getApartment() : request.getApartment());
+        event.setTitle(request.getTitle() == null ? event.getTitle() : request.getTitle());
+        event.setDescription(request.getDescription() == null ? event.getDescription() : request.getDescription());
+        event.setDate(request.getDate() == null ? event.getDate() : request.getDate());
+        event.setRegistrationRequired(request.isRegistrationRequired() == null ? event.isRegistrationRequired() : request.isRegistrationRequired());
+        event.setOwner(request.getOwnerId() == null ? event.getOwner() :
+                userRepository.findById(request.getOwnerId())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found")));
+        //event.setModifiedDate(new Date());
+
+        eventRepository.save(event);
+
+        EventUpdateResponse response = new EventUpdateResponse();
+        response.setId(event.getId());
+        response.setLongitude(event.getLongitude());
+        response.setLatitude(event.getLatitude());
+        response.setApartment(event.getApartment());
+        response.setTitle(event.getTitle());
+        response.setDescription(event.getDescription());
+        response.setDate(event.getDate());
+        response.setCountOfVisitors(eventRepository.countOfVisitors(eventId));
+        response.setRegistrationRequired(event.isRegistrationRequired());
+        response.setLastModifiedDate(event.getLastModifiedDate());
+
+        return response;
     }
 }
