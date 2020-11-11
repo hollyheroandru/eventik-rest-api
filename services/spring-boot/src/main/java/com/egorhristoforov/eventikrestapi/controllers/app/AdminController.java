@@ -4,8 +4,6 @@ import com.egorhristoforov.eventikrestapi.dtos.requests.admin.AdminEventCreateRe
 import com.egorhristoforov.eventikrestapi.dtos.requests.admin.AdminEventUpdateRequest;
 import com.egorhristoforov.eventikrestapi.dtos.requests.admin.AdminUserUpdateRequest;
 import com.egorhristoforov.eventikrestapi.dtos.requests.auth.AuthLoginRequest;
-import com.egorhristoforov.eventikrestapi.dtos.requests.event.EventCreateRequest;
-import com.egorhristoforov.eventikrestapi.dtos.requests.event.EventUpdateRequest;
 import com.egorhristoforov.eventikrestapi.dtos.responses.admin.AdminUserProfileResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.admin.UsersListResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.admin.UsersRolesResponse;
@@ -14,8 +12,6 @@ import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventRetrieveResp
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventUpdateResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventsListResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.user.UserCredentialsResponse;
-import com.egorhristoforov.eventikrestapi.dtos.responses.user.UserProfileResponse;
-import com.egorhristoforov.eventikrestapi.exceptions.BadRequestException;
 import com.egorhristoforov.eventikrestapi.exceptions.ForbiddenException;
 import com.egorhristoforov.eventikrestapi.exceptions.ResourceNotFoundException;
 import com.egorhristoforov.eventikrestapi.exceptions.UnauthorizedException;
@@ -64,6 +60,12 @@ public class AdminController {
     @ApiOperation(value = "Get list of users", authorizations = { @Authorization(value = "Access token") })
     public ResponseEntity<List<UsersListResponse>> getUsers() throws ResourceNotFoundException {
         return ResponseEntity.ok(adminService.getUsersList());
+    }
+
+    @GetMapping(value = "/users/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Get user profile", authorizations = { @Authorization(value = "Access token") })
+    public ResponseEntity<AdminUserProfileResponse> getUserById(@PathVariable(value = "id") Long userId) throws ResourceNotFoundException {
+        return ResponseEntity.ok(adminService.getUserById(userId));
     }
 
     @DeleteMapping("/users/{id}")

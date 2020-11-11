@@ -3,18 +3,12 @@ package com.egorhristoforov.eventikrestapi.services.impl;
 import com.egorhristoforov.eventikrestapi.dtos.requests.admin.AdminEventCreateRequest;
 import com.egorhristoforov.eventikrestapi.dtos.requests.admin.AdminEventUpdateRequest;
 import com.egorhristoforov.eventikrestapi.dtos.requests.admin.AdminUserUpdateRequest;
-import com.egorhristoforov.eventikrestapi.dtos.requests.event.EventCreateRequest;
-import com.egorhristoforov.eventikrestapi.dtos.requests.event.EventUpdateRequest;
 import com.egorhristoforov.eventikrestapi.dtos.responses.admin.AdminUserProfileResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.admin.UsersListResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.admin.UsersRolesResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventCreateResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventUpdateResponse;
-import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventsListResponse;
-import com.egorhristoforov.eventikrestapi.dtos.responses.user.UserProfileResponse;
-import com.egorhristoforov.eventikrestapi.exceptions.ForbiddenException;
 import com.egorhristoforov.eventikrestapi.exceptions.ResourceNotFoundException;
-import com.egorhristoforov.eventikrestapi.exceptions.UnauthorizedException;
 import com.egorhristoforov.eventikrestapi.models.City;
 import com.egorhristoforov.eventikrestapi.models.Event;
 import com.egorhristoforov.eventikrestapi.models.User;
@@ -25,8 +19,6 @@ import com.egorhristoforov.eventikrestapi.repositories.UserRepository;
 import com.egorhristoforov.eventikrestapi.repositories.UserRoleRepository;
 import com.egorhristoforov.eventikrestapi.services.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -68,6 +60,21 @@ public class AdminServiceImpl implements AdminService {
         userRepository.delete(user);
     }
 
+    private HashMap<Long, String> getUserRoles(User user) {
+        HashMap<Long, String> roles = new HashMap<>();
+        for(UserRole role : user.getRoles()) {
+            roles.put(role.getId(), role.getName());
+        }
+        return roles;
+    }
+
+    @Override
+    public AdminUserProfileResponse getUserById(Long userId) throws ResourceNotFoundException {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        return new AdminUserProfileResponse(user.getName(), user.getSurname(), user.getEmail(), getUserRoles(user));
+    }
+
     @Override
     public AdminUserProfileResponse updateUserProfileById(Long id, AdminUserUpdateRequest request)
             throws ResourceNotFoundException {
@@ -82,19 +89,17 @@ public class AdminServiceImpl implements AdminService {
         user.setSurname(request.getSurname() == null ? user.getSurname() : request.getSurname());
         user.setEmail(request.getEmail() == null ? user.getEmail() : request.getEmail());
 
-        if(request.getRoleId() != null) {
-            user.getRoles().add(userRoleRepository.findById(request.getRoleId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Role not found")));
-        }
-
-        HashMap<Long, String> roles = new HashMap<>();
-        for(UserRole role : user.getRoles()) {
-            roles.put(role.getId(), role.getName());
+        if(request.getRolesIds() != null) {
+            user.getRoles().clear();
+            for(Long roleId : request.getRolesIds()) {
+                user.getRoles().add(userRoleRepository.findById(roleId)
+                        .orElseThrow(() -> new ResourceNotFoundException("Role not found")));
+            }
         }
 
         userRepository.save(user);
         return new AdminUserProfileResponse(user.getName(), user.getSurname(), user.getEmail(),
-                roles);
+                getUserRoles(user));
     }
 
     @Override
