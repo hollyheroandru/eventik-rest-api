@@ -17,12 +17,15 @@ public class AdminUserUpdateRequest {
     @Size(min = 6, max = 50, message = "Password length must be greater than or equal 6 and less than or equal to 50")
     private String password;
 
+    private Long roleId;
+
     public AdminUserUpdateRequest(String name, String surname, String oldPassword,
-                                  String password, String email) {
+                                  String password, String email, Long roleId) {
         this.name = name;
         this.surname = surname;
         this.password = password;
         this.email = email;
+        this.roleId = roleId;
     }
 
     public AdminUserUpdateRequest() {
@@ -58,5 +61,13 @@ public class AdminUserUpdateRequest {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Long getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(Long roleId) {
+        this.roleId = roleId;
     }
 }
