@@ -5,6 +5,7 @@ import com.egorhristoforov.eventikrestapi.dtos.requests.admin.AdminEventUpdateRe
 import com.egorhristoforov.eventikrestapi.dtos.requests.admin.AdminUserUpdateRequest;
 import com.egorhristoforov.eventikrestapi.dtos.requests.event.EventCreateRequest;
 import com.egorhristoforov.eventikrestapi.dtos.requests.event.EventUpdateRequest;
+import com.egorhristoforov.eventikrestapi.dtos.responses.admin.AdminUserProfileResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.admin.UsersListResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.admin.UsersRolesResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventCreateResponse;
@@ -24,7 +25,7 @@ public interface AdminService {
     void deleteUserById(Long id)
         throws ResourceNotFoundException;
 
-    UserProfileResponse updateUserProfileById(Long id, AdminUserUpdateRequest request)
+    AdminUserProfileResponse updateUserProfileById(Long id, AdminUserUpdateRequest request)
         throws ResourceNotFoundException;
 
     EventCreateResponse createEvent(AdminEventCreateRequest request)

@@ -5,6 +5,7 @@ import com.egorhristoforov.eventikrestapi.dtos.requests.admin.AdminEventUpdateRe
 import com.egorhristoforov.eventikrestapi.dtos.requests.admin.AdminUserUpdateRequest;
 import com.egorhristoforov.eventikrestapi.dtos.requests.event.EventCreateRequest;
 import com.egorhristoforov.eventikrestapi.dtos.requests.event.EventUpdateRequest;
+import com.egorhristoforov.eventikrestapi.dtos.responses.admin.AdminUserProfileResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.admin.UsersListResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.admin.UsersRolesResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventCreateResponse;
@@ -30,9 +31,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -69,8 +68,14 @@ public class AdminServiceImpl implements AdminService {
         userRepository.delete(user);
     }
 
+    private List<String> getRolesNameByUser(User user) {
+        return user.getRoles().stream()
+                .map(userRoles -> userRoles.getName())
+                .collect(Collectors.toList());
+    }
+
     @Override
-    public UserProfileResponse updateUserProfileById(Long id, AdminUserUpdateRequest request)
+    public AdminUserProfileResponse updateUserProfileById(Long id, AdminUserUpdateRequest request)
             throws ResourceNotFoundException {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
@@ -78,12 +83,18 @@ public class AdminServiceImpl implements AdminService {
         if(request.getPassword() != null) {
             user.setPassword(bCryptPasswordEncoder.encode(request.getPassword()));
         }
+
         user.setName(request.getName() == null ? user.getName() : request.getName());
         user.setSurname(request.getSurname() == null ? user.getSurname() : request.getSurname());
         user.setEmail(request.getEmail() == null ? user.getEmail() : request.getEmail());
 
+        if(request.getRoleId() != null) {
+            user.getRoles().add(userRoleRepository.findById(request.getRoleId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Role not found")));
+        }
+
         userRepository.save(user);
-        return new UserProfileResponse(user.getName(), user.getSurname());
+        return new AdminUserProfileResponse(user.getName(), user.getSurname(), getRolesNameByUser(user));
     }
 
     @Override

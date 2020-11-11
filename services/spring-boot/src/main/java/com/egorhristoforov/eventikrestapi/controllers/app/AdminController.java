@@ -6,6 +6,7 @@ import com.egorhristoforov.eventikrestapi.dtos.requests.admin.AdminUserUpdateReq
 import com.egorhristoforov.eventikrestapi.dtos.requests.auth.AuthLoginRequest;
 import com.egorhristoforov.eventikrestapi.dtos.requests.event.EventCreateRequest;
 import com.egorhristoforov.eventikrestapi.dtos.requests.event.EventUpdateRequest;
+import com.egorhristoforov.eventikrestapi.dtos.responses.admin.AdminUserProfileResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.admin.UsersListResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.admin.UsersRolesResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventCreateResponse;
@@ -73,12 +74,10 @@ public class AdminController {
 
     @PutMapping(value = "/users/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Update users profiles", authorizations = { @Authorization(value = "Access token") })
-    public ResponseEntity<UserProfileResponse> updateUserById(@PathVariable(value = "id") Long userId,
-                                                              @Valid @RequestBody AdminUserUpdateRequest body)
-            throws ResourceNotFoundException, UnauthorizedException, ForbiddenException, BadRequestException {
-        UserProfileResponse response = adminService.updateUserProfileById(userId, body);
-
-        return ResponseEntity.ok(response);
+    public ResponseEntity<AdminUserProfileResponse> updateUserById(@PathVariable(value = "id") Long userId,
+                                                                   @Valid @RequestBody AdminUserUpdateRequest body)
+            throws ResourceNotFoundException {
+        return ResponseEntity.ok(adminService.updateUserProfileById(userId, body));
     }
 
     @PostMapping(value = "/events", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
