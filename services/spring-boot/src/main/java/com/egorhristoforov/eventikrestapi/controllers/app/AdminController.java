@@ -7,6 +7,7 @@ import com.egorhristoforov.eventikrestapi.dtos.requests.auth.AuthLoginRequest;
 import com.egorhristoforov.eventikrestapi.dtos.requests.event.EventCreateRequest;
 import com.egorhristoforov.eventikrestapi.dtos.requests.event.EventUpdateRequest;
 import com.egorhristoforov.eventikrestapi.dtos.responses.admin.UsersListResponse;
+import com.egorhristoforov.eventikrestapi.dtos.responses.admin.UsersRolesResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventCreateResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventRetrieveResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventUpdateResponse;
@@ -115,5 +116,11 @@ public class AdminController {
                                                            @Valid @RequestBody AdminEventUpdateRequest body)
             throws ResourceNotFoundException {
         return ResponseEntity.ok(adminService.updateEvent(eventId, body));
+    }
+
+    @GetMapping(value = "/roles")
+    @ApiOperation(value = "Get list of users roles", authorizations = { @Authorization(value = "Access token") })
+    public ResponseEntity<List<UsersRolesResponse>> getRoles() throws ResourceNotFoundException {
+        return ResponseEntity.ok(adminService.getRoles());
     }
 }

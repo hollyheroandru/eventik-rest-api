@@ -6,6 +6,7 @@ import com.egorhristoforov.eventikrestapi.dtos.requests.admin.AdminUserUpdateReq
 import com.egorhristoforov.eventikrestapi.dtos.requests.event.EventCreateRequest;
 import com.egorhristoforov.eventikrestapi.dtos.requests.event.EventUpdateRequest;
 import com.egorhristoforov.eventikrestapi.dtos.responses.admin.UsersListResponse;
+import com.egorhristoforov.eventikrestapi.dtos.responses.admin.UsersRolesResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventCreateResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventUpdateResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventsListResponse;
@@ -34,4 +35,7 @@ public interface AdminService {
 
     EventUpdateResponse updateEvent(Long eventId, AdminEventUpdateRequest request)
             throws ResourceNotFoundException;
+
+    List<UsersRolesResponse> getRoles()
+        throws ResourceNotFoundException;
 }

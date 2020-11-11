@@ -6,6 +6,7 @@ import com.egorhristoforov.eventikrestapi.dtos.requests.admin.AdminUserUpdateReq
 import com.egorhristoforov.eventikrestapi.dtos.requests.event.EventCreateRequest;
 import com.egorhristoforov.eventikrestapi.dtos.requests.event.EventUpdateRequest;
 import com.egorhristoforov.eventikrestapi.dtos.responses.admin.UsersListResponse;
+import com.egorhristoforov.eventikrestapi.dtos.responses.admin.UsersRolesResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventCreateResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventUpdateResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventsListResponse;
@@ -16,9 +17,11 @@ import com.egorhristoforov.eventikrestapi.exceptions.UnauthorizedException;
 import com.egorhristoforov.eventikrestapi.models.City;
 import com.egorhristoforov.eventikrestapi.models.Event;
 import com.egorhristoforov.eventikrestapi.models.User;
+import com.egorhristoforov.eventikrestapi.models.UserRole;
 import com.egorhristoforov.eventikrestapi.repositories.CityRepository;
 import com.egorhristoforov.eventikrestapi.repositories.EventRepository;
 import com.egorhristoforov.eventikrestapi.repositories.UserRepository;
+import com.egorhristoforov.eventikrestapi.repositories.UserRoleRepository;
 import com.egorhristoforov.eventikrestapi.services.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -47,6 +50,8 @@ public class AdminServiceImpl implements AdminService {
     @Autowired
     CityRepository cityRepository;
 
+    @Autowired
+    UserRoleRepository userRoleRepository;
 
     @Transactional
     public List<UsersListResponse> getUsersList() throws ResourceNotFoundException {
@@ -162,5 +167,14 @@ public class AdminServiceImpl implements AdminService {
         response.setLastModifiedDate(event.getLastModifiedDate());
 
         return response;
+    }
+
+    @Transactional
+    public List<UsersRolesResponse> getRoles() throws ResourceNotFoundException {
+        return userRoleRepository.findAll()
+                .stream()
+                .sorted(Comparator.comparing(UserRole::getId).reversed())
+                .map(role -> new UsersRolesResponse(role.getId(), role.getName()))
+                .collect(Collectors.toList());
     }
 }
