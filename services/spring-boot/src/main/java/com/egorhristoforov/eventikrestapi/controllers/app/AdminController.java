@@ -118,7 +118,7 @@ public class AdminController {
     }
 
     @GetMapping(value = "/roles")
-    @ApiOperation(value = "Get list of users roles", authorizations = { @Authorization(value = "Access token") })
+    @ApiOperation(value = "Get list of existed roles", authorizations = { @Authorization(value = "Access token") })
     public ResponseEntity<List<UsersRolesResponse>> getRoles() throws ResourceNotFoundException {
         return ResponseEntity.ok(adminService.getRoles());
     }
