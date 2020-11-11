@@ -94,7 +94,7 @@ public class AdminServiceImpl implements AdminService {
         }
 
         userRepository.save(user);
-        return new AdminUserProfileResponse(user.getName(), user.getSurname(), getRolesNameByUser(user));
+        return new AdminUserProfileResponse(user.getName(), user.getSurname(), user.getEmail(), getRolesNameByUser(user));
     }
 
     @Override
