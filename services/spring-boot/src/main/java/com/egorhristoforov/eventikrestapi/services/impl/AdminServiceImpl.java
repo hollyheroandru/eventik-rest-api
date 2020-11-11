@@ -68,12 +68,6 @@ public class AdminServiceImpl implements AdminService {
         userRepository.delete(user);
     }
 
-    private List<String> getRolesNameByUser(User user) {
-        return user.getRoles().stream()
-                .map(userRoles -> userRoles.getName())
-                .collect(Collectors.toList());
-    }
-
     @Override
     public AdminUserProfileResponse updateUserProfileById(Long id, AdminUserUpdateRequest request)
             throws ResourceNotFoundException {
@@ -93,8 +87,14 @@ public class AdminServiceImpl implements AdminService {
                     .orElseThrow(() -> new ResourceNotFoundException("Role not found")));
         }
 
+        HashMap<Long, String> roles = new HashMap<>();
+        for(UserRole role : user.getRoles()) {
+            roles.put(role.getId(), role.getName());
+        }
+
         userRepository.save(user);
-        return new AdminUserProfileResponse(user.getName(), user.getSurname(), getRolesNameByUser(user));
+        return new AdminUserProfileResponse(user.getName(), user.getSurname(), user.getEmail(),
+                roles);
     }
 
     @Override
