@@ -66,6 +66,12 @@ public class AdminController {
         return ResponseEntity.ok(adminService.getUsersList());
     }
 
+    @GetMapping(value = "/users/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Get user profile", authorizations = { @Authorization(value = "Access token") })
+    public ResponseEntity<AdminUserProfileResponse> getUserById(@PathVariable(value = "id") Long userId) throws ResourceNotFoundException {
+        return ResponseEntity.ok(adminService.getUserById(userId));
+    }
+
     @DeleteMapping("/users/{id}")
     @ApiOperation(value = "Delete users by id", authorizations = { @Authorization(value = "Access token") })
     public void deleteUserById(@PathVariable(value = "id") Long id) throws ResourceNotFoundException {

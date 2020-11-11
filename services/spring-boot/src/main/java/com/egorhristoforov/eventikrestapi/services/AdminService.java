@@ -25,6 +25,9 @@ public interface AdminService {
     void deleteUserById(Long id)
         throws ResourceNotFoundException;
 
+    AdminUserProfileResponse getUserById(Long userId)
+        throws ResourceNotFoundException;
+
     AdminUserProfileResponse updateUserProfileById(Long id, AdminUserUpdateRequest request)
         throws ResourceNotFoundException;
 
