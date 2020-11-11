@@ -3,6 +3,7 @@ package com.egorhristoforov.eventikrestapi.dtos.responses.admin;
 import com.egorhristoforov.eventikrestapi.models.UserRole;
 
 import javax.validation.constraints.Email;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -13,9 +14,9 @@ public class AdminUserProfileResponse {
     @Email
     private String email;
 
-    private List<String> roles;
+    private HashMap<Long, String> roles;
 
-    public AdminUserProfileResponse(String name, String surname, String email, List<String> roles) {
+    public AdminUserProfileResponse(String name, String surname, String email, HashMap<Long, String> roles) {
         this.name = name;
         this.surname = surname;
         this.email = email;
@@ -38,11 +39,11 @@ public class AdminUserProfileResponse {
         this.surname = surname;
     }
 
-    public List<String> getRoles() {
+    public HashMap<Long, String> getRoles() {
         return roles;
     }
 
-    public void setRoles(List<String> roles) {
+    public void setRoles(HashMap<Long, String> roles) {
         this.roles = roles;
     }
 
