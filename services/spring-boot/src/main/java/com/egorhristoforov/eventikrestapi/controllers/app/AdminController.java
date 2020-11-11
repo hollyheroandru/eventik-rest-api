@@ -1,8 +1,16 @@
 package com.egorhristoforov.eventikrestapi.controllers.app;
 
+import com.egorhristoforov.eventikrestapi.dtos.requests.admin.AdminEventCreateRequest;
+import com.egorhristoforov.eventikrestapi.dtos.requests.admin.AdminEventUpdateRequest;
 import com.egorhristoforov.eventikrestapi.dtos.requests.admin.AdminUserUpdateRequest;
 import com.egorhristoforov.eventikrestapi.dtos.requests.auth.AuthLoginRequest;
+import com.egorhristoforov.eventikrestapi.dtos.requests.event.EventCreateRequest;
+import com.egorhristoforov.eventikrestapi.dtos.requests.event.EventUpdateRequest;
 import com.egorhristoforov.eventikrestapi.dtos.responses.admin.UsersListResponse;
+import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventCreateResponse;
+import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventRetrieveResponse;
+import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventUpdateResponse;
+import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventsListResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.user.UserCredentialsResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.user.UserProfileResponse;
 import com.egorhristoforov.eventikrestapi.exceptions.BadRequestException;
@@ -11,16 +19,19 @@ import com.egorhristoforov.eventikrestapi.exceptions.ResourceNotFoundException;
 import com.egorhristoforov.eventikrestapi.exceptions.UnauthorizedException;
 import com.egorhristoforov.eventikrestapi.services.AdminService;
 import com.egorhristoforov.eventikrestapi.services.AuthService;
+import com.egorhristoforov.eventikrestapi.services.EventService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 import java.util.List;
 
 @RestController
@@ -34,6 +45,9 @@ public class AdminController {
 
     @Autowired
     AuthService authService;
+
+    @Autowired
+    EventService eventService;
 
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Login admin")
@@ -66,4 +80,40 @@ public class AdminController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping(value = "/events", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Create event", authorizations = { @Authorization(value = "Access token") })
+    public ResponseEntity<EventCreateResponse> createEvent(@Valid @RequestBody AdminEventCreateRequest body)
+            throws ResourceNotFoundException {
+        return ResponseEntity.status(HttpStatus.CREATED).body(adminService.createEvent(body));
+    }
+
+    @GetMapping(value = "/events", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Get events list", authorizations = { @Authorization(value = "Access token")})
+    public ResponseEntity<List<EventsListResponse>> getEvents(@RequestParam(value = "city-id") @Positive Long cityId)
+            throws ResourceNotFoundException{
+        return ResponseEntity.ok(eventService.getEventsList(cityId));
+    }
+
+    @GetMapping(value = "/events/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Retrieve event", authorizations = { @Authorization(value = "Access token")})
+    public ResponseEntity<EventRetrieveResponse> getEvent(@PathVariable(value = "id") @Positive Long eventId)
+            throws ResourceNotFoundException {
+        return ResponseEntity.ok(eventService.getEvent(eventId));
+    }
+
+    @DeleteMapping(value = "/events/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiOperation(value = "Delete event", authorizations = { @Authorization(value = "Access token") })
+    public void deleteEvent(@PathVariable(value = "id") @Positive Long eventId)
+            throws ResourceNotFoundException {
+        adminService.deleteEventById(eventId);
+    }
+
+    @PutMapping(value = "/events/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Update event", authorizations = { @Authorization(value = "Access token") })
+    public ResponseEntity<EventUpdateResponse> updateEvent(@PathVariable(value = "id") @Positive Long eventId,
+                                                           @Valid @RequestBody AdminEventUpdateRequest body)
+            throws ResourceNotFoundException {
+        return ResponseEntity.ok(adminService.updateEvent(eventId, body));
+    }
 }
