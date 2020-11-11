@@ -6,7 +6,7 @@ import com.egorhristoforov.eventikrestapi.dtos.requests.admin.AdminUserUpdateReq
 import com.egorhristoforov.eventikrestapi.dtos.requests.auth.AuthLoginRequest;
 import com.egorhristoforov.eventikrestapi.dtos.responses.admin.AdminUserProfileResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.admin.UsersListResponse;
-import com.egorhristoforov.eventikrestapi.dtos.responses.admin.UsersRolesResponse;
+import com.egorhristoforov.eventikrestapi.dtos.responses.admin.UserRolesResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventCreateResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventRetrieveResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventUpdateResponse;
@@ -121,7 +121,7 @@ public class AdminController {
 
     @GetMapping(value = "/roles")
     @ApiOperation(value = "Get list of existed roles", authorizations = { @Authorization(value = "Access token") })
-    public ResponseEntity<List<UsersRolesResponse>> getRoles() throws ResourceNotFoundException {
+    public ResponseEntity<List<UserRolesResponse>> getRoles() throws ResourceNotFoundException {
         return ResponseEntity.ok(adminService.getRoles());
     }
 }

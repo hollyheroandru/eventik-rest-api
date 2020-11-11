@@ -5,7 +5,7 @@ import com.egorhristoforov.eventikrestapi.dtos.requests.admin.AdminEventUpdateRe
 import com.egorhristoforov.eventikrestapi.dtos.requests.admin.AdminUserUpdateRequest;
 import com.egorhristoforov.eventikrestapi.dtos.responses.admin.AdminUserProfileResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.admin.UsersListResponse;
-import com.egorhristoforov.eventikrestapi.dtos.responses.admin.UsersRolesResponse;
+import com.egorhristoforov.eventikrestapi.dtos.responses.admin.UserRolesResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventCreateResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventUpdateResponse;
 import com.egorhristoforov.eventikrestapi.exceptions.ResourceNotFoundException;
@@ -60,12 +60,12 @@ public class AdminServiceImpl implements AdminService {
         userRepository.delete(user);
     }
 
-    private HashMap<Long, String> getUserRoles(User user) {
-        HashMap<Long, String> roles = new HashMap<>();
-        for(UserRole role : user.getRoles()) {
-            roles.put(role.getId(), role.getName());
-        }
-        return roles;
+    private List<UserRolesResponse> getUserRoles(User user) {
+        return user.getRoles()
+                .stream()
+                .sorted(Comparator.comparing(UserRole::getId))
+                .map(userRole -> new UserRolesResponse(userRole.getId(), userRole.getName()))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -186,11 +186,11 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Transactional
-    public List<UsersRolesResponse> getRoles() throws ResourceNotFoundException {
+    public List<UserRolesResponse> getRoles() throws ResourceNotFoundException {
         return userRoleRepository.findAll()
                 .stream()
                 .sorted(Comparator.comparing(UserRole::getId).reversed())
-                .map(role -> new UsersRolesResponse(role.getId(), role.getName()))
+                .map(role -> new UserRolesResponse(role.getId(), role.getName()))
                 .collect(Collectors.toList());
     }
 }

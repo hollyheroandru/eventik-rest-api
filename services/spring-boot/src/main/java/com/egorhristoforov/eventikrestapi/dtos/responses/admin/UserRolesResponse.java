@@ -1,15 +1,15 @@
 package com.egorhristoforov.eventikrestapi.dtos.responses.admin;
 
-public class UsersRolesResponse {
+public class UserRolesResponse {
     private Long id;
     private String name;
 
-    public UsersRolesResponse(Long id, String name) {
+    public UserRolesResponse(Long id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public UsersRolesResponse(){}
+    public UserRolesResponse(){}
 
     public Long getId() {
         return id;
