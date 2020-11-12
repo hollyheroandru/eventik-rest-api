@@ -31,6 +31,9 @@ public interface AdminService {
     AdminCountriesListResponse createCountry(AdminCountryCreateRequest request)
             throws BadRequestException;
 
+    AdminCountriesListResponse updateCountry(Long countryId, AdminCountryUpdateRequest request)
+        throws ResourceNotFoundException;
+
     List<AdminCountriesListResponse> getCountriesList();
 
     void deleteCountryById(Long countryId)

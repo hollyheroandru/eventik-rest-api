@@ -156,4 +156,11 @@ public class AdminController {
         return ResponseEntity.status(HttpStatus.CREATED).body(adminService.createCountry(request));
     }
 
+    @PutMapping(value = "/countries/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Update country", authorizations = { @Authorization(value = "Access token") })
+    public ResponseEntity<AdminCountriesListResponse> updateCountry(@PathVariable(value = "id") @Positive Long countryId,
+                                                           @Valid @RequestBody AdminCountryUpdateRequest body)
+            throws ResourceNotFoundException {
+        return ResponseEntity.ok(adminService.updateCountry(countryId, body));
+    }
 }

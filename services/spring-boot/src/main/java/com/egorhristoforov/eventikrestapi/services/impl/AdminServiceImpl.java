@@ -119,6 +119,21 @@ public class AdminServiceImpl implements AdminService {
                 country.isAddedByUser(), country.getCreatedDate(), country.getLastModifiedDate());
     }
 
+    @Override
+    public AdminCountriesListResponse updateCountry(Long countryId, AdminCountryUpdateRequest request) throws ResourceNotFoundException {
+        Country country = countryRepository.findById(countryId)
+                .orElseThrow(() -> new ResourceNotFoundException("Country not found"));
+
+        country.setEnName(request.getEnName() == null ? country.getEnName() : request.getEnName());
+        country.setRuName(request.getRuName() == null ? country.getRuName() : request.getRuName());
+        country.setAddedByUser(request.isAddedByUser() == country.isAddedByUser() ? country.isAddedByUser() : request.isAddedByUser());
+
+        countryRepository.save(country);
+
+        return new AdminCountriesListResponse(country.getId(), country.getEnName(), country.getRuName(),
+                country.isAddedByUser(), country.getCreatedDate(), country.getLastModifiedDate());
+    }
+
 
     @Override
     public List<AdminCountriesListResponse> getCountriesList() {
