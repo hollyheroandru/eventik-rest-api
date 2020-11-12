@@ -152,7 +152,7 @@ public class AdminController {
 
     @PostMapping(value = "/countries", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Create new country", authorizations = { @Authorization(value = "Access token")})
-    public ResponseEntity<List<AdminCountriesListResponse>> createCountry(@Validated @RequestBody AdminCountryCreateRequest request) throws BadRequestException {
+    public ResponseEntity<AdminCountriesListResponse> createCountry(@Validated @RequestBody AdminCountryCreateRequest request) throws BadRequestException {
         return ResponseEntity.status(HttpStatus.CREATED).body(adminService.createCountry(request));
     }
 

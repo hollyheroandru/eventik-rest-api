@@ -28,7 +28,7 @@ public interface AdminService {
     AdminUserProfileResponse createUser(AdminUserCreateRequest user)
             throws ResourceNotFoundException, BadRequestException;
 
-    List<AdminCountriesListResponse> createCountry(AdminCountryCreateRequest request)
+    AdminCountriesListResponse createCountry(AdminCountryCreateRequest request)
             throws BadRequestException;
 
     List<AdminCountriesListResponse> getCountriesList();

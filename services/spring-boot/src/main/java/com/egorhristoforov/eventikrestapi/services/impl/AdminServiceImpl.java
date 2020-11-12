@@ -101,7 +101,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public List<AdminCountriesListResponse> createCountry(AdminCountryCreateRequest request) throws BadRequestException {
+    public AdminCountriesListResponse createCountry(AdminCountryCreateRequest request) throws BadRequestException {
         Country country = countryRepository
                 .findByBothOfNamesIgnoreCase(request.getEnName(), request.getRuName())
                 .orElse(new Country());
@@ -115,22 +115,19 @@ public class AdminServiceImpl implements AdminService {
 
         countryRepository.save(country);
 
-        return getAllCountries();
+        return new AdminCountriesListResponse(country.getId(), country.getEnName(), country.getRuName(),
+                country.isAddedByUser(), country.getCreatedDate(), country.getLastModifiedDate());
     }
 
-    private List<AdminCountriesListResponse> getAllCountries() {
+
+    @Override
+    public List<AdminCountriesListResponse> getCountriesList() {
         return countryRepository.findAll()
                 .stream()
                 .sorted(Comparator.comparing(Country::getId))
                 .map((country) -> new AdminCountriesListResponse(country.getId(), country.getEnName(), country.getRuName(),
                         country.isAddedByUser(), country.getCreatedDate(), country.getLastModifiedDate()))
                 .collect(Collectors.toList());
-    }
-
-
-    @Override
-    public List<AdminCountriesListResponse> getCountriesList() {
-        return getAllCountries();
     }
 
     @Override
