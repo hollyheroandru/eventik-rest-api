@@ -1,6 +1,7 @@
 package com.egorhristoforov.eventikrestapi.services;
 
 import com.egorhristoforov.eventikrestapi.dtos.requests.admin.*;
+import com.egorhristoforov.eventikrestapi.dtos.responses.admin.AdminCountriesListResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.admin.AdminUserProfileResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.admin.UsersListResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.admin.UserRolesResponse;
@@ -14,19 +15,23 @@ import com.egorhristoforov.eventikrestapi.exceptions.ResourceNotFoundException;
 import java.util.List;
 
 public interface AdminService {
+
     List<UsersListResponse> getUsersList()
             throws ResourceNotFoundException;
+
     void deleteUserById(Long id)
         throws ResourceNotFoundException;
 
     AdminUserProfileResponse getUserById(Long userId)
         throws ResourceNotFoundException;
 
-    AdminUserProfileResponse createUser(AdminCreateUserRequest user)
+    AdminUserProfileResponse createUser(AdminUserCreateRequest user)
             throws ResourceNotFoundException, BadRequestException;
 
-    List<CountriesListResponse> createCountry(AdminCreateCountryRequest request)
+    List<AdminCountriesListResponse> createCountry(AdminCountryCreateRequest request)
             throws BadRequestException;
+
+    List<AdminCountriesListResponse> getCountriesList();
 
     void deleteCountryById(Long countryId)
         throws ResourceNotFoundException;

@@ -2,6 +2,7 @@ package com.egorhristoforov.eventikrestapi.controllers.app;
 
 import com.egorhristoforov.eventikrestapi.dtos.requests.admin.*;
 import com.egorhristoforov.eventikrestapi.dtos.requests.auth.AuthLoginRequest;
+import com.egorhristoforov.eventikrestapi.dtos.responses.admin.AdminCountriesListResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.admin.AdminUserProfileResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.admin.UsersListResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.admin.UserRolesResponse;
@@ -62,7 +63,7 @@ public class AdminController {
 
     @PostMapping(value = "/users", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Creating new user", authorizations = { @Authorization(value = "Access token") })
-    public ResponseEntity<AdminUserProfileResponse> createUser(@Valid @RequestBody AdminCreateUserRequest user) throws ResourceNotFoundException, BadRequestException {
+    public ResponseEntity<AdminUserProfileResponse> createUser(@Valid @RequestBody AdminUserCreateRequest user) throws ResourceNotFoundException, BadRequestException {
         return ResponseEntity.status(HttpStatus.CREATED).body(adminService.createUser(user));
     }
 
@@ -79,6 +80,7 @@ public class AdminController {
     }
 
     @DeleteMapping(value = "/users/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiOperation(value = "Delete users by id", authorizations = { @Authorization(value = "Access token") })
     public void deleteUserById(@PathVariable(value = "id") Long id) throws ResourceNotFoundException {
         adminService.deleteUserById(id);
@@ -137,8 +139,8 @@ public class AdminController {
 
     @GetMapping(value = "/countries", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Get list of countries", authorizations = { @Authorization(value = "Access token")})
-    public ResponseEntity<List<CountriesListResponse>> getCountriesList() {
-        return  ResponseEntity.ok(locationService.getCountries());
+    public ResponseEntity<List<AdminCountriesListResponse>> getCountriesList() {
+        return  ResponseEntity.ok(adminService.getCountriesList());
     }
 
     @DeleteMapping(value = "/countries/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -150,7 +152,7 @@ public class AdminController {
 
     @PostMapping(value = "/countries", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Create new country", authorizations = { @Authorization(value = "Access token")})
-    public ResponseEntity<List<CountriesListResponse>> createCountry(@Validated @RequestBody AdminCreateCountryRequest request) throws BadRequestException {
+    public ResponseEntity<List<AdminCountriesListResponse>> createCountry(@Validated @RequestBody AdminCountryCreateRequest request) throws BadRequestException {
         return ResponseEntity.status(HttpStatus.CREATED).body(adminService.createCountry(request));
     }
 

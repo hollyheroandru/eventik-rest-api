@@ -2,7 +2,7 @@ package com.egorhristoforov.eventikrestapi.dtos.requests.admin;
 
 import javax.validation.constraints.NotNull;
 
-public class AdminCreateCountryRequest {
+public class AdminCountryCreateRequest {
 
     @NotNull
     private String enName;
@@ -10,12 +10,12 @@ public class AdminCreateCountryRequest {
     @NotNull
     private String ruName;
 
-    public AdminCreateCountryRequest(String enName, String ruName) {
+    public AdminCountryCreateRequest(String enName, String ruName) {
         this.enName = enName;
         this.ruName = ruName;
     }
 
-    public AdminCreateCountryRequest() {
+    public AdminCountryCreateRequest() {
     }
 
     public String getEnName() {

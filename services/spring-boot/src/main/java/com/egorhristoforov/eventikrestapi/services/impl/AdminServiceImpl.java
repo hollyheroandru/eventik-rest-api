@@ -1,6 +1,7 @@
 package com.egorhristoforov.eventikrestapi.services.impl;
 
 import com.egorhristoforov.eventikrestapi.dtos.requests.admin.*;
+import com.egorhristoforov.eventikrestapi.dtos.responses.admin.AdminCountriesListResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.admin.AdminUserProfileResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.admin.UsersListResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.admin.UserRolesResponse;
@@ -77,7 +78,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public AdminUserProfileResponse createUser(AdminCreateUserRequest user) throws ResourceNotFoundException, BadRequestException {
+    public AdminUserProfileResponse createUser(AdminUserCreateRequest user) throws ResourceNotFoundException, BadRequestException {
         User createdUser = userRepository.findByEmail(user.getEmail())
                 .orElse(new User());
 
@@ -100,9 +101,10 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public List<CountriesListResponse> createCountry(AdminCreateCountryRequest request) throws BadRequestException {
+    public List<AdminCountriesListResponse> createCountry(AdminCountryCreateRequest request) throws BadRequestException {
         Country country = countryRepository
-                .findByEnNameIgnoreCase(request.getEnName()).orElse(new Country());
+                .findByBothOfNamesIgnoreCase(request.getEnName(), request.getRuName())
+                .orElse(new Country());
 
         if (country.getEnName() != null && country.getRuName() != null) {
             throw new BadRequestException("The country already exists");
@@ -113,7 +115,22 @@ public class AdminServiceImpl implements AdminService {
 
         countryRepository.save(country);
 
-        return locationService.getCountries();
+        return getAllCountries();
+    }
+
+    private List<AdminCountriesListResponse> getAllCountries() {
+        return countryRepository.findAll()
+                .stream()
+                .sorted(Comparator.comparing(Country::getId))
+                .map((country) -> new AdminCountriesListResponse(country.getId(), country.getEnName(), country.getRuName(),
+                        country.isAddedByUser(), country.getCreatedDate(), country.getLastModifiedDate()))
+                .collect(Collectors.toList());
+    }
+
+
+    @Override
+    public List<AdminCountriesListResponse> getCountriesList() {
+        return getAllCountries();
     }
 
     @Override

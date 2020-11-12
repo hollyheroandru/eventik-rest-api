@@ -3,7 +3,7 @@ package com.egorhristoforov.eventikrestapi.dtos.requests.admin;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 
-public class AdminCreateUserRequest {
+public class AdminUserCreateRequest {
     @Size(min = 2, max = 50, message = "Name length must be greater than or equal 6 and less than or equal to 50")
     private String name;
 
@@ -19,7 +19,7 @@ public class AdminCreateUserRequest {
 
     private Long[] rolesIds;
 
-    public AdminCreateUserRequest(String name, String surname,
+    public AdminUserCreateRequest(String name, String surname,
                                   String password, String email, Long[] rolesIds) {
         this.name = name;
         this.surname = surname;
@@ -28,7 +28,7 @@ public class AdminCreateUserRequest {
         this.rolesIds = rolesIds;
     }
 
-    public AdminCreateUserRequest() {
+    public AdminUserCreateRequest() {
     }
 
     public String getName() {
