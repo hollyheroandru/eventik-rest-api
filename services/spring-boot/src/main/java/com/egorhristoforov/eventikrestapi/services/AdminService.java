@@ -22,6 +22,9 @@ public interface AdminService {
     AdminUserProfileResponse getUserById(Long userId)
         throws ResourceNotFoundException;
 
+    AdminUserProfileResponse createUser(AdminUserUpdateRequest user)
+        throws ResourceNotFoundException;
+
     AdminUserProfileResponse updateUserProfileById(Long id, AdminUserUpdateRequest request)
         throws ResourceNotFoundException;
 

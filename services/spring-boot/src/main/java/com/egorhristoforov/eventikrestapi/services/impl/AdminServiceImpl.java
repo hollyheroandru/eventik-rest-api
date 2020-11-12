@@ -76,6 +76,35 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    public AdminUserProfileResponse createUser(AdminUserUpdateRequest user) throws ResourceNotFoundException {
+        User createdUser = userRepository.findByEmail(user.getEmail())
+                .orElse(new User());
+
+        createdUser.setName(user.getName());
+        createdUser.setSurname(user.getSurname());
+        createdUser.setEmail(user.getEmail());
+        createdUser.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        createdUser.setActivated(true);
+        createdUser.setRoles(new HashSet<>());
+        setUserRoles(user, createdUser);
+
+        userRepository.save(createdUser);
+
+        return new AdminUserProfileResponse(createdUser.getName(), createdUser.getSurname(),
+                createdUser.getEmail(), getUserRoles(createdUser));
+    }
+
+    private void setUserRoles(AdminUserUpdateRequest request, User user) throws ResourceNotFoundException {
+        if(request.getRolesIds() != null) {
+            user.getRoles().clear();
+            for(Long roleId : request.getRolesIds()) {
+                user.getRoles().add(userRoleRepository.findById(roleId)
+                        .orElseThrow(() -> new ResourceNotFoundException("Role not found")));
+            }
+        }
+    }
+
+    @Override
     public AdminUserProfileResponse updateUserProfileById(Long id, AdminUserUpdateRequest request)
             throws ResourceNotFoundException {
         User user = userRepository.findById(id)
@@ -89,13 +118,7 @@ public class AdminServiceImpl implements AdminService {
         user.setSurname(request.getSurname() == null ? user.getSurname() : request.getSurname());
         user.setEmail(request.getEmail() == null ? user.getEmail() : request.getEmail());
 
-        if(request.getRolesIds() != null) {
-            user.getRoles().clear();
-            for(Long roleId : request.getRolesIds()) {
-                user.getRoles().add(userRoleRepository.findById(roleId)
-                        .orElseThrow(() -> new ResourceNotFoundException("Role not found")));
-            }
-        }
+        setUserRoles(request, user);
 
         userRepository.save(user);
         return new AdminUserProfileResponse(user.getName(), user.getSurname(), user.getEmail(),

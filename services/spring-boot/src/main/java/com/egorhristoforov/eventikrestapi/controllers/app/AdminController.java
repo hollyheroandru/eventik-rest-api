@@ -12,6 +12,7 @@ import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventRetrieveResp
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventUpdateResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventsListResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.user.UserCredentialsResponse;
+import com.egorhristoforov.eventikrestapi.exceptions.BadRequestException;
 import com.egorhristoforov.eventikrestapi.exceptions.ForbiddenException;
 import com.egorhristoforov.eventikrestapi.exceptions.ResourceNotFoundException;
 import com.egorhristoforov.eventikrestapi.exceptions.UnauthorizedException;
@@ -54,6 +55,12 @@ public class AdminController {
         UserCredentialsResponse response = authService.loginAdmin(body);
 
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping(value = "/users", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Creating new user", authorizations = { @Authorization(value = "Access token") })
+    public ResponseEntity<AdminUserProfileResponse> createUser(@Valid @RequestBody AdminUserUpdateRequest user) throws ResourceNotFoundException {
+        return ResponseEntity.status(HttpStatus.CREATED).body(adminService.createUser(user));
     }
 
     @GetMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
