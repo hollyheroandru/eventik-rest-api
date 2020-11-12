@@ -1,13 +1,13 @@
 package com.egorhristoforov.eventikrestapi.services;
 
-import com.egorhristoforov.eventikrestapi.dtos.requests.admin.AdminEventCreateRequest;
-import com.egorhristoforov.eventikrestapi.dtos.requests.admin.AdminEventUpdateRequest;
-import com.egorhristoforov.eventikrestapi.dtos.requests.admin.AdminUserUpdateRequest;
+import com.egorhristoforov.eventikrestapi.dtos.requests.admin.*;
 import com.egorhristoforov.eventikrestapi.dtos.responses.admin.AdminUserProfileResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.admin.UsersListResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.admin.UserRolesResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventCreateResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventUpdateResponse;
+import com.egorhristoforov.eventikrestapi.dtos.responses.location.CountriesListResponse;
+import com.egorhristoforov.eventikrestapi.exceptions.BadRequestException;
 import com.egorhristoforov.eventikrestapi.exceptions.ResourceNotFoundException;
 
 
@@ -22,7 +22,13 @@ public interface AdminService {
     AdminUserProfileResponse getUserById(Long userId)
         throws ResourceNotFoundException;
 
-    AdminUserProfileResponse createUser(AdminUserUpdateRequest user)
+    AdminUserProfileResponse createUser(AdminCreateUserRequest user)
+            throws ResourceNotFoundException, BadRequestException;
+
+    List<CountriesListResponse> createCountry(AdminCreateCountryRequest request)
+            throws BadRequestException;
+
+    void deleteCountryById(Long countryId)
         throws ResourceNotFoundException;
 
     AdminUserProfileResponse updateUserProfileById(Long id, AdminUserUpdateRequest request)

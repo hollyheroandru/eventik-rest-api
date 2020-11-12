@@ -1,23 +1,18 @@
 package com.egorhristoforov.eventikrestapi.services.impl;
 
-import com.egorhristoforov.eventikrestapi.dtos.requests.admin.AdminEventCreateRequest;
-import com.egorhristoforov.eventikrestapi.dtos.requests.admin.AdminEventUpdateRequest;
-import com.egorhristoforov.eventikrestapi.dtos.requests.admin.AdminUserUpdateRequest;
+import com.egorhristoforov.eventikrestapi.dtos.requests.admin.*;
 import com.egorhristoforov.eventikrestapi.dtos.responses.admin.AdminUserProfileResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.admin.UsersListResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.admin.UserRolesResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventCreateResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventUpdateResponse;
+import com.egorhristoforov.eventikrestapi.dtos.responses.location.CountriesListResponse;
+import com.egorhristoforov.eventikrestapi.exceptions.BadRequestException;
 import com.egorhristoforov.eventikrestapi.exceptions.ResourceNotFoundException;
-import com.egorhristoforov.eventikrestapi.models.City;
-import com.egorhristoforov.eventikrestapi.models.Event;
-import com.egorhristoforov.eventikrestapi.models.User;
-import com.egorhristoforov.eventikrestapi.models.UserRole;
-import com.egorhristoforov.eventikrestapi.repositories.CityRepository;
-import com.egorhristoforov.eventikrestapi.repositories.EventRepository;
-import com.egorhristoforov.eventikrestapi.repositories.UserRepository;
-import com.egorhristoforov.eventikrestapi.repositories.UserRoleRepository;
+import com.egorhristoforov.eventikrestapi.models.*;
+import com.egorhristoforov.eventikrestapi.repositories.*;
 import com.egorhristoforov.eventikrestapi.services.AdminService;
+import com.egorhristoforov.eventikrestapi.services.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -36,7 +31,13 @@ public class AdminServiceImpl implements AdminService {
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
+    LocationService locationService;
+
+    @Autowired
     EventRepository eventRepository;
+
+    @Autowired
+    CountryRepository countryRepository;
 
     @Autowired
     CityRepository cityRepository;
@@ -76,9 +77,13 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public AdminUserProfileResponse createUser(AdminUserUpdateRequest user) throws ResourceNotFoundException {
+    public AdminUserProfileResponse createUser(AdminCreateUserRequest user) throws ResourceNotFoundException, BadRequestException {
         User createdUser = userRepository.findByEmail(user.getEmail())
                 .orElse(new User());
+
+        if (createdUser.getActivated()) {
+            throw new BadRequestException("Email already taken");
+        }
 
         createdUser.setName(user.getName());
         createdUser.setSurname(user.getSurname());
@@ -86,7 +91,7 @@ public class AdminServiceImpl implements AdminService {
         createdUser.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         createdUser.setActivated(true);
         createdUser.setRoles(new HashSet<>());
-        setUserRoles(user, createdUser);
+        setUserRoles(user.getRolesIds(), createdUser);
 
         userRepository.save(createdUser);
 
@@ -94,10 +99,34 @@ public class AdminServiceImpl implements AdminService {
                 createdUser.getEmail(), getUserRoles(createdUser));
     }
 
-    private void setUserRoles(AdminUserUpdateRequest request, User user) throws ResourceNotFoundException {
-        if(request.getRolesIds() != null) {
+    @Override
+    public List<CountriesListResponse> createCountry(AdminCreateCountryRequest request) throws BadRequestException {
+        Country country = countryRepository
+                .findByEnNameIgnoreCase(request.getEnName()).orElse(new Country());
+
+        if (country.getEnName() != null && country.getRuName() != null) {
+            throw new BadRequestException("The country already exists");
+        }
+
+        country.setEnName(request.getEnName());
+        country.setRuName(request.getRuName());
+
+        countryRepository.save(country);
+
+        return locationService.getCountries();
+    }
+
+    @Override
+    public void deleteCountryById(Long countryId) throws ResourceNotFoundException {
+        Country country = countryRepository.findById(countryId)
+                .orElseThrow(() -> new ResourceNotFoundException("County not found"));
+        countryRepository.delete(country);
+    }
+
+    private void setUserRoles(Long [] rolesIds, User user) throws ResourceNotFoundException {
+        if(rolesIds.length != 0) {
             user.getRoles().clear();
-            for(Long roleId : request.getRolesIds()) {
+            for(Long roleId : rolesIds) {
                 user.getRoles().add(userRoleRepository.findById(roleId)
                         .orElseThrow(() -> new ResourceNotFoundException("Role not found")));
             }
@@ -118,7 +147,7 @@ public class AdminServiceImpl implements AdminService {
         user.setSurname(request.getSurname() == null ? user.getSurname() : request.getSurname());
         user.setEmail(request.getEmail() == null ? user.getEmail() : request.getEmail());
 
-        setUserRoles(request, user);
+        setUserRoles(request.getRolesIds(), user);
 
         userRepository.save(user);
         return new AdminUserProfileResponse(user.getName(), user.getSurname(), user.getEmail(),
