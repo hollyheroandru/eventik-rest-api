@@ -1,9 +1,8 @@
 package com.egorhristoforov.eventikrestapi.controllers.app;
 
-import com.egorhristoforov.eventikrestapi.dtos.requests.admin.AdminEventCreateRequest;
-import com.egorhristoforov.eventikrestapi.dtos.requests.admin.AdminEventUpdateRequest;
-import com.egorhristoforov.eventikrestapi.dtos.requests.admin.AdminUserUpdateRequest;
+import com.egorhristoforov.eventikrestapi.dtos.requests.admin.*;
 import com.egorhristoforov.eventikrestapi.dtos.requests.auth.AuthLoginRequest;
+import com.egorhristoforov.eventikrestapi.dtos.responses.admin.AdminCountriesListResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.admin.AdminUserProfileResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.admin.UsersListResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.admin.UserRolesResponse;
@@ -11,13 +10,16 @@ import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventCreateRespon
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventRetrieveResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventUpdateResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventsListResponse;
+import com.egorhristoforov.eventikrestapi.dtos.responses.location.CountriesListResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.user.UserCredentialsResponse;
+import com.egorhristoforov.eventikrestapi.exceptions.BadRequestException;
 import com.egorhristoforov.eventikrestapi.exceptions.ForbiddenException;
 import com.egorhristoforov.eventikrestapi.exceptions.ResourceNotFoundException;
 import com.egorhristoforov.eventikrestapi.exceptions.UnauthorizedException;
 import com.egorhristoforov.eventikrestapi.services.AdminService;
 import com.egorhristoforov.eventikrestapi.services.AuthService;
 import com.egorhristoforov.eventikrestapi.services.EventService;
+import com.egorhristoforov.eventikrestapi.services.LocationService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
@@ -42,6 +44,9 @@ public class AdminController {
     AdminService adminService;
 
     @Autowired
+    LocationService locationService;
+
+    @Autowired
     AuthService authService;
 
     @Autowired
@@ -56,6 +61,12 @@ public class AdminController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping(value = "/users", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Creating new user", authorizations = { @Authorization(value = "Access token") })
+    public ResponseEntity<AdminUserProfileResponse> createUser(@Valid @RequestBody AdminUserCreateRequest user) throws ResourceNotFoundException, BadRequestException {
+        return ResponseEntity.status(HttpStatus.CREATED).body(adminService.createUser(user));
+    }
+
     @GetMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Get list of users", authorizations = { @Authorization(value = "Access token") })
     public ResponseEntity<List<UsersListResponse>> getUsers() throws ResourceNotFoundException {
@@ -68,7 +79,8 @@ public class AdminController {
         return ResponseEntity.ok(adminService.getUserById(userId));
     }
 
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping(value = "/users/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiOperation(value = "Delete users by id", authorizations = { @Authorization(value = "Access token") })
     public void deleteUserById(@PathVariable(value = "id") Long id) throws ResourceNotFoundException {
         adminService.deleteUserById(id);
@@ -119,9 +131,29 @@ public class AdminController {
         return ResponseEntity.ok(adminService.updateEvent(eventId, body));
     }
 
-    @GetMapping(value = "/roles")
+    @GetMapping(value = "/roles", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Get list of existed roles", authorizations = { @Authorization(value = "Access token") })
     public ResponseEntity<List<UserRolesResponse>> getRoles() throws ResourceNotFoundException {
         return ResponseEntity.ok(adminService.getRoles());
     }
+
+    @GetMapping(value = "/countries", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Get list of countries", authorizations = { @Authorization(value = "Access token")})
+    public ResponseEntity<List<AdminCountriesListResponse>> getCountriesList() {
+        return  ResponseEntity.ok(adminService.getCountriesList());
+    }
+
+    @DeleteMapping(value = "/countries/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiOperation(value = "Delete country by id", authorizations = { @Authorization(value = "Access token")})
+    public void deleteCountryById(@PathVariable(value = "id") Long countryId) throws ResourceNotFoundException {
+        adminService.deleteCountryById(countryId);
+    }
+
+    @PostMapping(value = "/countries", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Create new country", authorizations = { @Authorization(value = "Access token")})
+    public ResponseEntity<AdminCountriesListResponse> createCountry(@Validated @RequestBody AdminCountryCreateRequest request) throws BadRequestException {
+        return ResponseEntity.status(HttpStatus.CREATED).body(adminService.createCountry(request));
+    }
+
 }

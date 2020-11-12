@@ -15,4 +15,7 @@ public interface CountryRepository extends JpaRepository<Country, Long> {
 
     @Query(value = "SELECT * FROM countries c WHERE LOWER(c.en_name) = LOWER(:name) OR LOWER(c.ru_name) = LOWER(:name)", nativeQuery = true)
     Optional<Country> findByOneOfNamesIgnoreCase(@Param(value = "name") String name);
+
+    @Query(value = "SELECT * FROM countries c WHERE LOWER(c.en_name) = LOWER(:enName) OR LOWER(c.ru_name) = LOWER(:ruName)", nativeQuery = true)
+    Optional<Country> findByBothOfNamesIgnoreCase(@Param(value = "enName") String enName, @Param(value = "ruName") String ruName);
 }
