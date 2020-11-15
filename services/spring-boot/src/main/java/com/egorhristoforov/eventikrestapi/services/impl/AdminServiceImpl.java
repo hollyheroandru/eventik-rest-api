@@ -171,12 +171,10 @@ public class AdminServiceImpl implements AdminService {
     }
 
     private void setUserRoles(Long [] rolesIds, User user) throws ResourceNotFoundException {
-        if(rolesIds.length != 0) {
-            user.getRoles().clear();
-            for(Long roleId : rolesIds) {
-                user.getRoles().add(userRoleRepository.findById(roleId)
-                        .orElseThrow(() -> new ResourceNotFoundException("Role not found")));
-            }
+        user.getRoles().clear();
+        for(Long roleId : rolesIds) {
+            user.getRoles().add(userRoleRepository.findById(roleId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Role not found")));
         }
     }
 
@@ -194,7 +192,9 @@ public class AdminServiceImpl implements AdminService {
         user.setSurname(request.getSurname() == null ? user.getSurname() : request.getSurname());
         user.setEmail(request.getEmail() == null ? user.getEmail() : request.getEmail());
 
-        setUserRoles(request.getRolesIds(), user);
+        if(request.getRolesIds().length != 0) {
+            setUserRoles(request.getRolesIds(), user);
+        }
 
         userRepository.save(user);
         return new AdminUserProfileResponse(user.getName(), user.getSurname(), user.getEmail(),
