@@ -63,7 +63,10 @@ public class AdminServiceImpl implements AdminService {
         return user.getRoles()
                 .stream()
                 .sorted(Comparator.comparing(UserRole::getId))
-                .map(userRole -> new UserRolesResponse(userRole.getId(), userRole.getName()))
+                .map(userRole -> UserRolesResponse.builder()
+                        .id(userRole.getId())
+                        .name(userRole.getName())
+                        .build())
                 .collect(Collectors.toList());
     }
 
@@ -289,7 +292,10 @@ public class AdminServiceImpl implements AdminService {
         return userRoleRepository.findAll()
                 .stream()
                 .sorted(Comparator.comparing(UserRole::getId).reversed())
-                .map(role -> new UserRolesResponse(role.getId(), role.getName()))
+                .map(role -> UserRolesResponse.builder()
+                        .id(role.getId())
+                        .name(role.getName())
+                        .build())
                 .collect(Collectors.toList());
     }
 }
