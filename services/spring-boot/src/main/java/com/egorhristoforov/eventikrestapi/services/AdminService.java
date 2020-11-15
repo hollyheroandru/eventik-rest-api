@@ -1,10 +1,7 @@
 package com.egorhristoforov.eventikrestapi.services;
 
 import com.egorhristoforov.eventikrestapi.dtos.requests.admin.*;
-import com.egorhristoforov.eventikrestapi.dtos.responses.admin.AdminCountriesListResponse;
-import com.egorhristoforov.eventikrestapi.dtos.responses.admin.AdminUserProfileResponse;
-import com.egorhristoforov.eventikrestapi.dtos.responses.admin.UsersListResponse;
-import com.egorhristoforov.eventikrestapi.dtos.responses.admin.UserRolesResponse;
+import com.egorhristoforov.eventikrestapi.dtos.responses.admin.*;
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventCreateResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventUpdateResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.location.CountriesListResponse;
@@ -34,7 +31,13 @@ public interface AdminService {
     AdminCountriesListResponse updateCountry(Long countryId, AdminCountryUpdateRequest request)
         throws ResourceNotFoundException;
 
+    AdminCountriesListResponse getCountryById(Long countryId)
+        throws ResourceNotFoundException;
+
     List<AdminCountriesListResponse> getCountriesList();
+
+    List<AdminCitiesListResponse> getCitiesListForCountryByCountryId(Long countryId)
+        throws ResourceNotFoundException;
 
     void deleteCountryById(Long countryId)
         throws ResourceNotFoundException;

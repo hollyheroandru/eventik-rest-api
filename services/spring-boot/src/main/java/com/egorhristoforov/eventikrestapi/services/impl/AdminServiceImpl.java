@@ -1,10 +1,7 @@
 package com.egorhristoforov.eventikrestapi.services.impl;
 
 import com.egorhristoforov.eventikrestapi.dtos.requests.admin.*;
-import com.egorhristoforov.eventikrestapi.dtos.responses.admin.AdminCountriesListResponse;
-import com.egorhristoforov.eventikrestapi.dtos.responses.admin.AdminUserProfileResponse;
-import com.egorhristoforov.eventikrestapi.dtos.responses.admin.UsersListResponse;
-import com.egorhristoforov.eventikrestapi.dtos.responses.admin.UserRolesResponse;
+import com.egorhristoforov.eventikrestapi.dtos.responses.admin.*;
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventCreateResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventUpdateResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.location.CountriesListResponse;
@@ -134,6 +131,13 @@ public class AdminServiceImpl implements AdminService {
                 country.isAddedByUser(), country.getCreatedDate(), country.getLastModifiedDate());
     }
 
+    @Override
+    public AdminCountriesListResponse getCountryById(Long countryId) throws ResourceNotFoundException {
+        Country country = countryRepository.findById(countryId)
+                .orElseThrow(() -> new ResourceNotFoundException("Country not found"));
+        return new AdminCountriesListResponse(country.getId(), country.getEnName(), country.getRuName(), country.isAddedByUser(), country.getCreatedDate(), country.getLastModifiedDate());
+    }
+
 
     @Override
     public List<AdminCountriesListResponse> getCountriesList() {
@@ -142,6 +146,20 @@ public class AdminServiceImpl implements AdminService {
                 .sorted(Comparator.comparing(Country::getId))
                 .map((country) -> new AdminCountriesListResponse(country.getId(), country.getEnName(), country.getRuName(),
                         country.isAddedByUser(), country.getCreatedDate(), country.getLastModifiedDate()))
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<AdminCitiesListResponse> getCitiesListForCountryByCountryId(Long countryId) throws ResourceNotFoundException {
+        Country country = countryRepository.findById(countryId)
+                .orElseThrow(() -> new ResourceNotFoundException("Country not found"));
+
+        return country
+                .getCities()
+                .stream()
+                .sorted(Comparator.comparing(City::getId))
+                .map((city) -> new AdminCitiesListResponse(city.getId(), city.getEnName(), city.getRuName(),
+                        city.getLongitude(), city.getLatitude(), city.isAddedByUser(), city.getCreatedDate(), city.getLastModifiedDate()))
                 .collect(Collectors.toList());
     }
 

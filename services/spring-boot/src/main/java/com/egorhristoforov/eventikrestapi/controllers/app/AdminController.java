@@ -2,15 +2,11 @@ package com.egorhristoforov.eventikrestapi.controllers.app;
 
 import com.egorhristoforov.eventikrestapi.dtos.requests.admin.*;
 import com.egorhristoforov.eventikrestapi.dtos.requests.auth.AuthLoginRequest;
-import com.egorhristoforov.eventikrestapi.dtos.responses.admin.AdminCountriesListResponse;
-import com.egorhristoforov.eventikrestapi.dtos.responses.admin.AdminUserProfileResponse;
-import com.egorhristoforov.eventikrestapi.dtos.responses.admin.UsersListResponse;
-import com.egorhristoforov.eventikrestapi.dtos.responses.admin.UserRolesResponse;
+import com.egorhristoforov.eventikrestapi.dtos.responses.admin.*;
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventCreateResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventRetrieveResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventUpdateResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventsListResponse;
-import com.egorhristoforov.eventikrestapi.dtos.responses.location.CountriesListResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.user.UserCredentialsResponse;
 import com.egorhristoforov.eventikrestapi.exceptions.BadRequestException;
 import com.egorhristoforov.eventikrestapi.exceptions.ForbiddenException;
@@ -162,5 +158,17 @@ public class AdminController {
                                                            @Valid @RequestBody AdminCountryUpdateRequest body)
             throws ResourceNotFoundException {
         return ResponseEntity.ok(adminService.updateCountry(countryId, body));
+    }
+
+    @GetMapping(value = "/countries/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Get country", authorizations = {@Authorization(value = "Access token")})
+    public ResponseEntity<AdminCountriesListResponse> getCountryById(@PathVariable(value = "id") Long countryId) throws ResourceNotFoundException {
+        return ResponseEntity.ok(adminService.getCountryById(countryId));
+    }
+
+    @GetMapping(value = "/countries/{id}/cities", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Get cities list for country", authorizations = {@Authorization(value = "Access token")})
+    public ResponseEntity<List<AdminCitiesListResponse>> getCitiesListForCountry(@PathVariable(value = "id") Long countryId) throws ResourceNotFoundException {
+       return ResponseEntity.ok(adminService.getCitiesListForCountryByCountryId(countryId));
     }
 }
