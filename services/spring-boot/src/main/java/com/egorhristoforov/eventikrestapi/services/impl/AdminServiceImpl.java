@@ -4,7 +4,6 @@ import com.egorhristoforov.eventikrestapi.dtos.requests.admin.*;
 import com.egorhristoforov.eventikrestapi.dtos.responses.admin.*;
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventCreateResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventUpdateResponse;
-import com.egorhristoforov.eventikrestapi.dtos.responses.location.CountriesListResponse;
 import com.egorhristoforov.eventikrestapi.exceptions.BadRequestException;
 import com.egorhristoforov.eventikrestapi.exceptions.ResourceNotFoundException;
 import com.egorhristoforov.eventikrestapi.models.*;
@@ -82,7 +81,7 @@ public class AdminServiceImpl implements AdminService {
         User createdUser = userRepository.findByEmail(user.getEmail())
                 .orElse(new User());
 
-        if (createdUser.getActivated()) {
+        if (createdUser.isActivated()) {
             throw new BadRequestException("Email already taken");
         }
 
@@ -90,7 +89,7 @@ public class AdminServiceImpl implements AdminService {
         createdUser.setSurname(user.getSurname());
         createdUser.setEmail(user.getEmail());
         createdUser.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        createdUser.setActivated(true);
+        createdUser.setIsActivated(true);
         createdUser.setRoles(new HashSet<>());
         setUserRoles(user.getRolesIds(), createdUser);
 

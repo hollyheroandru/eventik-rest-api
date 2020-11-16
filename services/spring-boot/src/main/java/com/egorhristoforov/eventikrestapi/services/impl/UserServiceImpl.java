@@ -117,7 +117,7 @@ public class UserServiceImpl implements UserService {
         User createdUser = userRepository.findByEmail(user.getEmail())
                 .orElse(new User());
 
-        if (createdUser.getIsActivated()) {
+        if (createdUser.isEnabled()) {
             throw new BadRequestException("Email already taken");
         }
 
@@ -141,7 +141,7 @@ public class UserServiceImpl implements UserService {
         User existedUser = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        if (existedUser.getIsActivated()) {
+        if (existedUser.isEnabled()) {
             throw new BadRequestException("User already activated");
         }
 
@@ -235,7 +235,7 @@ public class UserServiceImpl implements UserService {
         User existedUser = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        if (!existedUser.getIsActivated()) {
+        if (!existedUser.isEnabled()) {
             throw new ResourceNotFoundException("User not found");
         }
 
@@ -252,7 +252,7 @@ public class UserServiceImpl implements UserService {
         User existedUser = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        if (!existedUser.getIsActivated()) {
+        if (!existedUser.isEnabled()) {
             throw new ResourceNotFoundException("User not found");
         }
 

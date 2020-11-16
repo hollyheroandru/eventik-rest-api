@@ -12,9 +12,7 @@ import com.egorhristoforov.eventikrestapi.models.UserRole;
 import com.egorhristoforov.eventikrestapi.repositories.UserRepository;
 import com.egorhristoforov.eventikrestapi.repositories.UserRoleRepository;
 import com.egorhristoforov.eventikrestapi.services.AuthService;
-import com.sun.mail.iap.Response;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -45,7 +43,7 @@ public class AuthServiceImpl implements AuthService {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        if (!user.getIsActivated()) {
+        if (!user.isEnabled()) {
             throw new ResourceNotFoundException("User not found");
         }
 
@@ -63,7 +61,7 @@ public class AuthServiceImpl implements AuthService {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        if (!user.getActivated()) {
+        if (!user.isActivated()) {
             throw new ResourceNotFoundException("User not found");
         }
 

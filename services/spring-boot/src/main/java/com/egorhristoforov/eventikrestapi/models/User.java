@@ -170,12 +170,12 @@ public class User extends Auditable implements UserDetails {
         this.passwordConfirmationCode = passwordConfirmationCode;
     }
 
-    public Boolean getActivated() {
+    public Boolean isActivated() {
         return isActivated;
     }
 
-    public void setActivated(Boolean activated) {
-        isActivated = activated;
+    public void setIsActivated(Boolean isActivated) {
+        this.isActivated = isActivated;
     }
 
     public Set<Event> getCreatedEvents() {
