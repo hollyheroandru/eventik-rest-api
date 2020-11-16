@@ -1,5 +1,8 @@
 package com.egorhristoforov.eventikrestapi.models;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.security.core.GrantedAuthority;
@@ -16,41 +19,63 @@ import java.util.stream.Collectors;
         @UniqueConstraint(columnNames = "email")
 })
 public class User extends Auditable implements UserDetails {
+    @Getter
+    @Setter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Getter
+    @Setter
     @Column(name = "email")
     private String email;
 
+    @Getter
+    @Setter
     @Column(name = "password")
     private String password;
 
+    @Getter
+    @Setter
     @Column(name = "name")
     private String name;
 
+    @Getter
+    @Setter
     @Column(name = "surname")
     private String surname;
 
+    @Getter
+    @Setter
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Set<UserRole> roles;
 
+    @Getter
+    @Setter
     @Column(name = "email_confirmation_code")
     private String emailConfirmationCode;
 
+    @Getter
+    @Setter
     @Column(name = "password_confirmation_code")
     private String passwordConfirmationCode;
 
+    @Getter
+    @Setter
     @Column(name = "is_activated")
     private Boolean isActivated = false;
 
+    @Getter
+    @Setter
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "owner")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Event> createdEvents;
 
+    @Getter
+    @Setter
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "visitor")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Booking> bookings;
@@ -59,6 +84,7 @@ public class User extends Auditable implements UserDetails {
         super();
     }
 
+    @Builder(toBuilder = true)
     public User(String email, String password, String name, String surname, String emailConfirmationCode,
                 String passwordConfirmationCode,
                 Boolean isActivated) {
@@ -104,93 +130,5 @@ public class User extends Auditable implements UserDetails {
     @Override
     public boolean isEnabled() {
         return isActivated;
-    }
-
-    public Set<UserRole> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<UserRole> roles) {
-        this.roles = roles;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public String getEmailConfirmationCode() {
-        return emailConfirmationCode;
-    }
-
-    public void setEmailConfirmationCode(String emailConfirmationCode) {
-        this.emailConfirmationCode = emailConfirmationCode;
-    }
-
-    public String getPasswordConfirmationCode() {
-        return passwordConfirmationCode;
-    }
-
-    public void setPasswordConfirmationCode(String passwordConfirmationCode) {
-        this.passwordConfirmationCode = passwordConfirmationCode;
-    }
-
-    public Boolean getActivated() {
-        return isActivated;
-    }
-
-    public void setActivated(Boolean activated) {
-        isActivated = activated;
-    }
-
-    public Set<Event> getCreatedEvents() {
-        return createdEvents;
-    }
-
-    public void setCreatedEvents(Set<Event> createdEvents) {
-        this.createdEvents = createdEvents;
-    }
-
-    public Set<Booking> getBookings() {
-        return bookings;
-    }
-
-    public void setBookings(Set<Booking> bookings) {
-        this.bookings = bookings;
     }
 }

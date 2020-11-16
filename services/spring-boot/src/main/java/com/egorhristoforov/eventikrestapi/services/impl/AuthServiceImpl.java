@@ -45,7 +45,7 @@ public class AuthServiceImpl implements AuthService {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        if (!user.getActivated()) {
+        if (!user.getIsActivated()) {
             throw new ResourceNotFoundException("User not found");
         }
 

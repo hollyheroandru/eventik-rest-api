@@ -1,5 +1,8 @@
 package com.egorhristoforov.eventikrestapi.models;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -10,43 +13,66 @@ import java.util.Set;
 @Entity
 @Table(name = "events")
 public class Event extends Auditable {
+    @Getter
+    @Setter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Getter
+    @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     private User owner;
 
+    @Getter
+    @Setter
     @Column(name = "longitude")
     private Double longitude;
 
+    @Getter
+    @Setter
     @Column(name = "latitude")
     private Double latitude;
 
+    @Getter
+    @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     private City city;
 
+    @Getter
+    @Setter
     @Column(name = "apartment")
     private String apartment;
 
+    @Getter
+    @Setter
     @Column(name = "title")
     private String title;
 
+    @Getter
+    @Setter
     @Column(name = "description")
     private String description;
 
+    @Getter
+    @Setter
     @Column(name = "date")
     private Date date;
 
+    @Getter
+    @Setter
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "event")
     private Set<Booking> bookings;
 
+    @Getter
+    @Setter
     @Column(name = "registration_required")
     private boolean isRegistrationRequired;
 
     public Event() {
     }
 
+    @Builder(toBuilder = true)
     public Event(Long id, User owner, Double longitude, Double latitude, City city, String apartment,
                  String title, String description, Date date, Set<Booking> bookings,
                  boolean isRegistrationRequired) {
@@ -61,93 +87,5 @@ public class Event extends Auditable {
         this.date = date;
         this.bookings = bookings;
         this.isRegistrationRequired = isRegistrationRequired;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public User getOwner() {
-        return owner;
-    }
-
-    public void setOwner(User owner) {
-        this.owner = owner;
-    }
-
-    public Double getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(Double longitude) {
-        this.longitude = longitude;
-    }
-
-    public Double getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(Double latitude) {
-        this.latitude = latitude;
-    }
-
-    public City getCity() {
-        return city;
-    }
-
-    public void setCity(City city) {
-        this.city = city;
-    }
-
-    public String getApartment() {
-        return apartment;
-    }
-
-    public void setApartment(String apartment) {
-        this.apartment = apartment;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public Set<Booking> getBookings() {
-        return bookings;
-    }
-
-    public void setBookings(Set<Booking> bookings) {
-        this.bookings = bookings;
-    }
-
-    public boolean isRegistrationRequired() {
-        return isRegistrationRequired;
-    }
-
-    public void setRegistrationRequired(boolean registrationRequired) {
-        isRegistrationRequired = registrationRequired;
     }
 }

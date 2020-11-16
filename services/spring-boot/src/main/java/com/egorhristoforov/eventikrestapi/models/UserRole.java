@@ -1,5 +1,8 @@
 package com.egorhristoforov.eventikrestapi.models;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
@@ -9,12 +12,18 @@ import java.util.List;
 @Table(name = "user_roles")
 public class UserRole implements GrantedAuthority {
 
+    @Getter
+    @Setter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Getter
+    @Setter
     private String name;
 
+    @Getter
+    @Setter
     @ManyToMany(mappedBy = "roles", cascade = CascadeType.ALL)
     private List<User> users;
 
@@ -22,39 +31,16 @@ public class UserRole implements GrantedAuthority {
 
     }
 
+    @Builder(toBuilder = true)
     public UserRole(Long id) {
         this.id = id;
     }
 
+    @Builder(toBuilder = true)
     public UserRole(Long id, String name) {
         this.id = id;
         this.name = name;
     }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<User> users) {
-        this.users = users;
-    }
-
     @Override
     public String getAuthority() {
         return "ROLE_" + getName();
