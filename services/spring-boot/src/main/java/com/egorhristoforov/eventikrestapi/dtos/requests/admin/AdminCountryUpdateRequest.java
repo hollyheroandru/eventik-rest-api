@@ -3,12 +3,8 @@ package com.egorhristoforov.eventikrestapi.dtos.requests.admin;
 import javax.validation.constraints.NotNull;
 
 public class AdminCountryUpdateRequest {
-    @NotNull
     private String enName;
-
-    @NotNull
     private String ruName;
-
     private boolean isAddedByUser;
 
     public AdminCountryUpdateRequest(String enName, String ruName, boolean isAddedByUser) {
