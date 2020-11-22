@@ -99,9 +99,9 @@ public class AdminController {
 
     @GetMapping(value = "/events", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Get events list", authorizations = { @Authorization(value = "Access token")})
-    public ResponseEntity<List<EventsListResponse>> getEvents(@RequestParam(value = "city-id") @Positive Long cityId)
+    public ResponseEntity<List<EventsListResponse>> getEvents(@RequestParam(value = "city-id", required = false) @Positive Long cityId)
             throws ResourceNotFoundException{
-        return ResponseEntity.ok(eventService.getEventsList(cityId));
+        return ResponseEntity.ok(adminService.getEventsList(cityId));
     }
 
     @GetMapping(value = "/events/{id}", produces = MediaType.APPLICATION_JSON_VALUE)

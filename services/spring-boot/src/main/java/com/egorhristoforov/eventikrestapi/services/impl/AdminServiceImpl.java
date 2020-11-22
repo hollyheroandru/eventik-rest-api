@@ -4,6 +4,7 @@ import com.egorhristoforov.eventikrestapi.dtos.requests.admin.*;
 import com.egorhristoforov.eventikrestapi.dtos.responses.admin.*;
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventCreateResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventUpdateResponse;
+import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventsListResponse;
 import com.egorhristoforov.eventikrestapi.exceptions.BadRequestException;
 import com.egorhristoforov.eventikrestapi.exceptions.ResourceNotFoundException;
 import com.egorhristoforov.eventikrestapi.models.*;
@@ -138,6 +139,29 @@ public class AdminServiceImpl implements AdminService {
         Country country = countryRepository.findById(countryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Country not found"));
         return new AdminCountriesListResponse(country.getId(), country.getEnName(), country.getRuName(), country.isAddedByUser(), country.getCreatedDate(), country.getLastModifiedDate());
+    }
+
+    @Override
+    public List<EventsListResponse> getEventsList(Long cityId) throws ResourceNotFoundException {
+        if (cityId != null) {
+            City eventCity = cityRepository.findById(cityId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Provided city not found"));
+
+            return eventCity.getEvents()
+                    .stream()
+                    .filter(event -> event.getDate().after(new Date(System.currentTimeMillis() - 3600 * 1000)))
+                    .sorted(Comparator.comparing(Event::getId).reversed())
+                    .map(event -> new EventsListResponse(event.getId(), event.getLongitude(), event.getLatitude(),
+                            event.getApartment(), event.getTitle(), event.getDate(), event.getLastModifiedDate()))
+                    .collect(Collectors.toList());
+        }
+        return eventRepository.findAll()
+                .stream()
+                .filter(event -> event.getDate().after(new Date(System.currentTimeMillis() - 3600 * 1000)))
+                .sorted(Comparator.comparing(Event::getCreatedDate))
+                .map(event -> new EventsListResponse(event.getId(), event.getLongitude(), event.getLatitude(),
+                        event.getApartment(), event.getTitle(), event.getDate(), event.getLastModifiedDate()))
+                .collect(Collectors.toList());
     }
 
 

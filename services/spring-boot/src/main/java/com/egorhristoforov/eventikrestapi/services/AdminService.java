@@ -4,6 +4,7 @@ import com.egorhristoforov.eventikrestapi.dtos.requests.admin.*;
 import com.egorhristoforov.eventikrestapi.dtos.responses.admin.*;
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventCreateResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventUpdateResponse;
+import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventsListResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.location.CountriesListResponse;
 import com.egorhristoforov.eventikrestapi.exceptions.BadRequestException;
 import com.egorhristoforov.eventikrestapi.exceptions.ResourceNotFoundException;
@@ -32,6 +33,9 @@ public interface AdminService {
         throws ResourceNotFoundException;
 
     AdminCountriesListResponse getCountryById(Long countryId)
+        throws ResourceNotFoundException;
+
+    List<EventsListResponse> getEventsList(Long cityId)
         throws ResourceNotFoundException;
 
     List<AdminCountriesListResponse> getCountriesList();
