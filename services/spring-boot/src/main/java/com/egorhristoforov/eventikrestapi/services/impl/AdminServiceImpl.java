@@ -1,13 +1,10 @@
 package com.egorhristoforov.eventikrestapi.services.impl;
 
 import com.egorhristoforov.eventikrestapi.dtos.requests.admin.*;
-import com.egorhristoforov.eventikrestapi.dtos.responses.admin.AdminCountriesListResponse;
-import com.egorhristoforov.eventikrestapi.dtos.responses.admin.AdminUserProfileResponse;
-import com.egorhristoforov.eventikrestapi.dtos.responses.admin.UsersListResponse;
-import com.egorhristoforov.eventikrestapi.dtos.responses.admin.UserRolesResponse;
+import com.egorhristoforov.eventikrestapi.dtos.responses.admin.*;
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventCreateResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventUpdateResponse;
-import com.egorhristoforov.eventikrestapi.dtos.responses.location.CountriesListResponse;
+import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventsListResponse;
 import com.egorhristoforov.eventikrestapi.exceptions.BadRequestException;
 import com.egorhristoforov.eventikrestapi.exceptions.ResourceNotFoundException;
 import com.egorhristoforov.eventikrestapi.models.*;
@@ -66,7 +63,10 @@ public class AdminServiceImpl implements AdminService {
         return user.getRoles()
                 .stream()
                 .sorted(Comparator.comparing(UserRole::getId))
-                .map(userRole -> new UserRolesResponse(userRole.getId(), userRole.getName()))
+                .map(userRole -> UserRolesResponse.builder()
+                        .id(userRole.getId())
+                        .name(userRole.getName())
+                        .build())
                 .collect(Collectors.toList());
     }
 
@@ -82,7 +82,7 @@ public class AdminServiceImpl implements AdminService {
         User createdUser = userRepository.findByEmail(user.getEmail())
                 .orElse(new User());
 
-        if (createdUser.getActivated()) {
+        if (createdUser.isActivated()) {
             throw new BadRequestException("Email already taken");
         }
 
@@ -90,7 +90,7 @@ public class AdminServiceImpl implements AdminService {
         createdUser.setSurname(user.getSurname());
         createdUser.setEmail(user.getEmail());
         createdUser.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        createdUser.setActivated(true);
+        createdUser.setIsActivated(true);
         createdUser.setRoles(new HashSet<>());
         setUserRoles(user.getRolesIds(), createdUser);
 
@@ -119,6 +119,49 @@ public class AdminServiceImpl implements AdminService {
                 country.isAddedByUser(), country.getCreatedDate(), country.getLastModifiedDate());
     }
 
+    @Override
+    public AdminCountriesListResponse updateCountry(Long countryId, AdminCountryUpdateRequest request) throws ResourceNotFoundException {
+        Country country = countryRepository.findById(countryId)
+                .orElseThrow(() -> new ResourceNotFoundException("Country not found"));
+
+        country.setEnName(request.getEnName() == null ? country.getEnName() : request.getEnName());
+        country.setRuName(request.getRuName() == null ? country.getRuName() : request.getRuName());
+        country.setAddedByUser(request.isAddedByUser() == country.isAddedByUser() ? country.isAddedByUser() : request.isAddedByUser());
+
+        countryRepository.save(country);
+
+        return new AdminCountriesListResponse(country.getId(), country.getEnName(), country.getRuName(),
+                country.isAddedByUser(), country.getCreatedDate(), country.getLastModifiedDate());
+    }
+
+    @Override
+    public AdminCountriesListResponse getCountryById(Long countryId) throws ResourceNotFoundException {
+        Country country = countryRepository.findById(countryId)
+                .orElseThrow(() -> new ResourceNotFoundException("Country not found"));
+        return new AdminCountriesListResponse(country.getId(), country.getEnName(), country.getRuName(), country.isAddedByUser(), country.getCreatedDate(), country.getLastModifiedDate());
+    }
+
+    @Override
+    public List<EventsListResponse> getEventsList(Long cityId) throws ResourceNotFoundException {
+        if (cityId != null) {
+            City eventCity = cityRepository.findById(cityId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Provided city not found"));
+
+            return eventCity.getEvents()
+                    .stream()
+                    .sorted(Comparator.comparing(Event::getCreatedDate))
+                    .map(event -> new EventsListResponse(event.getId(), event.getLongitude(), event.getLatitude(),
+                            event.getApartment(), event.getTitle(), event.getDate(), event.getLastModifiedDate()))
+                    .collect(Collectors.toList());
+        }
+        return eventRepository.findAll()
+                .stream()
+                .sorted(Comparator.comparing(Event::getCreatedDate))
+                .map(event -> new EventsListResponse(event.getId(), event.getLongitude(), event.getLatitude(),
+                        event.getApartment(), event.getTitle(), event.getDate(), event.getLastModifiedDate()))
+                .collect(Collectors.toList());
+    }
+
 
     @Override
     public List<AdminCountriesListResponse> getCountriesList() {
@@ -130,6 +173,20 @@ public class AdminServiceImpl implements AdminService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
+    public List<AdminCitiesListResponse> getCitiesListForCountryByCountryId(Long countryId) throws ResourceNotFoundException {
+        Country country = countryRepository.findById(countryId)
+                .orElseThrow(() -> new ResourceNotFoundException("Country not found"));
+
+        return country
+                .getCities()
+                .stream()
+                .sorted(Comparator.comparing(City::getId))
+                .map((city) -> new AdminCitiesListResponse(city.getId(), city.getEnName(), city.getRuName(),
+                        city.getLongitude(), city.getLatitude(), city.isAddedByUser(), city.getCreatedDate(), city.getLastModifiedDate()))
+                .collect(Collectors.toList());
+    }
+
     @Override
     public void deleteCountryById(Long countryId) throws ResourceNotFoundException {
         Country country = countryRepository.findById(countryId)
@@ -138,12 +195,10 @@ public class AdminServiceImpl implements AdminService {
     }
 
     private void setUserRoles(Long [] rolesIds, User user) throws ResourceNotFoundException {
-        if(rolesIds.length != 0) {
-            user.getRoles().clear();
-            for(Long roleId : rolesIds) {
-                user.getRoles().add(userRoleRepository.findById(roleId)
-                        .orElseThrow(() -> new ResourceNotFoundException("Role not found")));
-            }
+        user.getRoles().clear();
+        for(Long roleId : rolesIds) {
+            user.getRoles().add(userRoleRepository.findById(roleId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Role not found")));
         }
     }
 
@@ -161,7 +216,9 @@ public class AdminServiceImpl implements AdminService {
         user.setSurname(request.getSurname() == null ? user.getSurname() : request.getSurname());
         user.setEmail(request.getEmail() == null ? user.getEmail() : request.getEmail());
 
-        setUserRoles(request.getRolesIds(), user);
+        if(request.getRolesIds().length != 0) {
+            setUserRoles(request.getRolesIds(), user);
+        }
 
         userRepository.save(user);
         return new AdminUserProfileResponse(user.getName(), user.getSurname(), user.getEmail(),
@@ -256,7 +313,10 @@ public class AdminServiceImpl implements AdminService {
         return userRoleRepository.findAll()
                 .stream()
                 .sorted(Comparator.comparing(UserRole::getId).reversed())
-                .map(role -> new UserRolesResponse(role.getId(), role.getName()))
+                .map(role -> UserRolesResponse.builder()
+                        .id(role.getId())
+                        .name(role.getName())
+                        .build())
                 .collect(Collectors.toList());
     }
 }
