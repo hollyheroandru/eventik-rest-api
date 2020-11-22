@@ -149,15 +149,13 @@ public class AdminServiceImpl implements AdminService {
 
             return eventCity.getEvents()
                     .stream()
-                    .filter(event -> event.getDate().after(new Date(System.currentTimeMillis() - 3600 * 1000)))
-                    .sorted(Comparator.comparing(Event::getId).reversed())
+                    .sorted(Comparator.comparing(Event::getCreatedDate))
                     .map(event -> new EventsListResponse(event.getId(), event.getLongitude(), event.getLatitude(),
                             event.getApartment(), event.getTitle(), event.getDate(), event.getLastModifiedDate()))
                     .collect(Collectors.toList());
         }
         return eventRepository.findAll()
                 .stream()
-                .filter(event -> event.getDate().after(new Date(System.currentTimeMillis() - 3600 * 1000)))
                 .sorted(Comparator.comparing(Event::getCreatedDate))
                 .map(event -> new EventsListResponse(event.getId(), event.getLongitude(), event.getLatitude(),
                         event.getApartment(), event.getTitle(), event.getDate(), event.getLastModifiedDate()))
