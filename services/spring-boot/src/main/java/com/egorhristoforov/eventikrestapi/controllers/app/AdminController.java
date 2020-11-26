@@ -90,6 +90,13 @@ public class AdminController {
         return ResponseEntity.ok(adminService.updateUserProfileById(userId, body));
     }
 
+    @PostMapping(value = "/cities", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Create city", authorizations = { @Authorization(value = "Access token")})
+    public ResponseEntity<AdminCityCreateResponse> createCity(@Valid @RequestBody AdminCityCreateRequest body)
+            throws BadRequestException, ResourceNotFoundException{
+        return ResponseEntity.status(HttpStatus.CREATED).body(adminService.createCity(body));
+    }
+
     @PostMapping(value = "/events", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Create event", authorizations = { @Authorization(value = "Access token") })
     public ResponseEntity<EventCreateResponse> createEvent(@Valid @RequestBody AdminEventCreateRequest body)

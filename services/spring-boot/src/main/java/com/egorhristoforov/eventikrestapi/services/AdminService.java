@@ -20,6 +20,9 @@ public interface AdminService {
     void deleteUserById(Long id)
         throws ResourceNotFoundException;
 
+    AdminCityCreateResponse createCity(AdminCityCreateRequest request)
+        throws BadRequestException, ResourceNotFoundException;
+
     AdminUserProfileResponse getUserById(Long userId)
         throws ResourceNotFoundException;
 

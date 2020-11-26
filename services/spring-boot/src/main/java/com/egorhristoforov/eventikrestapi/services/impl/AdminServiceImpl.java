@@ -59,6 +59,38 @@ public class AdminServiceImpl implements AdminService {
         userRepository.delete(user);
     }
 
+    @Override
+    public AdminCityCreateResponse createCity(AdminCityCreateRequest request) throws BadRequestException, ResourceNotFoundException {
+        City city = cityRepository
+                .findByBothOfNamesIgnoreCase(request.getEnName(), request.getRuName())
+                .orElse(new City());
+
+        if(city.isValid()) {
+            throw new BadRequestException("The city already exists");
+        }
+
+        Country country = countryRepository.findById(request.getCountryId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Country not found"));
+
+        city.setEnName(request.getEnName());
+        city.setRuName(request.getRuName());
+        city.setCountry(country);
+
+        cityRepository.save(city);
+
+        return AdminCityCreateResponse.builder()
+                .id(city.getId())
+                .enName(city.getEnName())
+                .ruName(city.getRuName())
+                .countryId(city.getCountry().getId())
+                .createdDate(city.getCreatedDate())
+                .lastModifiedDate(city.getLastModifiedDate())
+                .latitude(city.getLatitude())
+                .longitude(city.getLongitude())
+                .isAddedByUser(city.isAddedByUser())
+                .build();
+    }
+
     private List<UserRolesResponse> getUserRoles(User user) {
         return user.getRoles()
                 .stream()
