@@ -5,7 +5,6 @@ import com.egorhristoforov.eventikrestapi.dtos.responses.admin.*;
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventCreateResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventUpdateResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.EventsListResponse;
-import com.egorhristoforov.eventikrestapi.dtos.responses.location.CountriesListResponse;
 import com.egorhristoforov.eventikrestapi.exceptions.BadRequestException;
 import com.egorhristoforov.eventikrestapi.exceptions.ResourceNotFoundException;
 
@@ -20,7 +19,10 @@ public interface AdminService {
     void deleteUserById(Long id)
         throws ResourceNotFoundException;
 
-    AdminCityCreateResponse createCity(AdminCityCreateRequest request)
+    AdminCityResponse getCityById(Long cityId)
+        throws ResourceNotFoundException;
+
+    AdminCityResponse createCity(AdminCityCreateRequest request)
         throws BadRequestException, ResourceNotFoundException;
 
     AdminUserProfileResponse getUserById(Long userId)

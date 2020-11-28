@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -60,7 +61,25 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public AdminCityCreateResponse createCity(AdminCityCreateRequest request) throws BadRequestException, ResourceNotFoundException {
+    public AdminCityResponse getCityById(Long cityId) throws ResourceNotFoundException {
+        City city = cityRepository.findById(cityId)
+                .orElseThrow(() -> new ResourceNotFoundException("City not found"));
+
+        return AdminCityResponse.builder()
+                .id(city.getId())
+                .enName(city.getEnName())
+                .ruName(city.getRuName())
+                .latitude(city.getLatitude())
+                .longitude(city.getLongitude())
+                .countryId(city.getCountry().getId())
+                .createdDate(city.getCreatedDate())
+                .lastModifiedDate(city.getLastModifiedDate())
+                .isAddedByUser(city.isAddedByUser())
+                .build();
+    }
+
+    @Override
+    public AdminCityResponse createCity(AdminCityCreateRequest request) throws BadRequestException, ResourceNotFoundException {
         City city = cityRepository
                 .findByBothOfNamesIgnoreCase(request.getEnName(), request.getRuName())
                 .orElse(new City());
@@ -78,7 +97,7 @@ public class AdminServiceImpl implements AdminService {
 
         cityRepository.save(city);
 
-        return AdminCityCreateResponse.builder()
+        return AdminCityResponse.builder()
                 .id(city.getId())
                 .enName(city.getEnName())
                 .ruName(city.getRuName())

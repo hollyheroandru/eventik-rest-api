@@ -92,9 +92,16 @@ public class AdminController {
 
     @PostMapping(value = "/cities", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Create city", authorizations = { @Authorization(value = "Access token")})
-    public ResponseEntity<AdminCityCreateResponse> createCity(@Valid @RequestBody AdminCityCreateRequest body)
+    public ResponseEntity<AdminCityResponse> createCity(@Valid @RequestBody AdminCityCreateRequest body)
             throws BadRequestException, ResourceNotFoundException{
         return ResponseEntity.status(HttpStatus.CREATED).body(adminService.createCity(body));
+    }
+
+    @GetMapping(value = "/cities/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Get city by id", authorizations = { @Authorization(value = "Access token")})
+    public ResponseEntity<AdminCityResponse> getCityById(@PathVariable(value = "id") Long cityId)
+        throws ResourceNotFoundException {
+        return ResponseEntity.ok(adminService.getCityById(cityId));
     }
 
     @PostMapping(value = "/events", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
