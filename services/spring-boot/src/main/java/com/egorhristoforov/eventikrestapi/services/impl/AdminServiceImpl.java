@@ -192,25 +192,24 @@ public class AdminServiceImpl implements AdminService {
         return new AdminCountriesListResponse(country.getId(), country.getEnName(), country.getRuName(), country.isAddedByUser(), country.getCreatedDate(), country.getLastModifiedDate());
     }
 
+    private List<EventsListResponse> makeEventsListResponse(Collection<Event> collection) {
+        return collection
+                .stream()
+                .sorted(Comparator.comparing(Event::getCreatedDate))
+                .map(event -> new EventsListResponse(event.getId(), event.getLongitude(), event.getLatitude(),
+                        event.getApartment(), event.getTitle(), event.getDate(), event.getLastModifiedDate()))
+                .collect(Collectors.toList());
+    }
+
     @Override
     public List<EventsListResponse> getEventsList(Long cityId) throws ResourceNotFoundException {
         if (cityId != null) {
             City eventCity = cityRepository.findById(cityId)
                     .orElseThrow(() -> new ResourceNotFoundException("Provided city not found"));
 
-            return eventCity.getEvents()
-                    .stream()
-                    .sorted(Comparator.comparing(Event::getCreatedDate))
-                    .map(event -> new EventsListResponse(event.getId(), event.getLongitude(), event.getLatitude(),
-                            event.getApartment(), event.getTitle(), event.getDate(), event.getLastModifiedDate()))
-                    .collect(Collectors.toList());
+            return makeEventsListResponse(eventCity.getEvents());
         }
-        return eventRepository.findAll()
-                .stream()
-                .sorted(Comparator.comparing(Event::getCreatedDate))
-                .map(event -> new EventsListResponse(event.getId(), event.getLongitude(), event.getLatitude(),
-                        event.getApartment(), event.getTitle(), event.getDate(), event.getLastModifiedDate()))
-                .collect(Collectors.toList());
+        return makeEventsListResponse(eventRepository.findAll());
     }
 
 
@@ -301,19 +300,15 @@ public class AdminServiceImpl implements AdminService {
 
         eventRepository.save(createdEvent);
 
-        return AdminEventResponse.builder()
-                .id(createdEvent.getId())
-                .latitude(createdEvent.getLatitude())
-                .longitude(createdEvent.getLongitude())
-                .apartment(createdEvent.getApartment())
-                .title(createdEvent.getTitle())
-                .description(createdEvent.getDescription())
-                .countOfVisitors(eventRepository.countOfVisitors(createdEvent.getId()))
-                .date(createdEvent.getDate())
-                .lastModifiedDate(createdEvent.getLastModifiedDate())
-                .registrationRequired(createdEvent.isRegistrationRequired())
-                .ownerId(createdEvent.getOwner().getId())
-                .build();
+        return new AdminEventResponse(createdEvent, eventRepository.countOfVisitors(createdEvent.getId()));
+    }
+
+    @Override
+    public  AdminEventResponse getEventById(Long eventId)
+            throws  ResourceNotFoundException{
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new ResourceNotFoundException("Event not found"));
+        return new AdminEventResponse(event, eventRepository.countOfVisitors(event.getId()));
     }
 
     @Override
@@ -344,19 +339,7 @@ public class AdminServiceImpl implements AdminService {
 
         eventRepository.save(event);
 
-        return AdminEventResponse.builder()
-                .id(event.getId())
-                .latitude(event.getLatitude())
-                .longitude(event.getLongitude())
-                .apartment(event.getApartment())
-                .title(event.getTitle())
-                .description(event.getDescription())
-                .countOfVisitors(eventRepository.countOfVisitors(event.getId()))
-                .date(event.getDate())
-                .lastModifiedDate(event.getLastModifiedDate())
-                .registrationRequired(event.isRegistrationRequired())
-                .ownerId(event.getOwner().getId())
-                .build();
+        return new AdminEventResponse(event, eventRepository.countOfVisitors(event.getId()));
     }
 
     @Transactional

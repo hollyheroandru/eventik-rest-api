@@ -119,10 +119,10 @@ public class AdminController {
     }
 
     @GetMapping(value = "/events/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "Retrieve event", authorizations = { @Authorization(value = "Access token")})
-    public ResponseEntity<EventRetrieveResponse> getEvent(@PathVariable(value = "id") @Positive Long eventId)
+    @ApiOperation(value = "Get event", authorizations = { @Authorization(value = "Access token")})
+    public ResponseEntity<AdminEventResponse> getEvent(@PathVariable(value = "id") @Positive Long eventId)
             throws ResourceNotFoundException {
-        return ResponseEntity.ok(eventService.getEvent(eventId));
+        return ResponseEntity.ok(adminService.getEventById(eventId));
     }
 
     @DeleteMapping(value = "/events/{id}", produces = MediaType.APPLICATION_JSON_VALUE)

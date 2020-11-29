@@ -1,18 +1,14 @@
 package com.egorhristoforov.eventikrestapi.dtos.responses.admin;
 
+import com.egorhristoforov.eventikrestapi.models.Event;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 
 import java.util.Date;
 
-@Data
-@Builder(toBuilder = true)
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
 public class AdminEventResponse {
+
     private Long id;
     private Double longitude;
     private Double latitude;
@@ -29,4 +25,19 @@ public class AdminEventResponse {
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
     private Date lastModifiedDate;
+
+    public AdminEventResponse(Event event, int countOfVisitors) {
+        id = event.getId();
+        longitude = event.getLongitude();
+        latitude = event.getLatitude();
+        apartment = event.getApartment();
+        title = event.getTitle();
+        description = event.getDescription();
+        ownerId = event.getOwner().getId();
+        date = event.getDate();
+        this.countOfVisitors = countOfVisitors;
+        registrationRequired = event.isRegistrationRequired();
+        lastModifiedDate = event.getLastModifiedDate();
+    }
+
 }
