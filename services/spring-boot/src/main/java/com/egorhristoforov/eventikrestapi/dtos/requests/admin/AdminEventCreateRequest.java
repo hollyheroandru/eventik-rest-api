@@ -38,14 +38,14 @@ public class AdminEventCreateRequest {
     private Double latitude;
 
     @NotNull
-    private boolean registrationRequired;
+    private boolean isRegistrationRequired;
 
     public AdminEventCreateRequest() {
     }
 
     public AdminEventCreateRequest(Long cityId, String apartment, String title,
                                    String description, Date date, Double longitude,
-                                   Double latitude, boolean registrationRequired, Long ownerId) {
+                                   Double latitude, boolean isRegistrationRequired, Long ownerId) {
         this.cityId = cityId;
         this.apartment = apartment;
         this.title = title;
@@ -53,7 +53,7 @@ public class AdminEventCreateRequest {
         this.date = date;
         this.longitude = longitude;
         this.latitude = latitude;
-        this.registrationRequired = registrationRequired;
+        this.isRegistrationRequired = isRegistrationRequired;
         this.ownerId = ownerId;
     }
 
@@ -114,11 +114,11 @@ public class AdminEventCreateRequest {
     }
 
     public boolean isRegistrationRequired() {
-        return registrationRequired;
+        return isRegistrationRequired;
     }
 
     public void setRegistrationRequired(boolean registrationRequired) {
-        this.registrationRequired = registrationRequired;
+        this.isRegistrationRequired = registrationRequired;
     }
 
     public Long getOwnerId() {

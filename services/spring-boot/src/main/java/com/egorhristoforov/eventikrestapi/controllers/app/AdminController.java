@@ -106,7 +106,7 @@ public class AdminController {
 
     @PostMapping(value = "/events", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Create event", authorizations = { @Authorization(value = "Access token") })
-    public ResponseEntity<EventCreateResponse> createEvent(@Valid @RequestBody AdminEventCreateRequest body)
+    public ResponseEntity<AdminEventResponse> createEvent(@Valid @RequestBody AdminEventCreateRequest body)
             throws ResourceNotFoundException {
         return ResponseEntity.status(HttpStatus.CREATED).body(adminService.createEvent(body));
     }
@@ -135,7 +135,7 @@ public class AdminController {
 
     @PutMapping(value = "/events/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Update event", authorizations = { @Authorization(value = "Access token") })
-    public ResponseEntity<EventUpdateResponse> updateEvent(@PathVariable(value = "id") @Positive Long eventId,
+    public ResponseEntity<AdminEventResponse> updateEvent(@PathVariable(value = "id") @Positive Long eventId,
                                                            @Valid @RequestBody AdminEventUpdateRequest body)
             throws ResourceNotFoundException {
         return ResponseEntity.ok(adminService.updateEvent(eventId, body));

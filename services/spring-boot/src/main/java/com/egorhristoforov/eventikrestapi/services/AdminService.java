@@ -54,13 +54,13 @@ public interface AdminService {
     AdminUserProfileResponse updateUserProfileById(Long id, AdminUserUpdateRequest request)
         throws ResourceNotFoundException;
 
-    EventCreateResponse createEvent(AdminEventCreateRequest request)
+    AdminEventResponse createEvent(AdminEventCreateRequest request)
             throws ResourceNotFoundException;
 
     void deleteEventById(Long eventId)
         throws ResourceNotFoundException;
 
-    EventUpdateResponse updateEvent(Long eventId, AdminEventUpdateRequest request)
+    AdminEventResponse updateEvent(Long eventId, AdminEventUpdateRequest request)
             throws ResourceNotFoundException;
 
     List<UserRolesResponse> getRoles()

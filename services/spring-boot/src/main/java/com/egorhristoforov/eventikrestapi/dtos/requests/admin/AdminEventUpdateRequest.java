@@ -14,20 +14,20 @@ public class AdminEventUpdateRequest {
     @FutureOrPresent
     private Date date;
 
-    private Boolean registrationRequired;
+    private Boolean isRegistrationRequired;
 
     public AdminEventUpdateRequest() {
     }
 
     public AdminEventUpdateRequest(Double longitude, Double latitude, String apartment, String title,
-                                   String description, Date date, boolean registrationRequired, Long ownerId) {
+                                   String description, Date date, boolean isRegistrationRequired, Long ownerId) {
         this.longitude = longitude;
         this.latitude = latitude;
         this.apartment = apartment;
         this.title = title;
         this.description = description;
         this.date = date;
-        this.registrationRequired = registrationRequired;
+        this.isRegistrationRequired = isRegistrationRequired;
         this.ownerId = ownerId;
     }
 
@@ -80,11 +80,11 @@ public class AdminEventUpdateRequest {
     }
 
     public Boolean isRegistrationRequired() {
-        return registrationRequired;
+        return isRegistrationRequired;
     }
 
-    public void setRegistrationRequired(boolean registrationRequired) {
-        this.registrationRequired = registrationRequired;
+    public void setIsRegistrationRequired(boolean isRegistrationRequired) {
+        this.isRegistrationRequired = isRegistrationRequired;
     }
 
     public Long getOwnerId() {
