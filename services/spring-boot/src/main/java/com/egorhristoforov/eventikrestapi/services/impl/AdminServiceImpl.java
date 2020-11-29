@@ -166,8 +166,7 @@ public class AdminServiceImpl implements AdminService {
 
         countryRepository.save(country);
 
-        return new AdminCountriesListResponse(country.getId(), country.getEnName(), country.getRuName(),
-                country.isAddedByUser(), country.getCreatedDate(), country.getLastModifiedDate());
+        return new AdminCountriesListResponse(country);
     }
 
     @Override
@@ -181,15 +180,14 @@ public class AdminServiceImpl implements AdminService {
 
         countryRepository.save(country);
 
-        return new AdminCountriesListResponse(country.getId(), country.getEnName(), country.getRuName(),
-                country.isAddedByUser(), country.getCreatedDate(), country.getLastModifiedDate());
+        return new AdminCountriesListResponse(country);
     }
 
     @Override
     public AdminCountriesListResponse getCountryById(Long countryId) throws ResourceNotFoundException {
         Country country = countryRepository.findById(countryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Country not found"));
-        return new AdminCountriesListResponse(country.getId(), country.getEnName(), country.getRuName(), country.isAddedByUser(), country.getCreatedDate(), country.getLastModifiedDate());
+        return new AdminCountriesListResponse(country);
     }
 
     private List<EventsListResponse> makeEventsListResponse(Collection<Event> collection) {
@@ -218,8 +216,7 @@ public class AdminServiceImpl implements AdminService {
         return countryRepository.findAll()
                 .stream()
                 .sorted(Comparator.comparing(Country::getId))
-                .map((country) -> new AdminCountriesListResponse(country.getId(), country.getEnName(), country.getRuName(),
-                        country.isAddedByUser(), country.getCreatedDate(), country.getLastModifiedDate()))
+                .map(AdminCountriesListResponse::new)
                 .collect(Collectors.toList());
     }
 
