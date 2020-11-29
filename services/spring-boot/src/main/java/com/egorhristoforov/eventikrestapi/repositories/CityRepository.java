@@ -1,6 +1,7 @@
 package com.egorhristoforov.eventikrestapi.repositories;
 
 import com.egorhristoforov.eventikrestapi.models.City;
+import com.egorhristoforov.eventikrestapi.models.Country;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,4 +13,7 @@ import java.util.Optional;
 public interface CityRepository extends JpaRepository<City, Long> {
     @Query(value = "SELECT * FROM cities c WHERE LOWER(c.en_name) = LOWER(:name) OR LOWER(c.ru_name) = LOWER(:name)", nativeQuery = true)
     Optional<City> findByOneOfNamesIgnoreCase(@Param(value = "name") String name);
+
+    @Query(value = "SELECT * FROM cities c WHERE LOWER(c.en_name) = LOWER(:enName) OR LOWER(c.ru_name) = LOWER(:ruName)", nativeQuery = true)
+    Optional<City> findByBothOfNamesIgnoreCase(@Param(value = "enName") String enName, @Param(value = "ruName") String ruName);
 }

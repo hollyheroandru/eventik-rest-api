@@ -108,4 +108,8 @@ public class City extends Auditable {
     public void setEvents(Set<Event> events) {
         this.events = events;
     }
+
+    public boolean isValid() {
+        return enName != null && ruName != null;
+    }
 }

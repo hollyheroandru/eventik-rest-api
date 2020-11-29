@@ -90,9 +90,23 @@ public class AdminController {
         return ResponseEntity.ok(adminService.updateUserProfileById(userId, body));
     }
 
+    @PostMapping(value = "/cities", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Create city", authorizations = { @Authorization(value = "Access token")})
+    public ResponseEntity<AdminCityResponse> createCity(@Valid @RequestBody AdminCityCreateRequest body)
+            throws BadRequestException, ResourceNotFoundException{
+        return ResponseEntity.status(HttpStatus.CREATED).body(adminService.createCity(body));
+    }
+
+    @GetMapping(value = "/cities/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Get city by id", authorizations = { @Authorization(value = "Access token")})
+    public ResponseEntity<AdminCityResponse> getCityById(@PathVariable(value = "id") Long cityId)
+        throws ResourceNotFoundException {
+        return ResponseEntity.ok(adminService.getCityById(cityId));
+    }
+
     @PostMapping(value = "/events", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Create event", authorizations = { @Authorization(value = "Access token") })
-    public ResponseEntity<EventCreateResponse> createEvent(@Valid @RequestBody AdminEventCreateRequest body)
+    public ResponseEntity<AdminEventResponse> createEvent(@Valid @RequestBody AdminEventCreateRequest body)
             throws ResourceNotFoundException {
         return ResponseEntity.status(HttpStatus.CREATED).body(adminService.createEvent(body));
     }
@@ -121,7 +135,7 @@ public class AdminController {
 
     @PutMapping(value = "/events/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Update event", authorizations = { @Authorization(value = "Access token") })
-    public ResponseEntity<EventUpdateResponse> updateEvent(@PathVariable(value = "id") @Positive Long eventId,
+    public ResponseEntity<AdminEventResponse> updateEvent(@PathVariable(value = "id") @Positive Long eventId,
                                                            @Valid @RequestBody AdminEventUpdateRequest body)
             throws ResourceNotFoundException {
         return ResponseEntity.ok(adminService.updateEvent(eventId, body));
