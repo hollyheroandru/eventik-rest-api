@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -65,17 +64,7 @@ public class AdminServiceImpl implements AdminService {
         City city = cityRepository.findById(cityId)
                 .orElseThrow(() -> new ResourceNotFoundException("City not found"));
 
-        return AdminCityResponse.builder()
-                .id(city.getId())
-                .enName(city.getEnName())
-                .ruName(city.getRuName())
-                .latitude(city.getLatitude())
-                .longitude(city.getLongitude())
-                .countryId(city.getCountry().getId())
-                .createdDate(city.getCreatedDate())
-                .lastModifiedDate(city.getLastModifiedDate())
-                .isAddedByUser(city.isAddedByUser())
-                .build();
+        return new AdminCityResponse(city);
     }
 
     @Override
@@ -97,35 +86,14 @@ public class AdminServiceImpl implements AdminService {
 
         cityRepository.save(city);
 
-        return AdminCityResponse.builder()
-                .id(city.getId())
-                .enName(city.getEnName())
-                .ruName(city.getRuName())
-                .countryId(city.getCountry().getId())
-                .createdDate(city.getCreatedDate())
-                .lastModifiedDate(city.getLastModifiedDate())
-                .latitude(city.getLatitude())
-                .longitude(city.getLongitude())
-                .isAddedByUser(city.isAddedByUser())
-                .build();
-    }
-
-    private List<UserRolesResponse> getUserRoles(User user) {
-        return user.getRoles()
-                .stream()
-                .sorted(Comparator.comparing(UserRole::getId))
-                .map(userRole -> UserRolesResponse.builder()
-                        .id(userRole.getId())
-                        .name(userRole.getName())
-                        .build())
-                .collect(Collectors.toList());
+        return new AdminCityResponse(city);
     }
 
     @Override
     public AdminUserProfileResponse getUserById(Long userId) throws ResourceNotFoundException {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-        return new AdminUserProfileResponse(user.getName(), user.getSurname(), user.getEmail(), getUserRoles(user));
+        return new AdminUserProfileResponse(user);
     }
 
     @Override
@@ -147,8 +115,7 @@ public class AdminServiceImpl implements AdminService {
 
         userRepository.save(createdUser);
 
-        return new AdminUserProfileResponse(createdUser.getName(), createdUser.getSurname(),
-                createdUser.getEmail(), getUserRoles(createdUser));
+        return new AdminUserProfileResponse(createdUser);
     }
 
     @Override
@@ -268,8 +235,7 @@ public class AdminServiceImpl implements AdminService {
         }
 
         userRepository.save(user);
-        return new AdminUserProfileResponse(user.getName(), user.getSurname(), user.getEmail(),
-                getUserRoles(user));
+        return new AdminUserProfileResponse(user);
     }
 
     @Override

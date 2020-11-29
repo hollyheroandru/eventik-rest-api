@@ -1,8 +1,16 @@
 package com.egorhristoforov.eventikrestapi.dtos.responses.admin;
 
-import javax.validation.constraints.Email;
-import java.util.List;
+import com.egorhristoforov.eventikrestapi.models.User;
+import com.egorhristoforov.eventikrestapi.models.UserRole;
+import lombok.Getter;
 
+import javax.validation.constraints.Email;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+@Getter
 public class AdminUserProfileResponse {
     private String name;
     private String surname;
@@ -12,42 +20,21 @@ public class AdminUserProfileResponse {
 
     private List<UserRolesResponse> roles;
 
-    public AdminUserProfileResponse(String name, String surname, String email, List<UserRolesResponse> roles) {
-        this.name = name;
-        this.surname = surname;
-        this.email = email;
-        this.roles = roles;
+    public AdminUserProfileResponse(User user) {
+        name = user.getName();
+        surname = user.getSurname();
+        email = user.getEmail();
+        roles = getUserRoles(user.getRoles());
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public List<UserRolesResponse> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<UserRolesResponse> roles) {
-        this.roles = roles;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    private List<UserRolesResponse> getUserRoles(Set<UserRole> roles) {
+        return roles
+                .stream()
+                .sorted(Comparator.comparing(UserRole::getId))
+                .map(userRole -> UserRolesResponse.builder()
+                        .id(userRole.getId())
+                        .name(userRole.getName())
+                        .build())
+                .collect(Collectors.toList());
     }
 }

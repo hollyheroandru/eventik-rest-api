@@ -1,17 +1,12 @@
 package com.egorhristoforov.eventikrestapi.dtos.responses.admin;
 
+import com.egorhristoforov.eventikrestapi.models.City;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
 
-@Data
-@Builder(toBuilder = true)
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
 public class AdminCityResponse {
     private Long id;
     private String enName;
@@ -26,4 +21,16 @@ public class AdminCityResponse {
 
     @JsonFormat(pattern = "yyyy.MM.dd 'T' HH:mm:ss Z")
     private Date lastModifiedDate;
+
+    public AdminCityResponse(City city) {
+        id = city.getId();
+        enName = city.getEnName();
+        ruName = city.getRuName();
+        longitude = city.getLongitude();
+        latitude = city.getLatitude();
+        isAddedByUser = city.isAddedByUser();
+        countryId = city.getCountry().getId();
+        createdDate = city.getCreatedDate();
+        lastModifiedDate = city.getLastModifiedDate();
+    }
 }
