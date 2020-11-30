@@ -16,6 +16,7 @@ public class AdminEventResponse {
     private String title;
     private String description;
     private Long ownerId;
+    private Long cityId;
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
     private Date date;
@@ -35,6 +36,7 @@ public class AdminEventResponse {
         description = event.getDescription();
         ownerId = event.getOwner().getId();
         date = event.getDate();
+        cityId = event.getCity().getId();
         this.countOfVisitors = countOfVisitors;
         registrationRequired = event.isRegistrationRequired();
         lastModifiedDate = event.getLastModifiedDate();

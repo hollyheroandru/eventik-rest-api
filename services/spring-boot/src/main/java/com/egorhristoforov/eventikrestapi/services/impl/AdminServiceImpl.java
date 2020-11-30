@@ -299,6 +299,9 @@ public class AdminServiceImpl implements AdminService {
         event.setOwner(request.getOwnerId() == null ? event.getOwner() :
                 userRepository.findById(request.getOwnerId())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found")));
+        event.setCity(request.getCityId() == null ? event.getCity() :
+                cityRepository.findById(request.getCityId())
+                        .orElseThrow(() -> new ResourceNotFoundException("City not found")));
         //event.setModifiedDate(new Date());
 
         eventRepository.save(event);

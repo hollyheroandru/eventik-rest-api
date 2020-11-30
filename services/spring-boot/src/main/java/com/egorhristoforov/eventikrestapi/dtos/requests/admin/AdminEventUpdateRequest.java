@@ -10,6 +10,7 @@ public class AdminEventUpdateRequest {
     private String title;
     private String description;
     private Long ownerId;
+    private Long cityId;
 
     @FutureOrPresent
     private Date date;
@@ -20,7 +21,7 @@ public class AdminEventUpdateRequest {
     }
 
     public AdminEventUpdateRequest(Double longitude, Double latitude, String apartment, String title,
-                                   String description, Date date, boolean isRegistrationRequired, Long ownerId) {
+                                   String description, Date date, boolean isRegistrationRequired, Long ownerId, Long cityId) {
         this.longitude = longitude;
         this.latitude = latitude;
         this.apartment = apartment;
@@ -29,6 +30,7 @@ public class AdminEventUpdateRequest {
         this.date = date;
         this.isRegistrationRequired = isRegistrationRequired;
         this.ownerId = ownerId;
+        this.cityId = cityId;
     }
 
     public Double getLongitude() {
@@ -85,6 +87,14 @@ public class AdminEventUpdateRequest {
 
     public void setIsRegistrationRequired(boolean isRegistrationRequired) {
         this.isRegistrationRequired = isRegistrationRequired;
+    }
+
+    public Long getCityId() {
+        return cityId;
+    }
+
+    public void setCityId(Long cityId) {
+        this.cityId = cityId;
     }
 
     public Long getOwnerId() {
