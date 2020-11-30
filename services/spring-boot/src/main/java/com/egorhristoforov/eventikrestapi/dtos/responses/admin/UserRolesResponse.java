@@ -1,15 +1,15 @@
 package com.egorhristoforov.eventikrestapi.dtos.responses.admin;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.egorhristoforov.eventikrestapi.models.UserRole;
+import lombok.*;
 
-@Data
-@Builder()
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
 public class UserRolesResponse {
     private Long id;
     private String name;
+
+    public UserRolesResponse(UserRole userRole) {
+        id = userRole.getId();
+        name = userRole.getName();
+    }
 }

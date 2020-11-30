@@ -60,6 +60,9 @@ public interface AdminService {
     void deleteEventById(Long eventId)
         throws ResourceNotFoundException;
 
+    AdminEventResponse getEventById(Long eventId)
+        throws ResourceNotFoundException;
+
     AdminEventResponse updateEvent(Long eventId, AdminEventUpdateRequest request)
             throws ResourceNotFoundException;
 
