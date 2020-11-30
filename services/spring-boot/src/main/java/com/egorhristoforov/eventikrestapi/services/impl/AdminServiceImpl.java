@@ -43,13 +43,20 @@ public class AdminServiceImpl implements AdminService {
     @Autowired
     UserRoleRepository userRoleRepository;
 
-    @Transactional
-    public List<UsersListResponse> getUsersList() throws ResourceNotFoundException {
-        return userRepository.findAll()
+    private List<UsersListResponse> makeUsersListResponse(List<User> users) {
+        return users
                 .stream()
                 .sorted(Comparator.comparing(User::getId).reversed())
-                .map(user -> new UsersListResponse(user.getId(), user.getEmail(), user.getName(), user.getSurname()))
+                .map(UsersListResponse::new)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<UsersListResponse> getUsersListByEmailPatternOrAll(String emailPattern) throws ResourceNotFoundException {
+        if(emailPattern != null) {
+            return makeUsersListResponse(userRepository.findUsersByEmailPattern(emailPattern + "%"));
+        }
+        return makeUsersListResponse(userRepository.findAll());
     }
 
     @Override

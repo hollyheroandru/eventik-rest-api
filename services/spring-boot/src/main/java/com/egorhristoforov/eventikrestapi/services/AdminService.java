@@ -13,8 +13,8 @@ import java.util.List;
 
 public interface AdminService {
 
-    List<UsersListResponse> getUsersList()
-            throws ResourceNotFoundException;
+    List<UsersListResponse> getUsersListByEmailPatternOrAll(String emailPattern)
+        throws ResourceNotFoundException;
 
     void deleteUserById(Long id)
         throws ResourceNotFoundException;
