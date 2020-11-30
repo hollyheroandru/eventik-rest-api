@@ -20,21 +20,10 @@ public class AdminUserProfileResponse {
 
     private List<UserRolesResponse> roles;
 
-    public AdminUserProfileResponse(User user) {
+    public AdminUserProfileResponse(User user, List<UserRolesResponse> roles) {
         name = user.getName();
         surname = user.getSurname();
         email = user.getEmail();
-        roles = getUserRoles(user.getRoles());
-    }
-
-    private List<UserRolesResponse> getUserRoles(Set<UserRole> roles) {
-        return roles
-                .stream()
-                .sorted(Comparator.comparing(UserRole::getId))
-                .map(userRole -> UserRolesResponse.builder()
-                        .id(userRole.getId())
-                        .name(userRole.getName())
-                        .build())
-                .collect(Collectors.toList());
+        this.roles = roles;
     }
 }

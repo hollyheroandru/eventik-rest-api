@@ -93,7 +93,7 @@ public class AdminServiceImpl implements AdminService {
     public AdminUserProfileResponse getUserById(Long userId) throws ResourceNotFoundException {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-        return new AdminUserProfileResponse(user);
+        return new AdminUserProfileResponse(user, getUserRoles(user.getRoles()));
     }
 
     @Override
@@ -115,7 +115,7 @@ public class AdminServiceImpl implements AdminService {
 
         userRepository.save(createdUser);
 
-        return new AdminUserProfileResponse(createdUser);
+        return new AdminUserProfileResponse(createdUser, getUserRoles(createdUser.getRoles()));
     }
 
     @Override
@@ -201,6 +201,7 @@ public class AdminServiceImpl implements AdminService {
                 .collect(Collectors.toList());
     }
 
+
     @Override
     public void deleteCountryById(Long countryId) throws ResourceNotFoundException {
         Country country = countryRepository.findById(countryId)
@@ -235,7 +236,7 @@ public class AdminServiceImpl implements AdminService {
         }
 
         userRepository.save(user);
-        return new AdminUserProfileResponse(user);
+        return new AdminUserProfileResponse(user, getUserRoles(user.getRoles()));
     }
 
     @Override
@@ -305,15 +306,16 @@ public class AdminServiceImpl implements AdminService {
         return new AdminEventResponse(event, eventRepository.countOfVisitors(event.getId()));
     }
 
+    private List<UserRolesResponse> getUserRoles(Collection<UserRole> roles) {
+        return roles
+                .stream()
+                .sorted(Comparator.comparing(UserRole::getId))
+                .map(UserRolesResponse::new)
+                .collect(Collectors.toList());
+    }
+
     @Transactional
     public List<UserRolesResponse> getRoles() throws ResourceNotFoundException {
-        return userRoleRepository.findAll()
-                .stream()
-                .sorted(Comparator.comparing(UserRole::getId).reversed())
-                .map(role -> UserRolesResponse.builder()
-                        .id(role.getId())
-                        .name(role.getName())
-                        .build())
-                .collect(Collectors.toList());
+        return getUserRoles(userRoleRepository.findAll());
     }
 }
