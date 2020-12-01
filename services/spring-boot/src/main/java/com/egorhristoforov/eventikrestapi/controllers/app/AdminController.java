@@ -79,8 +79,15 @@ public class AdminController {
     @DeleteMapping(value = "/users/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiOperation(value = "Delete users by id", authorizations = { @Authorization(value = "Access token") })
-    public void deleteUserById(@PathVariable(value = "id") Long id) throws ResourceNotFoundException {
+    public void deleteUserById(@PathVariable(value = "id") @Positive Long id) throws ResourceNotFoundException {
         adminService.deleteUserById(id);
+    }
+
+    @DeleteMapping(value = "/cities/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiOperation(value = "Delete city by id", authorizations = { @Authorization(value = "Access token")})
+    public void deleteCityById(@PathVariable(value = "id") @Positive Long cityId) throws ResourceNotFoundException{
+        adminService.deleteCityById(cityId);
     }
 
     @PutMapping(value = "/users/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -89,6 +96,14 @@ public class AdminController {
                                                                    @Valid @RequestBody AdminUserUpdateRequest body)
             throws ResourceNotFoundException {
         return ResponseEntity.ok(adminService.updateUserProfileById(userId, body));
+    }
+
+    @PutMapping(value = "/cities/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Update city by id", authorizations = { @Authorization(value = "Access token")})
+    public ResponseEntity<AdminCityResponse> updateCityById(@PathVariable(value = "id") @Positive Long cityId,
+                                            @Valid @RequestBody AdminCityUpdateRequest request)
+            throws ResourceNotFoundException {
+        return ResponseEntity.ok(adminService.updateCityById(cityId, request));
     }
 
     @PostMapping(value = "/cities", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

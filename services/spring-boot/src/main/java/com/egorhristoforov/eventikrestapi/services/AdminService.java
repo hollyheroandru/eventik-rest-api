@@ -16,7 +16,13 @@ public interface AdminService {
     List<UsersListResponse> getUsersListByEmailPatternOrAll(String emailPattern)
         throws ResourceNotFoundException;
 
+    void  deleteCityById(Long cityId)
+        throws ResourceNotFoundException;
+
     void deleteUserById(Long id)
+        throws ResourceNotFoundException;
+
+    AdminCityResponse updateCityById(Long cityId, AdminCityUpdateRequest request)
         throws ResourceNotFoundException;
 
     AdminCityResponse getCityById(Long cityId)

@@ -60,10 +60,35 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    public void deleteCityById(Long cityId) throws ResourceNotFoundException {
+        City city = cityRepository.findById(cityId)
+                .orElseThrow(() -> new ResourceNotFoundException("City not found"));
+        cityRepository.delete(city);
+    }
+
+    @Override
     public void deleteUserById(Long id) throws ResourceNotFoundException {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         userRepository.delete(user);
+    }
+
+    @Override
+    public AdminCityResponse updateCityById(Long cityId, AdminCityUpdateRequest request)
+            throws ResourceNotFoundException {
+        City city = cityRepository.findById(cityId)
+                .orElseThrow(() -> new ResourceNotFoundException("City not found"));
+
+        city.setEnName(request.getEnName() == null ? city.getEnName() : request.getEnName());
+        city.setRuName(request.getRuName() == null ? city.getRuName() : request.getRuName());
+        city.setAddedByUser(request.isAddedByUser() == city.isAddedByUser() ? city.isAddedByUser() : request.isAddedByUser());
+        city.setCountry(request.getCountryId() == null ? city.getCountry() :
+                countryRepository.findById(request.getCountryId())
+                        .orElseThrow(() -> new ResourceNotFoundException("Country not found")));
+
+        cityRepository.save(city);
+
+        return new AdminCityResponse(city);
     }
 
     @Override
