@@ -82,6 +82,8 @@ public class AdminServiceImpl implements AdminService {
         city.setEnName(request.getEnName() == null ? city.getEnName() : request.getEnName());
         city.setRuName(request.getRuName() == null ? city.getRuName() : request.getRuName());
         city.setAddedByUser(request.isAddedByUser() == city.isAddedByUser() ? city.isAddedByUser() : request.isAddedByUser());
+        city.setLongitude(request.getLongitude() == null ? city.getLongitude() : request.getLongitude());
+        city.setLatitude(request.getLatitude() == null ? city.getLatitude() : request.getLatitude());
         city.setCountry(request.getCountryId() == null ? city.getCountry() :
                 countryRepository.findById(request.getCountryId())
                         .orElseThrow(() -> new ResourceNotFoundException("Country not found")));
@@ -115,6 +117,8 @@ public class AdminServiceImpl implements AdminService {
         city.setEnName(request.getEnName());
         city.setRuName(request.getRuName());
         city.setCountry(country);
+        city.setLatitude(request.getLatitude() == null ? null : request.getLatitude());
+        city.setLongitude(request.getLongitude() == null ? null : request.getLongitude());
 
         cityRepository.save(city);
 

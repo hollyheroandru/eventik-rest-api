@@ -14,4 +14,6 @@ public class AdminCityUpdateRequest {
     private String ruName;
     private Long countryId;
     private boolean isAddedByUser = false;
+    private Double longitude;
+    private Double latitude;
 }

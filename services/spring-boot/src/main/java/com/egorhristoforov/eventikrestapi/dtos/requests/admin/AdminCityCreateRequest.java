@@ -22,5 +22,7 @@ public class AdminCityCreateRequest {
     @NotNull
     private Long countryId;
 
+    private Double longitude;
+    private Double latitude;
     private boolean isAddedByUser = false;
 }
