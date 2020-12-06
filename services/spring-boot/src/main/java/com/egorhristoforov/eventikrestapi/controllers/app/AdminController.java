@@ -63,7 +63,7 @@ public class AdminController {
         return ResponseEntity.status(HttpStatus.CREATED).body(adminService.createUser(user));
     }
 
-    @GetMapping(value = "/users", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Get users list by email pattern or all users list", authorizations = { @Authorization(value = "Access token")})
     public ResponseEntity<List<UsersListResponse>> getUsersListByEmailPatternOrAll(@RequestParam(value = "emailPattern", required = false) String emailPattern)
             throws ResourceNotFoundException {
@@ -127,7 +127,7 @@ public class AdminController {
         return ResponseEntity.status(HttpStatus.CREATED).body(adminService.createEvent(body));
     }
 
-    @GetMapping(value = "/events",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/events", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Get events list", authorizations = { @Authorization(value = "Access token")})
     public ResponseEntity<List<EventsListResponse>> getEvents(@RequestParam(value = "city-id", required = false) @Positive Long cityId)
             throws ResourceNotFoundException{
