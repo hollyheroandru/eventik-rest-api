@@ -54,7 +54,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public List<UsersListResponse> getUsersListByEmailPatternOrAll(String emailPattern) throws ResourceNotFoundException {
         if(emailPattern != null) {
-            return makeUsersListResponse(userRepository.findUsersByEmailPattern(emailPattern + "%"));
+            return makeUsersListResponse(userRepository.findUsersByEmailPattern(emailPattern));
         }
         return makeUsersListResponse(userRepository.findAll());
     }
@@ -291,8 +291,6 @@ public class AdminServiceImpl implements AdminService {
         createdEvent.setTitle(request.getTitle());
         createdEvent.setDescription(request.getDescription());
         createdEvent.setDate(request.getDate());
-        createdEvent.setCreatedDate(new Date());
-        //createdEvent.setModifiedDate(new Date());
         createdEvent.setLongitude(request.getLongitude());
         createdEvent.setLatitude(request.getLatitude());
         createdEvent.setRegistrationRequired(request.isRegistrationRequired());
@@ -338,7 +336,6 @@ public class AdminServiceImpl implements AdminService {
         event.setCity(request.getCityId() == null ? event.getCity() :
                 cityRepository.findById(request.getCityId())
                         .orElseThrow(() -> new ResourceNotFoundException("City not found")));
-        //event.setModifiedDate(new Date());
 
         eventRepository.save(event);
 
