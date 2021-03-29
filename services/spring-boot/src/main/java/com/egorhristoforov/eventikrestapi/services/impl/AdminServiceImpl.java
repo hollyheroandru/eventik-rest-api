@@ -43,13 +43,27 @@ public class AdminServiceImpl implements AdminService {
     @Autowired
     UserRoleRepository userRoleRepository;
 
-    @Transactional
-    public List<UsersListResponse> getUsersList() throws ResourceNotFoundException {
-        return userRepository.findAll()
+    private List<UsersListResponse> makeUsersListResponse(List<User> users) {
+        return users
                 .stream()
                 .sorted(Comparator.comparing(User::getId).reversed())
-                .map(user -> new UsersListResponse(user.getId(), user.getEmail(), user.getName(), user.getSurname()))
+                .map(UsersListResponse::new)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<UsersListResponse> getUsersListByEmailPatternOrAll(String emailPattern) throws ResourceNotFoundException {
+        if(emailPattern != null) {
+            return makeUsersListResponse(userRepository.findUsersByEmailPattern(emailPattern + "%"));
+        }
+        return makeUsersListResponse(userRepository.findAll());
+    }
+
+    @Override
+    public void deleteCityById(Long cityId) throws ResourceNotFoundException {
+        City city = cityRepository.findById(cityId)
+                .orElseThrow(() -> new ResourceNotFoundException("City not found"));
+        cityRepository.delete(city);
     }
 
     @Override
@@ -57,6 +71,26 @@ public class AdminServiceImpl implements AdminService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         userRepository.delete(user);
+    }
+
+    @Override
+    public AdminCityResponse updateCityById(Long cityId, AdminCityUpdateRequest request)
+            throws ResourceNotFoundException {
+        City city = cityRepository.findById(cityId)
+                .orElseThrow(() -> new ResourceNotFoundException("City not found"));
+
+        city.setEnName(request.getEnName() == null ? city.getEnName() : request.getEnName());
+        city.setRuName(request.getRuName() == null ? city.getRuName() : request.getRuName());
+        city.setAddedByUser(request.isAddedByUser() == city.isAddedByUser() ? city.isAddedByUser() : request.isAddedByUser());
+        city.setLongitude(request.getLongitude() == null ? city.getLongitude() : request.getLongitude());
+        city.setLatitude(request.getLatitude() == null ? city.getLatitude() : request.getLatitude());
+        city.setCountry(request.getCountryId() == null ? city.getCountry() :
+                countryRepository.findById(request.getCountryId())
+                        .orElseThrow(() -> new ResourceNotFoundException("Country not found")));
+
+        cityRepository.save(city);
+
+        return new AdminCityResponse(city);
     }
 
     @Override
@@ -83,6 +117,8 @@ public class AdminServiceImpl implements AdminService {
         city.setEnName(request.getEnName());
         city.setRuName(request.getRuName());
         city.setCountry(country);
+        city.setLatitude(request.getLatitude() == null ? null : request.getLatitude());
+        city.setLongitude(request.getLongitude() == null ? null : request.getLongitude());
 
         cityRepository.save(city);
 
@@ -299,6 +335,9 @@ public class AdminServiceImpl implements AdminService {
         event.setOwner(request.getOwnerId() == null ? event.getOwner() :
                 userRepository.findById(request.getOwnerId())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found")));
+        event.setCity(request.getCityId() == null ? event.getCity() :
+                cityRepository.findById(request.getCityId())
+                        .orElseThrow(() -> new ResourceNotFoundException("City not found")));
         //event.setModifiedDate(new Date());
 
         eventRepository.save(event);
