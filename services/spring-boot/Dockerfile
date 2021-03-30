@@ -1,8 +1,8 @@
 FROM java:8-jdk-alpine
+ARG JAR_FILE=target/*.jar
+COPY ${JAR_FILE} app.jar
 
-RUN mkdir /app
-WORKDIR /app
+RUN sh -c 'touch app.jar'
 
-COPY ./target/eventik-rest-api-0.0.1-SNAPSHOT.jar /app/
+ENTRYPOINT ["java","-jar","/app.jar"]
 
-RUN sh -c 'touch eventik-rest-api-0.0.1-SNAPSHOT.jar'

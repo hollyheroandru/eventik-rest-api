@@ -67,7 +67,7 @@ public class AdminController {
     @ApiOperation(value = "Get users list", authorizations = { @Authorization(value = "Access token")})
     public ResponseEntity<List<UsersListResponse>> getUsersList()
             throws ResourceNotFoundException {
-        return ResponseEntity.ok(adminService.getUsersListByEmailPatternOrAll(emailPattern));
+        return ResponseEntity.ok(adminService.getUsersList());
     }
 
     @GetMapping(value = "/users/{id}", produces = MediaType.APPLICATION_JSON_VALUE)

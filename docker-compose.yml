@@ -13,13 +13,27 @@ services:
     env_file:
       - ./db.env
 
+  rabbit:
+    image: rabbitmq:3-management
+    hostname: rabbit
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: "guest"
+      RABBITMQ_DEFAULT_PASS: "guest"
+      RABBITMQ_DEFAULT_VHOST: "/"
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+      - "61613:61613"
+    volumes:
+      - ./rabbitmq/enabled_plugins:/etc/rabbitmq/enabled_plugins
+
   app:
-    build:
-      context: ./services/spring-boot
-    command: java -jar eventik-rest-api-0.0.1-SNAPSHOT.jar
+    build: ./services/spring-boot
     restart: unless-stopped
     depends_on:
       - db
+      - rabbit
 
   nginx:
     build:

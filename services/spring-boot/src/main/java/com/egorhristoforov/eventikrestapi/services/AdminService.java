@@ -13,7 +13,7 @@ import java.util.List;
 
 public interface AdminService {
 
-    List<UsersListResponse> getUsersListByEmailPatternOrAll(String emailPattern)
+    List<UsersListResponse> getUsersList()
         throws ResourceNotFoundException;
 
     void  deleteCityById(Long cityId)
