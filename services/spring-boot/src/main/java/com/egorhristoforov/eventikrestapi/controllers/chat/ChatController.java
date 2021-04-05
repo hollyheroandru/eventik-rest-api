@@ -3,6 +3,7 @@ package com.egorhristoforov.eventikrestapi.controllers.chat;
 import static java.lang.String.format;
 
 import com.egorhristoforov.eventikrestapi.dtos.chat.ChatMessage;
+import com.egorhristoforov.eventikrestapi.dtos.chat.MessageType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ public class ChatController {
         String currentRoomId = (String) headerAccessor.getSessionAttributes().put("room_id", roomId);
         if (currentRoomId != null) {
             ChatMessage leaveMessage = new ChatMessage();
-            leaveMessage.setType(ChatMessage.MessageType.LEAVE);
+            leaveMessage.setType(MessageType.LEAVE);
             leaveMessage.setSender(chatMessage.getSender());
 
             messagingTemplate.convertAndSend(format("/topic/%s", currentRoomId), leaveMessage);

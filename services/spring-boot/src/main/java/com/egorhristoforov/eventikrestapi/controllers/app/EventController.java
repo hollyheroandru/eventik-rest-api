@@ -1,9 +1,12 @@
 package com.egorhristoforov.eventikrestapi.controllers.app;
 
+import com.egorhristoforov.eventikrestapi.dtos.chat.ChatMessage;
 import com.egorhristoforov.eventikrestapi.dtos.requests.event.EventCreateRequest;
 import com.egorhristoforov.eventikrestapi.dtos.requests.event.EventUpdateRequest;
 import com.egorhristoforov.eventikrestapi.dtos.requests.news.NewsCreateRequest;
 import com.egorhristoforov.eventikrestapi.dtos.requests.news.NewsUpdateRequest;
+import com.egorhristoforov.eventikrestapi.dtos.responses.chat.MessageListResponse;
+import com.egorhristoforov.eventikrestapi.dtos.responses.chat.MessageResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.*;
 import com.egorhristoforov.eventikrestapi.dtos.responses.news.NewsCreateResponse;
 import com.egorhristoforov.eventikrestapi.dtos.responses.news.NewsListResponse;
@@ -97,10 +100,9 @@ public class EventController {
 
     @GetMapping(value = "/{id}/news", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Get news list", authorizations = {@Authorization(value = "Access token")})
-    public ResponseEntity<List<NewsListResponse>> getNewsList(
-            @PathVariable(value = "id") @Positive Long eventId,
-            @RequestParam(value = "count", required = false) @Positive Long count,
-            @RequestParam(value = "last-news-id", required = false) @Positive Long lastNewsId) {
+    public ResponseEntity<List<NewsListResponse>> getNewsList(@PathVariable(value = "id") @Positive Long eventId,
+                                                              @RequestParam(value = "count", required = false) @Positive Long count,
+                                                              @RequestParam(value = "last-news-id", required = false) @Positive Long lastNewsId) {
         return null;
     }
 
@@ -112,18 +114,46 @@ public class EventController {
 
     @PutMapping(value = "/{id}/news/{newsId}")
     @ApiOperation(value = "Update news by id", authorizations = {@Authorization(value = "Access token")})
-    public ResponseEntity<NewsUpdateResponse> updateNewsById(
-            @PathVariable(value = "id") @Positive Long eventId,
-            @PathVariable(value = "newsId") @Positive Long newsId,
-            @Valid @RequestBody NewsUpdateRequest body) {
+    public ResponseEntity<NewsUpdateResponse> updateNewsById(@PathVariable(value = "id") @Positive Long eventId,
+                                                             @PathVariable(value = "newsId") @Positive Long newsId,
+                                                             @Valid @RequestBody NewsUpdateRequest body) {
         return null;
     }
 
     @PostMapping(value = "/{id}/news")
     @ApiOperation(value = "Create news", authorizations = {@Authorization(value = "Access token")})
-    public  ResponseEntity<NewsCreateResponse> createNews(@PathVariable(value = "id") @Positive Long eventId,
+    public ResponseEntity<NewsCreateResponse> createNews(@PathVariable(value = "id") @Positive Long eventId,
                                                           @Valid @RequestBody NewsCreateRequest body) {
         return null;
     }
 
+    @PostMapping(value = "/{id}/chat")
+    @ApiOperation(value = "Send message", authorizations = {@Authorization(value = "Access token")})
+    public ResponseEntity<MessageResponse> sendMessage(@PathVariable(value = "id") @Positive Long eventId,
+                                                       @Valid @RequestBody ChatMessage chatMessage) {
+        return null;
+    }
+
+    @PutMapping(value = "/{id}/chat/{messId}")
+    @ApiOperation(value = "Edit message by id", authorizations = {@Authorization(value = "Access token")})
+    public ResponseEntity<MessageResponse> editMessage(@PathVariable(value = "id") @Positive Long eventId,
+                                                       @PathVariable(value = "messId") @Positive Long messageId,
+                                                       @Valid @RequestBody ChatMessage chatMessage) {
+        return null;
+    }
+
+    @DeleteMapping(value = "/{id}/chat/{messId}")
+    @ApiOperation(value = "Delete message by id", authorizations = {@Authorization(value = "Access token")})
+    public void deleteMessage(@PathVariable(value = "id") @Positive Long eventId,
+                              @PathVariable(value = "messId") @Positive Long messageId) {
+
+    }
+
+    @GetMapping(value = "/{id}/chat")
+    @ApiOperation(value = "Get messages list", authorizations = {@Authorization(value = "Access token")})
+    public ResponseEntity<MessageListResponse> getMessagesList(@PathVariable(value = "id") @Positive Long eventId,
+                                                               @RequestParam(value = "count", required = false) @Positive Long count,
+                                                               @RequestParam(value = "lastMessageId", required = false) @Positive Long lastMessageId) {
+        return null;
+    }
 }

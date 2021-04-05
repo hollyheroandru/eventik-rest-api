@@ -2,10 +2,6 @@ package com.egorhristoforov.eventikrestapi.dtos.chat;
 
 public class ChatMessage {
 
-    public enum MessageType {
-        CHAT, JOIN, LEAVE
-    }
-
     private MessageType messageType;
     private String content;
     private String sender;
