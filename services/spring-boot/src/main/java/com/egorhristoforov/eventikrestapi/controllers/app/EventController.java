@@ -2,11 +2,17 @@ package com.egorhristoforov.eventikrestapi.controllers.app;
 
 import com.egorhristoforov.eventikrestapi.dtos.requests.event.EventCreateRequest;
 import com.egorhristoforov.eventikrestapi.dtos.requests.event.EventUpdateRequest;
+import com.egorhristoforov.eventikrestapi.dtos.requests.news.NewsCreateRequest;
+import com.egorhristoforov.eventikrestapi.dtos.requests.news.NewsUpdateRequest;
 import com.egorhristoforov.eventikrestapi.dtos.responses.event.*;
+import com.egorhristoforov.eventikrestapi.dtos.responses.news.NewsCreateResponse;
+import com.egorhristoforov.eventikrestapi.dtos.responses.news.NewsListResponse;
+import com.egorhristoforov.eventikrestapi.dtos.responses.news.NewsUpdateResponse;
 import com.egorhristoforov.eventikrestapi.exceptions.BadRequestException;
 import com.egorhristoforov.eventikrestapi.exceptions.ForbiddenException;
 import com.egorhristoforov.eventikrestapi.exceptions.ResourceNotFoundException;
 import com.egorhristoforov.eventikrestapi.exceptions.UnauthorizedException;
+import com.egorhristoforov.eventikrestapi.models.News;
 import com.egorhristoforov.eventikrestapi.services.EventService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -88,4 +94,36 @@ public class EventController {
             throws ResourceNotFoundException, UnauthorizedException, ForbiddenException, BadRequestException {
         return ResponseEntity.ok(eventService.getVisitorsListForEvent(eventId));
     }
+
+    @GetMapping(value = "/{id}/news", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Get news list", authorizations = {@Authorization(value = "Access token")})
+    public ResponseEntity<List<NewsListResponse>> getNewsList(
+            @PathVariable(value = "id") @Positive Long eventId,
+            @RequestParam(value = "count", required = false) @Positive Long count,
+            @RequestParam(value = "last-news-id", required = false) @Positive Long lastNewsId) {
+        return null;
+    }
+
+    @DeleteMapping(value = "/{id}/news/{newsId}")
+    @ApiOperation(value = "Delete news by id", authorizations = {@Authorization(value = "Access token")})
+    public void deleteNewsById(@PathVariable(value = "id") @Positive Long eventId, @PathVariable(value = "newsId") @Positive Long newsId) {
+
+    }
+
+    @PutMapping(value = "/{id}/news/{newsId}")
+    @ApiOperation(value = "Update news by id", authorizations = {@Authorization(value = "Access token")})
+    public ResponseEntity<NewsUpdateResponse> updateNewsById(
+            @PathVariable(value = "id") @Positive Long eventId,
+            @PathVariable(value = "newsId") @Positive Long newsId,
+            @Valid @RequestBody NewsUpdateRequest body) {
+        return null;
+    }
+
+    @PostMapping(value = "/{id}/news")
+    @ApiOperation(value = "Create news", authorizations = {@Authorization(value = "Access token")})
+    public  ResponseEntity<NewsCreateResponse> createNews(@PathVariable(value = "id") @Positive Long eventId,
+                                                          @Valid @RequestBody NewsCreateRequest body) {
+        return null;
+    }
+
 }
