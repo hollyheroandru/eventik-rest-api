@@ -12,16 +12,16 @@ public class News extends Auditable{
     @ManyToOne(fetch = FetchType.LAZY)
     private Event event;
 
-    @Column(name = "maintenance")
-    private String maintenance;
+    @Column(name = "text")
+    private String text;
 
     public News() {
     }
 
-    public News(Long id, Event event, String maintenance) {
+    public News(Long id, Event event, String text) {
         this.id = id;
         this.event = event;
-        this.maintenance = maintenance;
+        this.text = text;
     }
 
     public Long getId() {
@@ -40,11 +40,11 @@ public class News extends Auditable{
         this.event = event;
     }
 
-    public String getMaintenance() {
-        return maintenance;
+    public String getText() {
+        return text;
     }
 
-    public void setMaintenance(String maintenance) {
-        this.maintenance = maintenance;
+    public void setText(String maintenance) {
+        this.text = maintenance;
     }
 }

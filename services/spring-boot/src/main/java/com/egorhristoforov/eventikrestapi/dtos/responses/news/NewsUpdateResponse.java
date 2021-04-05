@@ -6,10 +6,10 @@ import lombok.Getter;
 @Getter
 public class NewsUpdateResponse {
     private Long newsId;
-    private String maintenance;
+    private String text;
 
     public NewsUpdateResponse(News news) {
         this.newsId = news.getId();
-        this.maintenance = news.getMaintenance();
+        this.text = news.getText();
     }
 }

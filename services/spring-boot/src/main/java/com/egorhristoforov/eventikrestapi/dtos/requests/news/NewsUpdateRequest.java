@@ -13,5 +13,5 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class NewsUpdateRequest {
     @NotNull
-    private String maintenance;
+    private String text;
 }
