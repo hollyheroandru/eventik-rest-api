@@ -112,7 +112,7 @@ public class EventController {
 
     }
 
-    @PutMapping(value = "/{id}/news/{newsId}")
+    @PutMapping(value = "/{id}/news/{newsId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Update news by id", authorizations = {@Authorization(value = "Access token")})
     public ResponseEntity<NewsUpdateResponse> updateNewsById(@PathVariable(value = "id") @Positive Long eventId,
                                                              @PathVariable(value = "newsId") @Positive Long newsId,
@@ -120,21 +120,21 @@ public class EventController {
         return null;
     }
 
-    @PostMapping(value = "/{id}/news")
+    @PostMapping(value = "/{id}/news", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Create news", authorizations = {@Authorization(value = "Access token")})
     public ResponseEntity<NewsCreateResponse> createNews(@PathVariable(value = "id") @Positive Long eventId,
                                                           @Valid @RequestBody NewsCreateRequest body) {
         return null;
     }
 
-    @PostMapping(value = "/{id}/chat")
+    @PostMapping(value = "/{id}/chat", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Send message", authorizations = {@Authorization(value = "Access token")})
     public ResponseEntity<MessageResponse> sendMessage(@PathVariable(value = "id") @Positive Long eventId,
                                                        @Valid @RequestBody ChatMessage chatMessage) {
         return null;
     }
 
-    @PutMapping(value = "/{id}/chat/{messId}")
+    @PutMapping(value = "/{id}/chat/{messId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Edit message by id", authorizations = {@Authorization(value = "Access token")})
     public ResponseEntity<MessageResponse> editMessage(@PathVariable(value = "id") @Positive Long eventId,
                                                        @PathVariable(value = "messId") @Positive Long messageId,
@@ -149,7 +149,7 @@ public class EventController {
 
     }
 
-    @GetMapping(value = "/{id}/chat")
+    @GetMapping(value = "/{id}/chat", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Get messages list", authorizations = {@Authorization(value = "Access token")})
     public ResponseEntity<MessageListResponse> getMessagesList(@PathVariable(value = "id") @Positive Long eventId,
                                                                @RequestParam(value = "count", required = false) @Positive Long count,

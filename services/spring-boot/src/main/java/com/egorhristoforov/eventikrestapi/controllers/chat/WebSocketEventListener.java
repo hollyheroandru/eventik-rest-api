@@ -3,6 +3,7 @@ package com.egorhristoforov.eventikrestapi.controllers.chat;
 import static java.lang.String.format;
 
 import com.egorhristoforov.eventikrestapi.dtos.chat.ChatMessage;
+import com.egorhristoforov.eventikrestapi.dtos.chat.MessageType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,7 @@ public class WebSocketEventListener {
             logger.info("User Disconnected: " + username);
 
             ChatMessage chatMessage = new ChatMessage();
-            chatMessage.setType(ChatMessage.MessageType.LEAVE);
+            chatMessage.setType(MessageType.LEAVE);
             chatMessage.setSender(username);
 
             messagingTemplate.convertAndSend(format("/topic/%s", roomId), chatMessage);
