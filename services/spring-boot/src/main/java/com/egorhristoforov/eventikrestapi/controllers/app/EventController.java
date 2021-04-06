@@ -1,6 +1,8 @@
 package com.egorhristoforov.eventikrestapi.controllers.app;
 
 import com.egorhristoforov.eventikrestapi.dtos.chat.ChatMessage;
+import com.egorhristoforov.eventikrestapi.dtos.chat.CreateMessageRequest;
+import com.egorhristoforov.eventikrestapi.dtos.chat.UpdateMessageRequest;
 import com.egorhristoforov.eventikrestapi.dtos.requests.event.EventCreateRequest;
 import com.egorhristoforov.eventikrestapi.dtos.requests.event.EventUpdateRequest;
 import com.egorhristoforov.eventikrestapi.dtos.requests.news.NewsCreateRequest;
@@ -130,7 +132,7 @@ public class EventController {
     @PostMapping(value = "/{id}/chat", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Send message", authorizations = {@Authorization(value = "Access token")})
     public ResponseEntity<MessageResponse> sendMessage(@PathVariable(value = "id") @Positive Long eventId,
-                                                       @Valid @RequestBody ChatMessage chatMessage) {
+                                                       @Valid @RequestBody CreateMessageRequest body) {
         return null;
     }
 
@@ -138,7 +140,7 @@ public class EventController {
     @ApiOperation(value = "Edit message by id", authorizations = {@Authorization(value = "Access token")})
     public ResponseEntity<MessageResponse> editMessage(@PathVariable(value = "id") @Positive Long eventId,
                                                        @PathVariable(value = "messId") @Positive Long messageId,
-                                                       @Valid @RequestBody ChatMessage chatMessage) {
+                                                       @Valid @RequestBody UpdateMessageRequest body) {
         return null;
     }
 

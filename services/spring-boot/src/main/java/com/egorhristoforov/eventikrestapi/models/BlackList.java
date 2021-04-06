@@ -7,10 +7,10 @@ import java.util.Set;
 @Table(name = "black_list")
 public class BlackList extends Auditable{
     @Id
-    @OneToOne(optional = false, mappedBy = "id")
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "blackList")
     private Event event;
 
-    @ManyToMany()
+    @OneToMany()
     private Set<User> users;
 
     public BlackList() {

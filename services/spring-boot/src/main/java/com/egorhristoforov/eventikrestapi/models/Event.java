@@ -44,12 +44,15 @@ public class Event extends Auditable {
     @Column(name = "registration_required")
     private boolean isRegistrationRequired;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    private BlackList blackList;
+
     public Event() {
     }
 
     public Event(Long id, User owner, Double longitude, Double latitude, City city, String apartment,
                  String title, String description, Date date, Set<Booking> bookings,
-                 boolean isRegistrationRequired) {
+                 boolean isRegistrationRequired, BlackList blackList) {
         this.id = id;
         this.owner = owner;
         this.longitude = longitude;
@@ -61,6 +64,15 @@ public class Event extends Auditable {
         this.date = date;
         this.bookings = bookings;
         this.isRegistrationRequired = isRegistrationRequired;
+        this.blackList = blackList;
+    }
+
+    public BlackList getBlackList() {
+        return blackList;
+    }
+
+    public void setBlackList(BlackList blackList) {
+        this.blackList = blackList;
     }
 
     public Long getId() {
