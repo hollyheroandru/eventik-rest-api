@@ -179,7 +179,7 @@ public class EventController {
         return null;
     }
 
-    @DeleteMapping(value = "/{id}/visitors/{userId}/block")
+    @DeleteMapping(value = "/{id}/visitors/{userId}/unblock")
     @ApiOperation(value = "Delete user by id from black list", authorizations = {@Authorization(value = "Access token")})
     public void deleteUserFromBlackList(@PathVariable("id") @Positive Long eventId,
                                                                                        @PathVariable("userId") @Positive Long userId) {
