@@ -157,31 +157,31 @@ public class EventController {
         return null;
     }
 
-    @GetMapping(value = "/{id}/blocked", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}/visitors/blocked", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Get blocked users list by event id", authorizations = {@Authorization(value = "Access token")})
     public ResponseEntity<List<EventBlockedUsersListResponse>> getBlockedUsersForEvent(@PathVariable(value = "id") @Positive Long eventId) {
         return null;
     }
 
-    @DeleteMapping(value = "/{id}/{userId}")
+    @DeleteMapping(value = "/{id}/visitors/{userId}")
     @ApiOperation(value = "Delete user from event by user id", authorizations = {@Authorization(value = "Access token")})
     public void deleteEventUser(@PathVariable("id") @Positive Long eventId,
                                 @PathVariable("userId") @Positive Long userId){
 
     }
 
-    @PostMapping(value = "/{id}/blocked/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/{id}/visitors/{userId}/block", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Add user by id to black list", authorizations = {@Authorization(value = "Access token")})
-    public ResponseEntity<List<EventBlockedUsersListResponse>> addUserToBlackList(@PathVariable("id") @Positive Long eventId,
+    public ResponseEntity<EventBlockedUserResponse> addUserToBlackList(@PathVariable("id") @Positive Long eventId,
                                                                                   @PathVariable("userId") @Positive Long userId) {
         return null;
     }
 
-    @DeleteMapping(value = "/{id}/blocked/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/{id}/visitors/{userId}/block")
     @ApiOperation(value = "Delete user by id from black list", authorizations = {@Authorization(value = "Access token")})
-    public ResponseEntity<List<EventBlockedUsersListResponse>> deleteUserFromBlackList(@PathVariable("id") @Positive Long eventId,
+    public void deleteUserFromBlackList(@PathVariable("id") @Positive Long eventId,
                                                                                        @PathVariable("userId") @Positive Long userId) {
-        return null;
+
     }
 
 }

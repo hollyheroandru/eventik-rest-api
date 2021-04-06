@@ -21,5 +21,5 @@ public class UpdateConfigurationFieldRequest {
 
     @NotNull
     @Positive
-    private Long type;
+    private Long typeId;
 }

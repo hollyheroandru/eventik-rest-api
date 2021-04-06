@@ -1,6 +1,6 @@
 package com.egorhristoforov.eventikrestapi.dtos.responses.chat;
 
-import com.egorhristoforov.eventikrestapi.models.Messages;
+import com.egorhristoforov.eventikrestapi.models.Message;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.Date;
@@ -13,10 +13,10 @@ public class MessageListResponse {
     private Long senderId;
     private String senderName;
 
-    public MessageListResponse(Messages messages) {
-        this.text = messages.getText();
-        this.senderId = messages.getUser().getId();
-        this.senderName = messages.getUser().getName();
-        this.date = messages.getLastModifiedDate();
+    public MessageListResponse(Message message) {
+        this.text = message.getText();
+        this.senderId = message.getUser().getId();
+        this.senderName = message.getUser().getName();
+        this.date = message.getCreatedDate();
     }
 }

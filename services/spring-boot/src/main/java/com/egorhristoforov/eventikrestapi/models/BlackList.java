@@ -10,7 +10,7 @@ public class BlackList extends Auditable{
     @OneToOne(optional = false, mappedBy = "id")
     private Event event;
 
-    @OneToMany()
+    @ManyToMany()
     private Set<User> users;
 
     public BlackList() {

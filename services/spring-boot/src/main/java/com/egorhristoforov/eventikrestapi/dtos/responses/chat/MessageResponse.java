@@ -1,6 +1,6 @@
 package com.egorhristoforov.eventikrestapi.dtos.responses.chat;
 
-import com.egorhristoforov.eventikrestapi.models.Messages;
+import com.egorhristoforov.eventikrestapi.models.Message;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import java.util.Date;
@@ -14,10 +14,10 @@ public class MessageResponse {
     private Long senderId;
     private String senderName;
 
-    public MessageResponse(Messages messages) {
-        this.text = messages.getText();
-        this.senderId = messages.getUser().getId();
-        this.senderName = messages.getUser().getName();
-        this.date = messages.getLastModifiedDate();
+    public MessageResponse(Message message) {
+        this.text = message.getText();
+        this.senderId = message.getUser().getId();
+        this.senderName = message.getUser().getName();
+        this.date = message.getCreatedDate();
     }
 }

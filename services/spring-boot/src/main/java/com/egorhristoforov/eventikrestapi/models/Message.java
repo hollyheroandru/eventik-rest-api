@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "messages")
-public class Messages extends Auditable{
+public class Message extends Auditable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,10 +21,10 @@ public class Messages extends Auditable{
     @Column(name = "is_deleted")
     private boolean isDeleted;
 
-    public Messages() {
+    public Message() {
     }
 
-    public Messages(Long id, User user, Event event, String text, boolean isDeleted) {
+    public Message(Long id, User user, Event event, String text, boolean isDeleted) {
         this.id = id;
         this.user = user;
         this.event = event;
