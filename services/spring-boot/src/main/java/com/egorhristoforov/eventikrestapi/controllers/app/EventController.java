@@ -151,9 +151,37 @@ public class EventController {
 
     @GetMapping(value = "/{id}/chat", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Get messages list", authorizations = {@Authorization(value = "Access token")})
-    public ResponseEntity<MessageListResponse> getMessagesList(@PathVariable(value = "id") @Positive Long eventId,
+    public ResponseEntity<List<MessageListResponse>> getMessagesList(@PathVariable(value = "id") @Positive Long eventId,
                                                                @RequestParam(value = "count", required = false) @Positive Long count,
                                                                @RequestParam(value = "lastMessageId", required = false) @Positive Long lastMessageId) {
         return null;
     }
+
+    @GetMapping(value = "/{id}/blocked", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Get blocked users list by event id", authorizations = {@Authorization(value = "Access token")})
+    public ResponseEntity<List<EventBlockedUsersListResponse>> getBlockedUsersForEvent(@PathVariable(value = "id") @Positive Long eventId) {
+        return null;
+    }
+
+    @DeleteMapping(value = "/{id}/{userId}")
+    @ApiOperation(value = "Delete user from event by user id", authorizations = {@Authorization(value = "Access token")})
+    public void deleteEventUser(@PathVariable("id") @Positive Long eventId,
+                                @PathVariable("userId") @Positive Long userId){
+
+    }
+
+    @PostMapping(value = "/{id}/blocked/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Add user by id to black list", authorizations = {@Authorization(value = "Access token")})
+    public ResponseEntity<List<EventBlockedUsersListResponse>> addUserToBlackList(@PathVariable("id") @Positive Long eventId,
+                                                                                  @PathVariable("userId") @Positive Long userId) {
+        return null;
+    }
+
+    @DeleteMapping(value = "/{id}/blocked/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Delete user by id from black list", authorizations = {@Authorization(value = "Access token")})
+    public ResponseEntity<List<EventBlockedUsersListResponse>> deleteUserFromBlackList(@PathVariable("id") @Positive Long eventId,
+                                                                                       @PathVariable("userId") @Positive Long userId) {
+        return null;
+    }
+
 }
