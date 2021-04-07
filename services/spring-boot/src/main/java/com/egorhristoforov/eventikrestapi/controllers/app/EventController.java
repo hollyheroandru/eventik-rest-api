@@ -1,6 +1,5 @@
 package com.egorhristoforov.eventikrestapi.controllers.app;
 
-import com.egorhristoforov.eventikrestapi.dtos.chat.ChatMessage;
 import com.egorhristoforov.eventikrestapi.dtos.chat.CreateMessageRequest;
 import com.egorhristoforov.eventikrestapi.dtos.chat.UpdateMessageRequest;
 import com.egorhristoforov.eventikrestapi.dtos.requests.event.EventCreateRequest;
@@ -17,7 +16,6 @@ import com.egorhristoforov.eventikrestapi.exceptions.BadRequestException;
 import com.egorhristoforov.eventikrestapi.exceptions.ForbiddenException;
 import com.egorhristoforov.eventikrestapi.exceptions.ResourceNotFoundException;
 import com.egorhristoforov.eventikrestapi.exceptions.UnauthorizedException;
-import com.egorhristoforov.eventikrestapi.models.News;
 import com.egorhristoforov.eventikrestapi.services.EventService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

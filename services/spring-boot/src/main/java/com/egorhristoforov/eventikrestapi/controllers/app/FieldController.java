@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/v1/fields")
@@ -23,8 +24,8 @@ import javax.validation.constraints.Positive;
 public class FieldController {
 
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "Get fields list", authorizations = {@Authorization(value = "Access token")})
-    public ResponseEntity<FieldListResponse> getConfigurationFields() {
+    @ApiOperation(value = "Get fields list")
+    public ResponseEntity<List<FieldListResponse>> getConfigurationFields() {
         return null;
     }
 

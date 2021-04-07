@@ -6,13 +6,11 @@ import lombok.Getter;
 @Getter
 public class EventBlockedUserResponse {
     private Long id;
-    private String email;
     private String name;
     private String surname;
 
     public EventBlockedUserResponse(User user) {
         id = user.getId();
-        email = user.getEmail();
         name = user.getName();
         surname = user.getSurname();
     }
