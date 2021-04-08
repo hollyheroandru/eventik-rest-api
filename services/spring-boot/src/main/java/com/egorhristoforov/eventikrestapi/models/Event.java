@@ -67,11 +67,11 @@ public class Event extends Auditable {
         this.blockedUsers = blockedUsers;
     }
 
-    public Set<User> getBlackList() {
+    public Set<User> getBlockedUsers() {
         return blockedUsers;
     }
 
-    public void setBlackList(Set<User> blackList) {
+    public void setBlockedUsers(Set<User> blockedUsers) {
         this.blockedUsers = blockedUsers;
     }
 
