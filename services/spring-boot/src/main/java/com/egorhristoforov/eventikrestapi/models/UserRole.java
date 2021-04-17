@@ -15,7 +15,7 @@ public class UserRole implements GrantedAuthority {
 
     private String name;
 
-    @ManyToMany(mappedBy = "roles", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "roles")
     private List<User> users;
 
     public UserRole() {
