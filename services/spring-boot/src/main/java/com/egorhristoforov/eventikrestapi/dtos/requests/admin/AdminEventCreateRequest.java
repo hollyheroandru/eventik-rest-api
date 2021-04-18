@@ -12,7 +12,8 @@ public class AdminEventCreateRequest {
     @Positive(message = "City id must be positive")
     private Long cityId;
 
-    //@NotBlank
+    @NotNull(message = "Apartment cannot be null")
+    @NotBlank(message = "Apartment cannot be empty")
     private String apartment;
 
     @NotNull(message = "Owner id cannot be null")
@@ -20,11 +21,11 @@ public class AdminEventCreateRequest {
     private Long ownerId;
 
     @NotNull(message = "Title cannot be null")
-    @NotBlank
+    @NotBlank(message = "Title cannot be empty")
     private String title;
 
     @NotNull(message = "Description cannot be null")
-    @NotBlank
+    @NotBlank(message = "Description cannot be empty")
     private String description;
 
     @NotNull(message = "Date cannot be null")
