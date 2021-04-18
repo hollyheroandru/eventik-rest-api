@@ -7,11 +7,11 @@ import javax.validation.constraints.Size;
 
 public class AdminUserCreateRequest {
     @NotNull(message = "Name cannot be null")
-    @Size(min = 2, max = 50, message = "Name length must be greater than or equal 6 and less than or equal to 50")
+    @Size(min = 2, max = 50, message = "Name length must be greater than or equal 2 and less than or equal to 50")
     private String name;
 
     @NotNull(message = "Surname cannot be null")
-    @Size(min = 2, max = 50, message = "Name length must be greater than or equal 6 and less than or equal to 50")
+    @Size(min = 2, max = 50, message = "Surname length must be greater than or equal 2 and less than or equal to 50")
     private String surname;
 
     @NotNull(message = "Email cannot be null")
