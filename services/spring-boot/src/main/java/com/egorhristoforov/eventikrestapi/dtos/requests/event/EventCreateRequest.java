@@ -11,7 +11,8 @@ public class EventCreateRequest {
     @Positive
     private Long cityId;
 
-    //@NotBlank
+    @NotBlank
+    @NotNull
     private String Apartment;
 
     @NotNull

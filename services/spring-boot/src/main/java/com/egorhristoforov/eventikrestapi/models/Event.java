@@ -44,7 +44,7 @@ public class Event extends Auditable {
     @Column(name = "registration_required")
     private boolean isRegistrationRequired;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY)
     private Set<User> blockedUsers;
 
     public Event() {

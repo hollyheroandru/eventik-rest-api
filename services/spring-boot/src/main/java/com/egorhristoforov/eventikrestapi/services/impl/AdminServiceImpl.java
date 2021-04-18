@@ -288,6 +288,7 @@ public class AdminServiceImpl implements AdminService {
         createdEvent.setLatitude(request.getLatitude());
         createdEvent.setRegistrationRequired(request.isRegistrationRequired());
         createdEvent.setOwner(owner);
+        createdEvent.setBlockedUsers(new HashSet<>());
 
         eventRepository.save(createdEvent);
 
