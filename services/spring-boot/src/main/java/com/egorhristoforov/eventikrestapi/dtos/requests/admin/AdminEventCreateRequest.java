@@ -8,36 +8,36 @@ import javax.validation.constraints.Positive;
 import java.util.Date;
 
 public class AdminEventCreateRequest {
-    @NotNull
-    @Positive
+    @NotNull(message = "City id cannot be null")
+    @Positive(message = "City id must be positive")
     private Long cityId;
 
     //@NotBlank
     private String apartment;
 
-    @NotNull
-    @Positive
+    @NotNull(message = "Owner id cannot be null")
+    @Positive(message = "Owner id must be positive")
     private Long ownerId;
 
-    @NotNull
+    @NotNull(message = "Title cannot be null")
     @NotBlank
     private String title;
 
-    @NotNull
+    @NotNull(message = "Description cannot be null")
     @NotBlank
     private String description;
 
-    @NotNull
-    @FutureOrPresent
+    @NotNull(message = "Date cannot be null")
+    @FutureOrPresent(message = "Date must be future or present")
     private Date date;
 
-    @NotNull
+    @NotNull(message = "Longitude cannot be null")
     private Double longitude;
 
-    @NotNull
+    @NotNull(message = "Latitude cannot be null")
     private Double latitude;
 
-    @NotNull
+    @NotNull(message = "IsRegistrationRequired cannot be null")
     private boolean isRegistrationRequired;
 
     public AdminEventCreateRequest() {
