@@ -33,5 +33,5 @@ public interface EventService {
             throws UnauthorizedException, ResourceNotFoundException, BadRequestException;
 
     List<EventVisitorsListResponse> getVisitorsListForEvent(Long eventId)
-            throws UnauthorizedException, ForbiddenException, ResourceNotFoundException, BadRequestException;
+            throws UnauthorizedException, ResourceNotFoundException;
 }

@@ -94,7 +94,7 @@ public class EventController {
     @GetMapping(value = "/{id}/visitors", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Get event visitors list", authorizations = { @Authorization(value = "Access token") })
     public ResponseEntity<List<EventVisitorsListResponse>> getVisitors(@PathVariable(value = "id") @Positive Long eventId)
-            throws ResourceNotFoundException, UnauthorizedException, ForbiddenException, BadRequestException {
+            throws ResourceNotFoundException, UnauthorizedException {
         return ResponseEntity.ok(eventService.getVisitorsListForEvent(eventId));
     }
 

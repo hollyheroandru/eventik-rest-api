@@ -277,7 +277,7 @@ public class EventServiceImpl implements EventService {
     }
 
     public List<EventVisitorsListResponse> getVisitorsListForEvent(Long eventId)
-            throws UnauthorizedException, ForbiddenException, ResourceNotFoundException, BadRequestException {
+            throws UnauthorizedException, ResourceNotFoundException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) {
             throw new UnauthorizedException("Unauthorized request");
@@ -288,14 +288,6 @@ public class EventServiceImpl implements EventService {
 
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new ResourceNotFoundException("Event not found"));
-
-        if (!event.isRegistrationRequired()) {
-            throw new BadRequestException("Registration not required");
-        }
-
-        if (!event.getOwner().equals(currentUser) && !hasRole(currentUser, "ADMIN")) {
-            throw new ForbiddenException("Access denied");
-        }
 
         return event.getBookings().stream()
                 .sorted(Comparator.comparing(Booking::getCreatedDate))

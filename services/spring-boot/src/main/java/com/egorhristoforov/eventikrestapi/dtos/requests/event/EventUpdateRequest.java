@@ -1,5 +1,7 @@
 package com.egorhristoforov.eventikrestapi.dtos.requests.event;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.validation.constraints.FutureOrPresent;
 import java.util.Date;
 
@@ -11,6 +13,7 @@ public class EventUpdateRequest {
     private String description;
 
     @FutureOrPresent
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
     private Date date;
 
     private Boolean registrationRequired;

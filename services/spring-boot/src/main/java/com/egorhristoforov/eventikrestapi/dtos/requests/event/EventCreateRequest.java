@@ -1,5 +1,7 @@
 package com.egorhristoforov.eventikrestapi.dtos.requests.event;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -25,6 +27,7 @@ public class EventCreateRequest {
 
     @NotNull
     @FutureOrPresent
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
     private Date date;
 
     @NotNull
