@@ -277,14 +277,7 @@ public class EventServiceImpl implements EventService {
     }
 
     public List<EventVisitorsListResponse> getVisitorsListForEvent(Long eventId)
-            throws UnauthorizedException, ResourceNotFoundException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null) {
-            throw new UnauthorizedException("Unauthorized request");
-        }
-
-        User currentUser = userRepository.findByEmail(authentication.getName())
-                .orElseThrow(() -> new UnauthorizedException("Unauthorized request"));
+            throws ResourceNotFoundException {
 
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new ResourceNotFoundException("Event not found"));

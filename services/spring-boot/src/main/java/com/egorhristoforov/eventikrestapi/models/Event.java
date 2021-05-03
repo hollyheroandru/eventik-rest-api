@@ -36,7 +36,6 @@ public class Event extends Auditable {
     private String description;
 
     @Column(name = "date")
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
     private Date date;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "event")
